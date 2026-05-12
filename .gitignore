@@ -33,6 +33,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# MCP server config (contains access tokens — never commit)
+.mcp.json
+
 # typescript
 *.tsbuildinfo
 
