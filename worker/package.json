@@ -1,0 +1,19 @@
+{
+  "name": "kore-dou-suteru-api",
+  "version": "0.1.0",
+  "description": "Cloudflare Workers proxy for 「これどう捨てる？」 - Gemini Vision API gateway with rate limiting and no image storage",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy:dev": "wrangler deploy --env development",
+    "deploy:prod": "wrangler deploy --env production",
+    "secret:gemini": "wrangler secret put GEMINI_API_KEY",
+    "tail": "wrangler tail",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260101.0",
+    "typescript": "^5.4.0",
+    "wrangler": "^3.50.0"
+  }
+}

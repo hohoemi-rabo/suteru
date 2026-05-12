@@ -1,0 +1,28 @@
+# wrangler.toml
+name = "kore-dou-suteru-api"
+main = "src/index.ts"
+compatibility_date = "2026-05-12"
+compatibility_flags = ["nodejs_compat"]
+
+# 本番環境
+[env.production]
+name = "kore-dou-suteru-api-production"
+
+# 開発環境
+[env.development]
+name = "kore-dou-suteru-api-dev"
+
+# レート制限用のKVネームスペース
+# wrangler kv:namespace create "RATE_LIMIT" で作成し、IDを以下に貼る
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "PLACEHOLDER_KV_NAMESPACE_ID"
+
+# 環境変数（secretsは wrangler secret put で設定）
+# - GEMINI_API_KEY: Google AI StudioのAPIキー（必須、secretで設定）
+# - GEMINI_MODEL: 使用するGeminiモデル名（任意、デフォルトは gemini-2.5-flash）
+# - ALLOWED_ORIGINS: CORS許可オリジン（カンマ区切り。アプリのみなら "*" でも可）
+[vars]
+GEMINI_MODEL = "gemini-2.5-flash"
+ALLOWED_ORIGINS = "*"
+RATE_LIMIT_PER_MINUTE = "10"

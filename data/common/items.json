@@ -1,0 +1,673 @@
+{
+  "$schema_comment": "飯田市の品目辞書。Gemini Visionが返した品目名を「name」「aliases」のいずれかで完全一致 or 部分一致させ、categoryIdを引く。aliasesはGeminiの出力ゆれに備えて広めに設定する。",
+  "version": "0.1.0-draft",
+  "lastUpdated": "2026-05-12",
+  "sourceDocument": "飯田市ごみ収集カレンダー令和8年度（全市共通の捨て方説明PDFより）",
+  "items": [
+    {
+      "name": "紙おむつ",
+      "aliases": ["おむつ", "おしめ", "大人用おむつ", "子供用おむつ", "尿取りパッド", "尿パッド"],
+      "categoryId": "burnable",
+      "instruction": "汚物を取り除いてビニール袋に入れ、燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "紙くず",
+      "aliases": ["くずかご", "汚れた紙", "ティッシュ"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "生ごみ",
+      "aliases": ["食べ残し", "野菜くず", "食品くず", "残飯"],
+      "categoryId": "burnable",
+      "instruction": "水分をよく切り、ビニール袋や新聞紙などで包んで燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "衣類",
+      "aliases": ["古着", "服", "シャツ", "ズボン", "下着", "靴下"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "革製品",
+      "aliases": ["皮革製品", "革のバッグ", "革靴", "ベルト", "財布(革)"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "ゴム製品",
+      "aliases": ["長いままのゴムホース", "ゴム長靴", "ゴムボール"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。長いままのゴムホースもそのままで可。",
+      "warnings": []
+    },
+    {
+      "name": "使い捨てカイロ",
+      "aliases": ["カイロ", "ホッカイロ"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "乾燥剤",
+      "aliases": ["シリカゲル", "石灰乾燥剤"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "保冷剤",
+      "aliases": ["アイスパック", "冷凍ジェル"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "草・落ち葉",
+      "aliases": ["落ち葉", "草", "雑草", "枯れ葉"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "ランドセル",
+      "aliases": ["通学かばん"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "ぬいぐるみ",
+      "aliases": ["人形(布製)", "縫いぐるみ"],
+      "categoryId": "burnable",
+      "instruction": "燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "写真",
+      "aliases": ["プリント写真", "写真プリント"],
+      "categoryId": "burnable",
+      "instruction": "紙資源ではなく、燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "レシート",
+      "aliases": ["感熱紙", "レジレシート"],
+      "categoryId": "burnable",
+      "instruction": "感熱紙のため紙資源ではなく、燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "油汚れの紙",
+      "aliases": ["ピザの箱", "油のついた紙"],
+      "categoryId": "burnable",
+      "instruction": "紙資源ではなく、燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "ビニールやアルミで加工された紙",
+      "aliases": ["紙パック(銀色内側)", "アルミ加工紙"],
+      "categoryId": "burnable",
+      "instruction": "紙資源ではなく、燃やすごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "せともの",
+      "aliases": ["陶器", "茶碗", "皿(陶器)", "湯のみ", "どんぶり"],
+      "categoryId": "landfill",
+      "instruction": "埋立ごみへ。割れたものは紙で包み「われもの」と書く。",
+      "warnings": []
+    },
+    {
+      "name": "ガラスびん(梅漬けびんなど)",
+      "aliases": ["梅漬けびん", "保存びん", "梅酒びん"],
+      "categoryId": "landfill",
+      "instruction": "埋立ごみへ。割れたものは紙で包み「われもの」と書く。",
+      "warnings": ["飲料用・調味料用のガラスびんはリサイクルステーションへ"]
+    },
+    {
+      "name": "割れたガラス",
+      "aliases": ["ガラス片", "板ガラス"],
+      "categoryId": "landfill",
+      "instruction": "紙で包み「われもの」と書いて埋立ごみへ。",
+      "warnings": ["手を切らないよう注意"]
+    },
+    {
+      "name": "電球",
+      "aliases": ["LED電球", "白熱電球", "電球型蛍光灯"],
+      "categoryId": "landfill",
+      "instruction": "紙で包んで埋立ごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "鏡",
+      "aliases": ["手鏡", "卓上ミラー"],
+      "categoryId": "landfill",
+      "instruction": "埋立ごみへ。割れたものは紙で包み「われもの」と書く。",
+      "warnings": []
+    },
+    {
+      "name": "電気毛布",
+      "aliases": ["電気カーペット(小型)"],
+      "categoryId": "landfill",
+      "instruction": "埋立ごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "灰",
+      "aliases": ["木灰", "炭の灰"],
+      "categoryId": "landfill",
+      "instruction": "完全に消火してから埋立ごみへ。",
+      "warnings": ["完全に火が消えていることを確認"]
+    },
+    {
+      "name": "乾電池",
+      "aliases": ["単1電池", "単2電池", "単3電池", "単4電池", "アルカリ電池", "マンガン電池", "電池"],
+      "categoryId": "hazardous",
+      "instruction": "中身が見える透明な袋に入れて、特定ごみの日に集積所の見えやすい場所へ。乾電池専用の容器がある集積所はそちらへ。",
+      "warnings": ["他のごみと絶対に混ぜない（火災の危険）"]
+    },
+    {
+      "name": "コイン電池",
+      "aliases": ["ボタン電池", "リチウムコイン電池"],
+      "categoryId": "hazardous",
+      "instruction": "電気店等でも回収あり。集積所に出す場合は特定ごみとして透明袋へ。",
+      "warnings": []
+    },
+    {
+      "name": "充電池",
+      "aliases": ["リチウムイオン電池", "ニッケル水素電池", "充電式電池"],
+      "categoryId": "hazardous",
+      "instruction": "特定ごみへ。膨張・破損がある場合は環境課または最終処分場へ直接持ち込む。",
+      "warnings": ["膨張・破損品は集積所に出さない（火災の危険）"]
+    },
+    {
+      "name": "モバイルバッテリー",
+      "aliases": ["スマホ充電器", "ポータブル充電器"],
+      "categoryId": "hazardous",
+      "instruction": "特定ごみへ。膨張・破損がある場合は環境課または最終処分場へ直接持ち込む。",
+      "warnings": ["膨張・破損品は集積所に出さない（火災の危険）"]
+    },
+    {
+      "name": "電子タバコ",
+      "aliases": ["加熱式タバコ", "ベイプ", "vape"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。充電池は無理に取り外さない。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "ハンディファン",
+      "aliases": ["携帯扇風機", "ポータブル扇風機"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "ワイヤレスイヤフォン",
+      "aliases": ["イヤホン", "Bluetoothイヤホン", "AirPods"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "電動歯ブラシ",
+      "aliases": ["電動ブラシ"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "シェーバー",
+      "aliases": ["電気シェーバー", "電動カミソリ"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "タブレット",
+      "aliases": ["iPad", "タブレット端末"],
+      "categoryId": "hazardous",
+      "instruction": "充電池内蔵型家電として特定ごみへ。",
+      "warnings": ["無理に分解しない"]
+    },
+    {
+      "name": "スプレー缶",
+      "aliases": ["殺虫剤", "消臭剤", "ヘアスプレー", "制汗スプレー", "塗料スプレー"],
+      "categoryId": "hazardous",
+      "instruction": "使い切ってから穴を開けずに特定ごみへ。",
+      "warnings": ["穴は開けない", "残った中身は使い切る"]
+    },
+    {
+      "name": "カセットボンベ",
+      "aliases": ["ガスボンベ(カセット)"],
+      "categoryId": "hazardous",
+      "instruction": "使い切ってから穴を開けずに特定ごみへ。未使用のものは要問い合わせ。",
+      "warnings": ["未使用品は穴を開けず環境課に問い合わせ"]
+    },
+    {
+      "name": "ライター",
+      "aliases": ["使い捨てライター", "チャッカマン", "100円ライター"],
+      "categoryId": "hazardous",
+      "instruction": "ガスを使い切ってから特定ごみへ。壊れている場合はそのままで。",
+      "warnings": []
+    },
+    {
+      "name": "蛍光管",
+      "aliases": ["蛍光灯", "丸型蛍光灯", "直管蛍光灯", "蛍光ランプ"],
+      "categoryId": "hazardous",
+      "instruction": "特定ごみへ。割れたものは紙で包み埋立ごみへ。",
+      "warnings": ["電気店等で回収を行っている場合あり"]
+    },
+    {
+      "name": "水銀体温計",
+      "aliases": ["水銀温度計", "体温計(水銀)"],
+      "categoryId": "hazardous",
+      "instruction": "特定ごみへ。",
+      "warnings": ["割らないように注意"]
+    },
+    {
+      "name": "ペットボトル",
+      "aliases": ["PETボトル", "プラボトル", "飲料ボトル", "ペット容器"],
+      "categoryId": "bottle_pet",
+      "instruction": "キャップとラベルを外し、切り開いて中を洗う。リサイクルステーション（毎週土曜 7:30-9:00）へ。",
+      "warnings": ["キャップは外して袋に入れる（プラ資源）", "汚れが取れないものや加工したものは燃やすごみへ"]
+    },
+    {
+      "name": "ガラスびん(飲料用)",
+      "aliases": ["ジュースのびん", "酒のびん", "ワインのびん", "ビールのびん"],
+      "categoryId": "bottle_pet",
+      "instruction": "栓・ふたを外し、中をゆすいでリサイクルステーションへ。3色（透明・茶・その他）に分ける。",
+      "warnings": ["リターナブルびん（ビールびん・一升びん）は販売店へ"]
+    },
+    {
+      "name": "ガラスびん(調味料用)",
+      "aliases": ["しょうゆびん", "酢びん", "食用油のびん"],
+      "categoryId": "bottle_pet",
+      "instruction": "栓・ふたを外し、中をゆすいでリサイクルステーションへ。3色に分ける。",
+      "warnings": []
+    },
+    {
+      "name": "プラスチック容器",
+      "aliases": ["食品トレイ", "コンビニ弁当の容器", "卵パック", "豆腐容器"],
+      "categoryId": "plastic_resource",
+      "instruction": "水でゆすぎ、汚れを落としてプラ資源へ。",
+      "warnings": ["汚れが落ちないものは燃やすごみへ"]
+    },
+    {
+      "name": "発泡スチロール",
+      "aliases": ["スチロール", "発泡トレイ"],
+      "categoryId": "plastic_resource",
+      "instruction": "50cmを超えるものは切ってプラ資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "ペットボトルのキャップ",
+      "aliases": ["ボトルキャップ"],
+      "categoryId": "plastic_resource",
+      "instruction": "外して袋に入れ、プラ資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "包装フィルム",
+      "aliases": ["プラスチック包装", "お菓子の袋", "食品包装"],
+      "categoryId": "plastic_resource",
+      "instruction": "水でゆすぎ、汚れを落としてプラ資源へ。",
+      "warnings": ["汚れが落ちないものは燃やすごみへ"]
+    },
+    {
+      "name": "シャンプーボトル",
+      "aliases": ["リンスボトル", "ボディソープ容器", "詰め替え用パウチ"],
+      "categoryId": "plastic_resource",
+      "instruction": "水でゆすぎ、汚れを落としてプラ資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "プラスチック製チューブ",
+      "aliases": ["歯磨き粉のチューブ", "マヨネーズチューブ", "ケチャップチューブ"],
+      "categoryId": "plastic_resource",
+      "instruction": "中身を出して水でゆすぎ、プラ資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "レジ袋",
+      "aliases": ["買い物袋", "ビニール袋(レジ)"],
+      "categoryId": "plastic_resource",
+      "instruction": "汚れがなければプラ資源へ。汚れたものは燃やすごみへ。",
+      "warnings": ["二重袋にしない"]
+    },
+    {
+      "name": "プラスチックボウル",
+      "aliases": ["タッパー", "保存容器(プラ)", "プラスチック保存容器"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "スポンジ",
+      "aliases": ["食器用スポンジ", "キッチンスポンジ"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "プラスチック皿",
+      "aliases": ["プラ食器", "プラスチックコップ", "プラスチックストロー"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "歯ブラシ",
+      "aliases": ["プラ製歯ブラシ"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": ["電動歯ブラシは特定ごみへ"]
+    },
+    {
+      "name": "洗濯ばさみ",
+      "aliases": ["ピンチ", "プラスチッククリップ"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "CD",
+      "aliases": ["DVD", "ブルーレイ", "CD-ROM", "DVD-ROM"],
+      "categoryId": "plastic_product",
+      "instruction": "ケースも含めてプラ製品へ。",
+      "warnings": []
+    },
+    {
+      "name": "カセットテープ",
+      "aliases": ["VHSテープ", "ビデオテープ", "MDディスク"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "プランター",
+      "aliases": ["植木鉢(プラ)", "バケツ(プラ)", "プラスチックごみ箱"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": []
+    },
+    {
+      "name": "カッパ",
+      "aliases": ["レインコート", "雨合羽", "うきわ"],
+      "categoryId": "plastic_product",
+      "instruction": "ビニール製品としてプラ製品へ。",
+      "warnings": []
+    },
+    {
+      "name": "プラスチック製おもちゃ",
+      "aliases": ["プラおもちゃ", "プラモデル"],
+      "categoryId": "plastic_product",
+      "instruction": "プラ製品として出す。",
+      "warnings": ["電池式・充電式のものは電池を抜く"]
+    },
+    {
+      "name": "ファンヒーター",
+      "aliases": ["石油ファンヒーター"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": ["灯油は必ず抜く", "電池も抜く"]
+    },
+    {
+      "name": "石油ストーブ",
+      "aliases": ["ストーブ"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": ["灯油は必ず抜く"]
+    },
+    {
+      "name": "ガスコンロ",
+      "aliases": ["卓上コンロ", "ガステーブル"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": ["電池を抜く"]
+    },
+    {
+      "name": "トースター",
+      "aliases": ["ポップアップトースター", "オーブントースター"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": []
+    },
+    {
+      "name": "電子レンジ",
+      "aliases": ["レンジ"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": []
+    },
+    {
+      "name": "アルミホイル",
+      "aliases": ["アルミ箔"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": []
+    },
+    {
+      "name": "鍋",
+      "aliases": ["フライパン", "やかん", "金属製調理器具"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": []
+    },
+    {
+      "name": "空き缶",
+      "aliases": ["缶", "アルミ缶", "スチール缶", "ジュースの缶"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。",
+      "warnings": []
+    },
+    {
+      "name": "電気コード",
+      "aliases": ["延長コード", "テーブルタップ", "ACアダプター", "コード類"],
+      "categoryId": "metal_resource",
+      "instruction": "資源（金属）へ。テーブルタップやアダプター部分は切り離して埋立ごみへ。",
+      "warnings": []
+    },
+    {
+      "name": "自転車",
+      "aliases": ["チャリ", "ママチャリ", "サイクル"],
+      "categoryId": "metal_resource",
+      "instruction": "サドルにガムテープを貼り「ごみ」と書いて集積所へ。収入証紙は不要。",
+      "warnings": ["1m×1m×30cmを超える場合は集積所に出せない"]
+    },
+    {
+      "name": "刃物",
+      "aliases": ["包丁", "ハサミ", "カッター", "ナイフ"],
+      "categoryId": "metal_resource",
+      "instruction": "鋭利な部分は紙で包んで資源（金属）へ。",
+      "warnings": ["けがをしないよう、刃の部分を厳重に包む"]
+    },
+    {
+      "name": "新聞紙",
+      "aliases": ["新聞"],
+      "categoryId": "paper_resource",
+      "instruction": "ひもで十字にしばって紙資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "段ボール",
+      "aliases": ["ダンボール", "段ボール箱"],
+      "categoryId": "paper_resource",
+      "instruction": "ひもで十字にしばって紙資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "雑誌",
+      "aliases": ["本", "書籍", "週刊誌", "コミック", "漫画"],
+      "categoryId": "paper_resource",
+      "instruction": "ひもで十字にしばって紙資源へ。小さな紙は雑誌の間にはさむ。",
+      "warnings": []
+    },
+    {
+      "name": "チラシ",
+      "aliases": ["広告", "ダイレクトメール", "パンフレット"],
+      "categoryId": "paper_resource",
+      "instruction": "雑誌の間にはさむか、紙袋に入れて紙資源へ。",
+      "warnings": []
+    },
+    {
+      "name": "厚紙",
+      "aliases": ["空き箱(厚紙)", "お菓子の箱", "ティッシュの箱"],
+      "categoryId": "paper_resource",
+      "instruction": "雑誌の間にはさむか、紙袋に入れて紙資源へ。",
+      "warnings": ["においの強い箱（石けん・線香）は燃やすごみへ"]
+    },
+    {
+      "name": "布団",
+      "aliases": ["敷布団", "掛け布団", "毛布", "枕"],
+      "categoryId": "oversized",
+      "instruction": "120円の収入証紙を貼って集積所へ（1m×1m×30cm以内）。",
+      "warnings": ["電気毛布は埋立ごみへ"]
+    },
+    {
+      "name": "カーペット",
+      "aliases": ["じゅうたん", "ラグ", "マット"],
+      "categoryId": "oversized",
+      "instruction": "120円の収入証紙を貼って集積所へ（1m×1m×30cm以内）。",
+      "warnings": ["電気カーペットは埋立ごみへ"]
+    },
+    {
+      "name": "衣装ケース",
+      "aliases": ["プラケース(大)", "収納ケース"],
+      "categoryId": "oversized",
+      "instruction": "120円の収入証紙を貼って集積所へ（1m×1m×30cm以内）。",
+      "warnings": []
+    },
+    {
+      "name": "灯油タンク",
+      "aliases": ["灯油用ポリタンク"],
+      "categoryId": "oversized",
+      "instruction": "1m以下、中身を空にして120円の収入証紙を貼って集積所へ。",
+      "warnings": ["中身は必ず空にする", "水用などのポリタンクはプラ資源へ"]
+    },
+    {
+      "name": "庭木",
+      "aliases": ["剪定枝", "枝", "木の枝"],
+      "categoryId": "oversized",
+      "instruction": "1m以下なら120円の収入証紙を貼って集積所へ。1mを超えるものは稲葉クリーンセンターへ持ち込み。",
+      "warnings": []
+    },
+    {
+      "name": "テレビ",
+      "aliases": ["液晶テレビ", "プラズマテレビ", "TV"],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "冷蔵庫",
+      "aliases": ["冷凍冷蔵庫"],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "冷凍庫",
+      "aliases": [],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "エアコン",
+      "aliases": ["クーラー", "エアコン室外機"],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "洗濯機",
+      "aliases": ["全自動洗濯機", "ドラム式洗濯機"],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "衣類乾燥機",
+      "aliases": ["乾燥機"],
+      "categoryId": "home_appliances",
+      "instruction": "家電リサイクル法対象。集積所に出せない。販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者へ、または市の粗大ごみ戸別収集を利用。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "デスクトップパソコン",
+      "aliases": ["デスクトップPC", "パソコン", "PC"],
+      "categoryId": "pc",
+      "instruction": "集積所に出せない。メーカー直接、販売店、またはパソコン3R推進協会（03-5282-7685）へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "ノートパソコン",
+      "aliases": ["ノートPC", "ラップトップ"],
+      "categoryId": "pc",
+      "instruction": "集積所に出せない。メーカー直接、販売店、またはパソコン3R推進協会（03-5282-7685）へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "パソコンディスプレイ",
+      "aliases": ["モニター", "PCモニター", "液晶モニター"],
+      "categoryId": "pc",
+      "instruction": "集積所に出せない。メーカー直接、販売店、またはパソコン3R推進協会（03-5282-7685）へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "パソコン周辺機器",
+      "aliases": ["キーボード", "マウス", "プリンター"],
+      "categoryId": "pc",
+      "instruction": "集積所に出せない。メーカー直接、販売店、またはパソコン3R推進協会（03-5282-7685）へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "スマートフォン",
+      "aliases": ["携帯電話", "ガラケー", "スマホ", "iPhone", "Android"],
+      "categoryId": "small_appliances",
+      "instruction": "市内ホームセンターを窓口に無料でリサイクル回収。販売店か市の回収ボックスへ。",
+      "warnings": []
+    },
+    {
+      "name": "タイヤ",
+      "aliases": ["自動車タイヤ", "夏タイヤ", "冬タイヤ", "スタッドレスタイヤ"],
+      "categoryId": "not_accepted",
+      "instruction": "市では回収していない。産業廃棄物処理業許可業者へ直接処分を依頼。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "自動車バッテリー",
+      "aliases": ["カーバッテリー"],
+      "categoryId": "not_accepted",
+      "instruction": "市では回収していない。販売店または産業廃棄物処理業許可業者へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "自動車部品",
+      "aliases": ["カー用品", "車のパーツ"],
+      "categoryId": "not_accepted",
+      "instruction": "市では回収していない。販売店または産業廃棄物処理業許可業者へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "消火器",
+      "aliases": [],
+      "categoryId": "not_accepted",
+      "instruction": "市では回収していない。販売店または特定窓口（リサイクル推進センター）へ。",
+      "warnings": ["集積所には絶対に出さない"]
+    },
+    {
+      "name": "注射器",
+      "aliases": ["医療廃棄物", "針"],
+      "categoryId": "not_accepted",
+      "instruction": "市では回収していない。医療機関で処分。",
+      "warnings": ["集積所には絶対に出さない", "けがの危険があるので適切に処理"]
+    }
+  ]
+}
