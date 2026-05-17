@@ -1,28 +1,41 @@
 # wrangler.toml
+#
+# 重要: wrangler の仕様上、[env.X] ブロックを定義すると top-level の
+# [[kv_namespaces]] / [vars] は **その env には継承されない**。
+# よって dev / prod それぞれにフルセットを明示する。
+# KV ネームスペース ID は dev/prod 共有（レート制限は端末 ID キーなので衝突なし）。
+
 name = "kore-dou-suteru-api"
 main = "src/index.ts"
 compatibility_date = "2026-05-12"
 compatibility_flags = ["nodejs_compat"]
 
+# ─────────────────────────────────────────────
 # 本番環境
+# ─────────────────────────────────────────────
 [env.production]
 name = "kore-dou-suteru-api-production"
 
-# 開発環境
-[env.development]
-name = "kore-dou-suteru-api-dev"
-
-# レート制限用のKVネームスペース
-# wrangler kv:namespace create "RATE_LIMIT" で作成し、IDを以下に貼る
-[[kv_namespaces]]
+[[env.production.kv_namespaces]]
 binding = "RATE_LIMIT"
 id = "77ad0d59ada24cd08a4d3ea65b7d58af"
 
-# 環境変数（secretsは wrangler secret put で設定）
-# - GEMINI_API_KEY: Google AI StudioのAPIキー（必須、secretで設定）
-# - GEMINI_MODEL: 使用するGeminiモデル名（任意、デフォルトは gemini-2.5-flash）
-# - ALLOWED_ORIGINS: CORS許可オリジン（カンマ区切り。アプリのみなら "*" でも可）
-[vars]
+[env.production.vars]
+GEMINI_MODEL = "gemini-2.5-flash"
+ALLOWED_ORIGINS = "*"
+RATE_LIMIT_PER_MINUTE = "10"
+
+# ─────────────────────────────────────────────
+# 開発環境
+# ─────────────────────────────────────────────
+[env.development]
+name = "kore-dou-suteru-api-dev"
+
+[[env.development.kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "77ad0d59ada24cd08a4d3ea65b7d58af"
+
+[env.development.vars]
 GEMINI_MODEL = "gemini-2.5-flash"
 ALLOWED_ORIGINS = "*"
 RATE_LIMIT_PER_MINUTE = "10"

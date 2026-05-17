@@ -15,6 +15,7 @@
 - **デプロイ済み（2026-05-17、06 番）**: dev / prod URL は `docs/06_worker_deployment.md` 参照。KV ネームスペースは dev/prod 共有方針
 - **Secret は env ごと独立**: `GEMINI_API_KEY` を更新するときは `--env development` と `--env production` の両方に `wrangler secret put` する（片方だけ更新すると不整合）
 - **wrangler v3 系**: `kv:namespace create`（コロン）を使う。v4 にバージョンアップしたら `kv namespace create`（スペース）に変わる
+- **`[env.X]` を定義したら `kv_namespaces` と `vars` は env 別に明示が必須**: top-level の `[[kv_namespaces]]` / `[vars]` は env を定義した瞬間にその env には**継承されない**（Cloudflare 公式仕様）。継承忘れだと `/healthz` は通るが `/api/identify` で `TypeError: Cannot read properties of undefined (reading 'get')` になる。Secret は env 別に登録するので自動継承の話とは別。06 番デプロイ直後にハマったポイント
 
 ## Expoアプリ
 
