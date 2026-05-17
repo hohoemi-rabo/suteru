@@ -1,7 +1,7 @@
 # 10. 収集日計算ロジック（lib/schedule-calculator.ts）
 
 > 関連: `REQUIREMENTS.md` §5.4
-> ステータス: 未着手
+> ステータス: 実装完了（テストランナーは未導入、ホーム診断カードで目視確認）
 
 ## 目的
 
@@ -18,41 +18,42 @@
 
 ### 基本実装
 
-- [ ] `lib/schedule-calculator.ts` 作成
-- [ ] [[05_type_definitions]] の `Pattern` / `CollectionPattern` / `WeekDay` を import
-- [ ] `getNextCollectionDate(pattern, from?: Date): Date` 関数
-- [ ] `findNextWeekday(from, days)`: 指定の曜日のうち最も近い未来日を返す
-- [ ] `findNextNthWeekdayOfMonth(from, nth, day)`: 第N曜日のうち最も近い未来日を返す
+- [×] `lib/schedule-calculator.ts` 作成（純粋関数のみ、React なし）
+- [×] [[05_type_definitions]] の `Pattern` / `CollectionPattern` / `WeekDay` を import
+- [×] `getNextCollectionDate(pattern, from?: Date): Date` 関数
+- [×] `findNextWeekday(from, days, includeToday)`: 指定の曜日のうち最も近い未来日を返す（内部ヘルパー）
+- [×] `findNextNthWeekdayOfMonth(from, nth, day, includeToday)`: 第N曜日のうち最も近い未来日を返す（内部ヘルパー、最大12ヶ月探索）
 
 ### 一括取得API
 
-- [ ] `getAllNextCollections(pattern: Pattern, from?: Date): NextCollection[]`
-  - 全カテゴリ（burnable, plastic_resource, landfill, hazardous, metal_resource, paper_resource）について次回日を返す
-- [ ] 日付昇順でソート
-- [ ] 「今日が収集日」のケースを正しく扱う（朝7時前なら今日、それ以降なら次回）
+- [×] `getAllNextCollections(pattern, categoryLabels, from?: Date): NextCollection[]` 実装
+- [×] 日付昇順でソート
+- [×] 「今日が収集日」のケースを `COLLECTION_CUTOFF_HOUR = 7` で動的判定
 
 ### 表示用ヘルパー
 
-- [ ] `formatNextCollection(date, locale='ja')`: 「次は5月14日（木）」形式
-- [ ] 「明日」「明後日」の特別表示
+- [×] `formatNextCollection(date, from?)`: 「5月14日（木）」形式、`date-fns/locale/ja` 利用
+- [×] 「今日」「明日」「明後日」の特別表示
 
 ### エッジケース
 
-- [ ] 月またぎ（5月の第3木曜の次は6月の第1木曜）
-- [ ] うるう年・年末年始（祝日考慮はMVPでは不要、要件未確定）
-- [ ] `from` が pattern の曜日と一致する場合の挙動（午前7時前後で分岐？）
+- [×] 月またぎ（最大12ヶ月探索でガード）
+- [ ] 祝日・年末年始休止 ← **MVP 未対応**（公式 PDF に明確なルール記載なし。曜日ベース計算結果に「祝日は別途確認」と添える方針、18 のスコープ）
+- [×] `from` が pattern の曜日と一致する場合 → 朝7時境界で当日 / 次回を分岐
 
 ### テスト
 
-- [ ] 単体テスト（Jest等）。固定日付 `2026-05-12 火` を `from` にした expected を書く
-- [ ] 各 patternId × 各カテゴリ × 月またぎ・年またぎを網羅
+- [ ] 単体テスト（Jest等）← **MVP 未実施**。テストランナー未導入。動作確認はホーム診断カードでの目視。12 通知 / 18 Schedule 実装時にバグが出たら Jest 追加検討
 
 ### 通知スケジュールとの連携
 
-- [ ] 次回収集日の **前日夜** の日時を返す `getNextNotificationTime(pattern, time, from)` を [[12_notifications]] に提供
+- [×] `getNextNotificationTime(pattern, time, from)` 実装。「翌日0時基準で次回収集日を探索 → その前日 + 指定時刻」のロジックで「当日通知が間に合わない」問題を回避
+- [×] `parseHHmm` で不正な時刻文字列を 20:00 にフォールバック
 
 ## 注意点
 
-- **タイムゾーンは Asia/Tokyo 固定**。Date.UTC は使わない、date-fns-tz は MVP では不要
-- 祝日の収集休止は要件未確定。実装時は素直に曜日ベースで返し、後で祝日ルールを追加可能な設計に
-- patterns.json の `type` literal が "weekly" / "nth_day" 以外のとき型エラーが出るよう network narrowing
+- **タイムゾーンは端末ローカル**（飯田市ユーザー = JST 想定）。Date.UTC / date-fns-tz は使わない
+- 祝日の収集休止は **MVP 未対応**。曜日ベース計算のみ。UI 側で「祝日は別途確認」と添える
+- 公開 API（`getNextCollectionDate` / `getAllNextCollections` / `getNextNotificationTime` / `formatNextCollection`）は **純粋関数**。同じ入力なら同じ出力で、React Compiler 環境でも安全に呼べる
+- `COLLECTION_CATEGORIES` を export しているので、呼び出し側でカテゴリ列挙する際は import で同期できる
+- `getNextNotificationTime` は **「当日収集日に当日夜通知では遅すぎる」問題** を回避するため、基準を翌日0時にずらして次回を探索する。これで「明朝7時の収集に対しては必ず前日夜の通知」になる
