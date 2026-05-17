@@ -7,6 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { detectArea, type DetectionResult } from '@/lib/area-detector';
 import { useData } from '@/lib/data-loader';
 import {
+  getNextStationCollection,
+  type NextStationDate,
+} from '@/lib/recycle-station-utils';
+import {
   COLLECTION_CATEGORIES,
   formatNextCollection,
   getNextCollectionDate,
@@ -16,45 +20,22 @@ import { useUserSettings } from '@/lib/user-settings';
 import type {
   Area,
   CategoriesData,
+  Category,
   CategoryId,
   CollectionCategoryId,
+  FacilitiesData,
   Item,
+  RecycleStationsData,
 } from '@/types';
 
 const COLLECTION_CATEGORY_SET = new Set<CategoryId>(COLLECTION_CATEGORIES);
 
-const SPECIAL_HANDLING: Record<
-  Exclude<CategoryId, CollectionCategoryId>,
-  { label: string; hint: string }
+/** カテゴリごとに参照すべき施設の purpose 文字列（部分一致） */
+const FACILITY_PURPOSE_HINTS: Partial<
+  Record<Exclude<CategoryId, CollectionCategoryId>, string>
 > = {
-  bottle_pet: {
-    label: 'リサイクルステーションへ',
-    hint: '毎月決まった日にリサイクルステーション（ア〜ク）に持ち込みます。袋のまま入れず分別してください。',
-  },
-  oversized: {
-    label: '大型ごみ',
-    hint: '1m × 1m × 30cm を超える大きさのものは集積所に出せません。クリーンセンターへの持ち込みまたは個別申込が必要です。',
-  },
-  home_appliances: {
-    label: '家電リサイクル法対象',
-    hint: 'テレビ・冷蔵庫・冷凍庫・洗濯機・衣類乾燥機・エアコンは家電リサイクル法により、引取業者へ依頼します。',
-  },
-  pc: {
-    label: 'パソコン回収',
-    hint: 'メーカー回収または小型家電回収ボックス（市役所など）へ。',
-  },
-  small_appliances: {
-    label: '小型家電回収ボックスへ',
-    hint: '市役所などに設置された回収ボックスに入れてください。',
-  },
-  plastic_product: {
-    label: 'プラ製品（プラ資源とは別袋）',
-    hint: '指定のプラ製品袋に入れて出します。プラスチック資源とは別の袋で出してください。',
-  },
-  not_accepted: {
-    label: '飯田市では受け付けていません',
-    hint: '販売店または専門業者にご相談ください。',
-  },
+  oversized: '直接持ち込み',
+  home_appliances: '家電リサイクル法対象品の引取業者',
 };
 
 // ============================================================
@@ -148,6 +129,9 @@ export default function ResultScreen() {
         ) : (
           <SpecialHandlingSection
             categoryId={item.categoryId as Exclude<CategoryId, CollectionCategoryId>}
+            categories={data.categories}
+            recycleStations={data.recycleStations}
+            facilities={data.facilities}
           />
         )}
 
@@ -303,25 +287,210 @@ function CollectionSection({
 }
 
 // ============================================================
-// セクション: 特別ルール
+// セクション: 特別ルール（カテゴリ別、データ駆動 + リンク導線）
 // ============================================================
 
 function SpecialHandlingSection({
   categoryId,
+  categories,
+  recycleStations,
+  facilities,
 }: {
   categoryId: Exclude<CategoryId, CollectionCategoryId>;
+  categories: CategoriesData;
+  recycleStations: RecycleStationsData;
+  facilities: FacilitiesData;
 }) {
-  const handling = SPECIAL_HANDLING[categoryId];
+  const category = categories.categories.find((c) => c.id === categoryId);
+  // 万一カテゴリ定義が見つからない場合のフォールバック
+  if (!category) {
+    return (
+      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+        <Text className="text-sm text-ink-500">出し方</Text>
+        <Text className="text-base text-ink-900">この品目の詳細は準備中です。</Text>
+      </View>
+    );
+  }
+
+  if (categoryId === 'bottle_pet') {
+    const next = getNextStationCollection(recycleStations);
+    return (
+      <BottlePetSection
+        category={category}
+        next={next}
+        onPressDetails={() => router.push('/recycle-stations')}
+      />
+    );
+  }
+
+  const relevantFacilities = pickRelevantFacilities(facilities, categoryId);
   return (
-    <View className="rounded-2xl border border-ink-200 p-4 gap-2">
-      <Text className="text-sm text-ink-500">出し方</Text>
-      <Text className="text-base text-ink-900 font-bold">{handling.label}</Text>
-      <Text className="text-sm text-ink-900 leading-relaxed">{handling.hint}</Text>
-      <Text className="text-xs text-ink-500">
-        ※ 詳細な施設情報は近日公開予定です。
+    <CategoryRuleSection
+      category={category}
+      facilities={relevantFacilities}
+      onPressFacilities={
+        relevantFacilities.length > 0
+          ? () => router.push('/(tabs)/facilities')
+          : null
+      }
+    />
+  );
+}
+
+function BottlePetSection({
+  category,
+  next,
+  onPressDetails,
+}: {
+  category: Category;
+  next: NextStationDate | null;
+  onPressDetails: () => void;
+}) {
+  return (
+    <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+      <View className="gap-1">
+        <Text className="text-sm text-ink-500">出し方</Text>
+        <Text className="text-base text-ink-900 font-bold">
+          リサイクルステーションへ
+        </Text>
+      </View>
+
+      <Text className="text-sm text-ink-900 leading-relaxed">
+        {category.description}
       </Text>
+
+      {next ? (
+        <View className="rounded-xl bg-accent-500/10 px-3 py-3 gap-1">
+          <Text className="text-xs text-ink-500">次の開催</Text>
+          <Text className="text-lg text-ink-900 font-bold">
+            {formatNextCollection(next.date)}
+          </Text>
+          <Text className="text-sm text-ink-900">
+            {next.group.label} グループ（{next.group.schedulePattern}）
+          </Text>
+        </View>
+      ) : (
+        <View className="rounded-xl bg-warn-100 px-3 py-3">
+          <Text className="text-sm text-warn-600">
+            今年度の開催はすべて終了しました。
+          </Text>
+        </View>
+      )}
+
+      {category.notes.length > 0 && (
+        <View className="gap-1">
+          {category.notes.map((note) => (
+            <Text key={note} className="text-xs text-ink-500 leading-relaxed">
+              ・{note}
+            </Text>
+          ))}
+        </View>
+      )}
+
+      <Pressable
+        onPress={onPressDetails}
+        accessibilityRole="link"
+        accessibilityLabel="リサイクルステーションの詳細を見る"
+        className="min-h-11 rounded-xl bg-accent-500 px-4 py-3 flex-row items-center justify-center gap-2"
+      >
+        <Text className="text-base text-white font-bold">
+          リサイクルステーションを見る
+        </Text>
+        <Ionicons name="chevron-forward" size={16} color="#FFFFFF" />
+      </Pressable>
     </View>
   );
+}
+
+function CategoryRuleSection({
+  category,
+  facilities,
+  onPressFacilities,
+}: {
+  category: Category;
+  facilities: ReturnType<typeof pickRelevantFacilities>;
+  onPressFacilities: (() => void) | null;
+}) {
+  return (
+    <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+      <View className="gap-1">
+        <Text className="text-sm text-ink-500">出し方</Text>
+        <Text className="text-base text-ink-900 font-bold">{category.name}</Text>
+      </View>
+
+      <Text className="text-sm text-ink-900 leading-relaxed">
+        {category.description}
+      </Text>
+
+      {category.notes.length > 0 && (
+        <View className="gap-1">
+          {category.notes.map((note) => (
+            <Text key={note} className="text-sm text-ink-900 leading-relaxed">
+              ・{note}
+            </Text>
+          ))}
+        </View>
+      )}
+
+      {facilities.length > 0 && (
+        <View className="rounded-xl bg-ink-200/30 px-3 py-3 gap-2">
+          <Text className="text-xs text-ink-500">関連する連絡先</Text>
+          {facilities.map((f) => (
+            <FacilityQuickRow key={f.id} name={f.name} phone={f.phone} />
+          ))}
+        </View>
+      )}
+
+      {onPressFacilities && (
+        <Pressable
+          onPress={onPressFacilities}
+          accessibilityRole="link"
+          accessibilityLabel="施設一覧を見る"
+          className="flex-row items-center gap-1 self-end"
+        >
+          <Text className="text-sm text-brand-600 underline">施設一覧を見る</Text>
+          <Ionicons name="chevron-forward" size={14} color="#16A34A" />
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+function FacilityQuickRow({ name, phone }: { name: string; phone: string }) {
+  const handleCall = async () => {
+    const tel = `tel:${phone.replace(/[^0-9+]/g, '')}`;
+    try {
+      await Linking.openURL(tel);
+    } catch {
+      Alert.alert('電話を発信できませんでした', phone);
+    }
+  };
+
+  return (
+    <View className="flex-row items-center justify-between gap-2">
+      <Text className="flex-1 text-sm text-ink-900" numberOfLines={1}>
+        {name}
+      </Text>
+      <Pressable
+        onPress={handleCall}
+        accessibilityRole="button"
+        accessibilityLabel={`${name}に電話する`}
+        className="flex-row items-center gap-1 rounded-full bg-brand-500 px-3 py-1.5"
+      >
+        <Ionicons name="call" size={12} color="#FFFFFF" />
+        <Text className="text-sm text-white font-bold">{phone}</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function pickRelevantFacilities(
+  facilities: FacilitiesData,
+  categoryId: Exclude<CategoryId, CollectionCategoryId>,
+) {
+  const hint = FACILITY_PURPOSE_HINTS[categoryId];
+  if (!hint) return [];
+  return facilities.facilities.filter((f) => f.purpose.includes(hint));
 }
 
 // ============================================================

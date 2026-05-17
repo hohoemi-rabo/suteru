@@ -50,8 +50,8 @@
 | 16 | [結果画面](16_result_screen.md) | F1 | Result | ✅ 完了 |
 | 17 | [手動検索画面](17_manual_search_screen.md) | F2 | ManualSearch | ✅ 完了 |
 | 18 | [収集日画面](18_schedule_screen.md) | F3 | Schedule | ✅ 完了 |
-| 19 | [施設画面](19_facilities_screen.md) | F4 | Facilities | ⏳ Phase 4 |
-| 20 | [リサイクルステーション画面](20_recycle_stations_screen.md) | F4 | RecycleStations | ⏳ Phase 4 |
+| 19 | [施設画面](19_facilities_screen.md) | F4 | Facilities | ✅ 完了 (2026-05-17) |
+| 20 | [リサイクルステーション画面](20_recycle_stations_screen.md) | F4 | RecycleStations | ✅ 完了 (2026-05-17) |
 | 21 | [設定画面](21_settings_screen.md) | - | Settings | ✅ 完了 |
 
 ### E. リリース準備
@@ -77,16 +77,18 @@
 > ストア公開・ユーザーテストへ。01 を起点に、データが入ると 19/20 が data-driven に書ける。
 
 1. ✅ **01** データ整備 完了（2026-05-17） — 全 9 JSON が version 1.0.0、MVP 対象 8 区が No.01/15/32-37 に確定
-2. **19** Facilities / **20** RecycleStations（01 完了済みのため着手可）
+2. ✅ **19** Facilities / **20** RecycleStations 完了（2026-05-17） — `app/(tabs)/facilities.tsx` 本実装、`app/recycle-stations.tsx` 新規、`lib/recycle-station-utils.ts` 追加、`app/result.tsx` の SPECIAL_HANDLING をデータ駆動化
 3. **22** 法務文書 / **02** 行政アピール資料（並行可）
 4. **23** EAS Build / Play 配布（preview APK）
 5. **24** ユーザーテスト（ほほ笑みラボ生徒）
 
-### 01 完了に伴う影響
+### 完了に伴う影響と後続作業
 
 - **AreaSelect 画面 (13)** は新 8 区（No.01/15/32/33/34/35/36/37）を表示するように `areas.json` が変更されたため、自動的に追従
 - **REQUIREMENTS.md §2.3** の「No.36 まで」記述は実態と異なる（No.37 まで存在）→ 別途修正必要
-- **recycle-stations.json の各拠点 lat/lng (119件)** は Phase 4 後半で別チケットに切り出し
+- **MapView 埋め込み** は MVP 未対応（外部 Google Maps リンク方式）。将来必要なら別チケット
+- **recycle-stations.json の各拠点 lat/lng (119件)** は別チケットに切り出し（MapView と「最寄りグループ推定」前提）
+- **施設の営業時間判定**（営業中/営業時間外バッジ）は MVP 未対応、必要なら別チケット
 
 ### 判断ポイント
 
