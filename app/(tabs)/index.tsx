@@ -5,6 +5,11 @@ import { useEffect, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import {
+  getConfiguredApiUrl,
+  identifyItem,
+  type IdentifyResult,
+} from '@/lib/api';
 import { detectArea, type DetectionResult } from '@/lib/area-detector';
 import { useData } from '@/lib/data-loader';
 import { getScheduledCount } from '@/lib/notifications';
@@ -167,6 +172,15 @@ type DetectionState =
   | { status: 'loading' }
   | { status: 'done'; result: DetectionResult };
 
+type PingState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'done'; result: IdentifyResult };
+
+// 1×1 透明 PNG（疎通確認用、画像内容自体に意味はない）
+const PING_TINY_PNG_BASE64 =
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 function DevDiagnostics({
   data,
   settings,
@@ -180,6 +194,13 @@ function DevDiagnostics({
 }) {
   const [detection, setDetection] = useState<DetectionState>({ status: 'idle' });
   const [scheduledCount, setScheduledCount] = useState<number | null>(null);
+  const [pingState, setPingState] = useState<PingState>({ status: 'idle' });
+
+  const handlePingApi = async () => {
+    setPingState({ status: 'loading' });
+    const result = await identifyItem(PING_TINY_PNG_BASE64, 'image/png');
+    setPingState({ status: 'done', result });
+  };
 
   const refreshScheduledCount = async () => {
     setScheduledCount(await getScheduledCount());
@@ -280,6 +301,25 @@ function DevDiagnostics({
       </View>
 
       <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+        <Text className="text-sm text-ink-500">Worker 疎通確認</Text>
+        <Text className="text-xs text-ink-500">
+          URL: {getConfiguredApiUrl() ?? '未設定（EXPO_PUBLIC_API_URL）'}
+        </Text>
+        <Pressable
+          onPress={() => {
+            void handlePingApi();
+          }}
+          disabled={pingState.status === 'loading'}
+          className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+        >
+          <Text className="text-base text-white">
+            {pingState.status === 'loading' ? '送信中…' : '1×1 PNG を /api/identify に投げる'}
+          </Text>
+        </Pressable>
+        {pingState.status === 'done' && <PingResultView result={pingState.result} />}
+      </View>
+
+      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
         <Text className="text-sm text-ink-500">通知スケジュール</Text>
         <Text className="text-base text-ink-900">
           予約済み: {scheduledCount === null ? '—' : `${scheduledCount} 件`}
@@ -306,6 +346,26 @@ function DevDiagnostics({
         </Pressable>
       </View>
     </View>
+  );
+}
+
+function PingResultView({ result }: { result: IdentifyResult }) {
+  if (!result.ok) {
+    return (
+      <Text className="text-base text-warn-600">
+        ERR {result.errorCode}: {result.userMessage}
+      </Text>
+    );
+  }
+  if (result.identifiedName === null) {
+    return (
+      <Text className="text-base text-ink-900">
+        OK: null（{result.reason}）
+      </Text>
+    );
+  }
+  return (
+    <Text className="text-base text-ink-900">OK: {result.identifiedName}</Text>
   );
 }
 

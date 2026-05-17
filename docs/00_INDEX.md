@@ -35,7 +35,7 @@
 |---|---|---|---|
 | 07 | [データローダー](07_data_loader.md) | バンドルJSON + リモート最新版の取得・キャッシュ | ✅ 完了 |
 | 08 | [ストレージ層](08_storage_layer.md) | `lib/storage.ts` AsyncStorageラッパー | ✅ 完了 |
-| 09 | [APIクライアント](09_api_client.md) | `lib/api.ts` Worker `/api/identify` 呼び出し | ⏳ Phase 3 |
+| 09 | [APIクライアント](09_api_client.md) | `lib/api.ts` Worker `/api/identify` 呼び出し | ✅ 完了 |
 | 10 | [収集日計算ロジック](10_schedule_calculator.md) | `lib/schedule-calculator.ts` patterns.jsonから次回日算出 | ✅ 完了 |
 | 11 | [地区判定（GPS）](11_area_detector.md) | `lib/area-detector.ts` GPS最近傍判定 | ⏳ Phase 1（次） |
 | 12 | [通知サービス](12_notifications.md) | `lib/notifications.ts` 前夜リマインダー | ✅ 完了 |
