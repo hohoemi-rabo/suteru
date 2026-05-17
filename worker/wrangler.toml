@@ -21,7 +21,7 @@ binding = "RATE_LIMIT"
 id = "77ad0d59ada24cd08a4d3ea65b7d58af"
 
 [env.production.vars]
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 ALLOWED_ORIGINS = "*"
 RATE_LIMIT_PER_MINUTE = "10"
 
@@ -36,6 +36,6 @@ binding = "RATE_LIMIT"
 id = "77ad0d59ada24cd08a4d3ea65b7d58af"
 
 [env.development.vars]
-GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_MODEL = "gemini-3.1-flash-lite"
 ALLOWED_ORIGINS = "*"
 RATE_LIMIT_PER_MINUTE = "10"
