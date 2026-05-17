@@ -1,5 +1,7 @@
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
 
+import { detectArea, type DetectionResult } from '@/lib/area-detector';
 import { useData } from '@/lib/data-loader';
 import {
   COLLECTION_CATEGORIES,
@@ -9,16 +11,22 @@ import {
 import { useUserSettings } from '@/lib/user-settings';
 import type { CollectionCategoryId } from '@/types';
 
+type DetectionState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'done'; result: DetectionResult };
+
 export default function HomeScreen() {
   const data = useData();
   const { settings, isHydrated } = useUserSettings();
+  const [detection, setDetection] = useState<DetectionState>({ status: 'idle' });
 
   // 表示地区: 設定値があればそれ、なければ最初の地区にフォールバック（診断用）
   const displayAreaId = settings.areaId ?? data.areas.areas[0]?.id ?? null;
   const displayArea = data.areas.areas.find((a) => a.id === displayAreaId) ?? null;
   const pattern = displayArea ? data.patterns.patterns[displayArea.patternId] : undefined;
 
-  // カテゴリ名マップ（CollectionCategoryId → 表示名）
+  // カテゴリ名マップ
   const categoryNameMap = data.categories.categories.reduce<Record<string, string>>(
     (acc, c) => {
       acc[c.id] = c.name;
@@ -35,6 +43,12 @@ export default function HomeScreen() {
   );
 
   const nextCollections = pattern ? getAllNextCollections(pattern, collectionLabels) : [];
+
+  const handleDetect = async () => {
+    setDetection({ status: 'loading' });
+    const result = await detectArea(data.areas.areas);
+    setDetection({ status: 'done', result });
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-bg">
@@ -106,7 +120,73 @@ export default function HomeScreen() {
             ※ 祝日休止は MVP 未対応。曜日ベースの計算結果のみ。
           </Text>
         </View>
+
+        {/* area-detector 動作確認用（16_result_screen で本実装される） */}
+        <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+          <Text className="text-sm text-ink-500">地区判定（GPS）デバッグ</Text>
+          <Pressable
+            onPress={handleDetect}
+            disabled={detection.status === 'loading'}
+            className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+          >
+            <Text className="text-base text-white">
+              {detection.status === 'loading' ? '判定中…' : '現在地で判定'}
+            </Text>
+          </Pressable>
+
+          {detection.status === 'done' && <DetectionResultView result={detection.result} />}
+          <Text className="text-xs text-ink-500 mt-2">
+            ※ 初回は位置情報の許可ダイアログが出ます。座標はサーバーに送信されません。
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+function DetectionResultView({ result }: { result: DetectionResult }) {
+  if (!result.ok) {
+    return (
+      <View className="gap-1">
+        <Text className="text-base text-warn-600">エラー: {detectionErrorLabel(result.error)}</Text>
+      </View>
+    );
+  }
+  if (result.area === null) {
+    return (
+      <View className="gap-1">
+        <Text className="text-base text-warn-600">対応エリア外</Text>
+        <Text className="text-sm text-ink-500">
+          最寄り地区まで {result.nearestDistanceKm.toFixed(2)} km
+        </Text>
+        <Text className="text-xs text-ink-500">
+          ({result.coords.lat.toFixed(4)}, {result.coords.lng.toFixed(4)})
+        </Text>
+      </View>
+    );
+  }
+  return (
+    <View className="gap-1">
+      <Text className="text-base text-ink-900">
+        {result.area.name}（{result.area.id}）
+      </Text>
+      <Text className="text-sm text-ink-500">距離: {result.distanceKm.toFixed(2)} km</Text>
+      <Text className="text-xs text-ink-500">
+        ({result.coords.lat.toFixed(4)}, {result.coords.lng.toFixed(4)})
+      </Text>
+    </View>
+  );
+}
+
+function detectionErrorLabel(error: string): string {
+  switch (error) {
+    case 'permission_denied':
+      return '位置情報の許可が必要です（設定アプリから許可してください）';
+    case 'timeout':
+      return '位置情報の取得がタイムアウトしました';
+    case 'unavailable':
+      return '位置情報が利用できません';
+    default:
+      return '不明なエラー';
+  }
 }

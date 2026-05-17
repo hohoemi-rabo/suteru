@@ -1,7 +1,7 @@
 # 11. 地区判定（lib/area-detector.ts）
 
 > 関連: `REQUIREMENTS.md` §3.2（補助フロー: 地区切替）, F5
-> ステータス: 未着手
+> ステータス: 実装完了（16/19/20 への配線は各画面チケットで対応）
 
 ## 目的
 
@@ -17,33 +17,39 @@
 
 ### 基本実装
 
-- [ ] `lib/area-detector.ts` 作成
-- [ ] `requestLocationPermission()`: 許可リクエスト、許可状態を返す
-- [ ] `getCurrentLocation()`: 1回限りの GPS 取得（タイムアウト10秒）
-- [ ] `findNearestArea(lat, lng, areas: Area[]): Area | null`: 最近傍判定
-- [ ] 距離計算は Haversine 公式または平面近似（飯田市内なら平面近似で十分）
+- [×] `lib/area-detector.ts` 作成
+- [×] `ensureLocationPermission()`: 権限確認＋未確定時にリクエスト、`'granted' | 'denied' | 'undetermined'` を返す
+- [×] `getCurrentCoords(timeoutMs)`: 1回限りの GPS 取得（Promise.race でタイムアウト、デフォルト10秒）
+- [×] `findNearestArea(coords, areas)`: 最近傍判定（distance も返す）
+- [×] 距離計算は **Haversine 公式** で実装（地球半径 6371km）
 
 ### 「対応エリア外」判定
 
-- [ ] 最近傍地区との距離が閾値超なら null を返す（例：10km超）
-- [ ] 閾値を決める根拠：MVP 8地区の地理的範囲を確認して調整
+- [×] 最寄り地区との距離 > `OUT_OF_AREA_DISTANCE_KM`（10km）なら `{ ok: true, area: null, reason: 'out_of_area' }` を返す
+- [×] 閾値の根拠: 8地区の地理的範囲は緯度差≈8km、経度差≈8km。10km なら市内ならどこかには到達できる
 
 ### エラーハンドリング
 
-- [ ] 位置情報拒否：明示的なエラー型で返し、UI で誘導
-- [ ] タイムアウト：「位置を取得できませんでした」
-- [ ] GPS無効（屋内など）：「位置の精度が低いです」を表示するか
+- [×] 位置情報拒否: `{ ok: false, error: 'permission_denied' }`、UI 側で設定アプリ誘導
+- [×] タイムアウト: `{ ok: false, error: 'timeout' }`
+- [×] GPS不可・未取得: `{ ok: false, error: 'unavailable' }` または `'unknown'`
+- [×] 結果は discriminated union（`DetectionResult`）で UI 側が網羅できる
 
 ### プライバシー
 
-- [ ] **オンデマンド取得のみ。常時監視しない**（§7.1）
-- [ ] サーバーには送信しない（端末内完結）
-- [ ] 取得後の座標はメモリ上でのみ使用、永続化しない
+- [×] オンデマンド取得のみ。常時監視（watchPosition）は実装しない
+- [×] サーバーには送信しない（端末内完結）
+- [×] 取得後の座標はメモリ上のみ、AsyncStorage / SecureStore には書かない
 
 ### 統合
 
-- [ ] [[16_result_screen]] の「現在地で確認」ボタン
-- [ ] [[19_facilities_screen]] / [[20_recycle_stations_screen]] の地図表示で参考に使えるか検討
+- [ ] [[16_result_screen]] の「現在地で確認」ボタン ← 16 で配線
+- [ ] [[19_facilities_screen]] / [[20_recycle_stations_screen]] の地図表示で参考に使えるか検討 ← 19/20 で判断
+
+### 高レベル統合関数
+
+- [×] `detectArea(areas, timeoutMs?)`: 「許可確認 → GPS取得 → 最寄り判定」をワンコール
+- [×] ホーム画面に「現在地で判定」デバッグボタンを追加して動作確認可能に
 
 ## 注意点
 
