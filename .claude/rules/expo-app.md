@@ -2,33 +2,50 @@
 
 ルート直下の Expo アプリ（`app/` / `components/` / `lib/` / `data/` など）に関する技術・規約・コマンドをまとめる。`worker/` の規約は [`worker.md`](./worker.md) を参照。
 
-## 技術スタック
-
-### 現在 `package.json` に導入済み
+## 技術スタック（全て導入済み）
 
 - Expo SDK 54 / React 19 / React Native 0.81
 - Expo Router 6（typedRoutes / reactCompiler 有効、`app.json` 参照）
-- TypeScript（strict）
+- TypeScript（strict、worker/ は tsconfig で除外）
 - ESLint（`eslint-config-expo`）
-- React Navigation（bottom-tabs）/ expo-image / expo-haptics / expo-symbols 等
+- **NativeWind v4 + tailwindcss v3**（`tailwind.config.js` で brand/accent/warn/ink/cat カラー定義済み）
+- `@react-native-async-storage/async-storage`（設定・データキャッシュ）
+- `expo-camera` / `expo-location` / `expo-notifications`（権限文言は app.json 設定済み）
+- `react-native-maps`（Google Maps、19/20 で使用予定）
+- `react-native-safe-area-context`（**SafeAreaView は必ずこちらから import**）
+- `date-fns` v4（収集日計算、`date-fns/locale/ja` で日本語フォーマット）
+- `expo-secure-store` / `expo-crypto` / `expo-application`（09 API でデバイスIDハッシュに使用予定）
+- `expo-haptics`（重要操作のフィードバック）
+- React Navigation（bottom-tabs）/ expo-image / expo-symbols 等
 
-### MVP実装で追加予定
-
-`REQUIREMENTS.md` §9 に記載、まだ未導入:
-
-- NativeWind（Tailwind CSS）
-- `@react-native-async-storage/async-storage`（地区・通知設定の保存）
-- expo-camera / expo-location / expo-notifications
-- react-native-maps（Google Maps）
-- date-fns（収集日計算）
-
-依存追加時は `package.json` の Expo SDK バージョン（54）に対応するバージョンを `npx expo install` で入れる（`npm install` 直で入れない）。
+依存追加時は `package.json` の Expo SDK バージョン（54）に対応するバージョンを `npx expo install` で入れる（`npm install` 直で入れない、純粋 JS パッケージのみ例外）。
 
 ## React Compiler（`app.json` で有効化済み）
 
 - 手動の `useMemo` / `useCallback` は **書かない**。React Compiler が自動でメモ化する
 - コンパイラが解析できない書き方は避ける: 条件分岐内のフック呼び出し、描画中の ref ミューテーション、など
 - 不安定さに遭遇した場合は、`babel.config.js` の `babel-preset-expo` に `react-compiler.sources` を渡して対象ディレクトリを段階的に絞れる（緊急時のフォールバック手段）
+
+## NativeWind v4
+
+- `tailwind.config.js` の `theme.extend.colors` に **カスタムカラー** を定義済み（`brand`, `accent`, `warn`, `success`, `ink`, `bg`, `cat`）。色は文字列リテラルではなく Tailwind class で参照（`bg-brand-500`, `text-ink-900` 等）
+- カテゴリ8色（実際は13値）の Tailwind キーは `cat.burnable`, `cat.plastic` 等。`data/common/categories.json` の `color` フィールドと同期している
+- 詳細は `docs/03_design_system.md` の「決定事項」セクション参照
+- `babel.config.js` で `jsxImportSource: 'nativewind'` を設定済み
+
+## SafeAreaView の import 元（**重要**）
+
+`react-native` の SafeAreaView は deprecated。**必ず `react-native-safe-area-context` から import** する:
+
+```tsx
+// ❌ NG (deprecation 警告が出る)
+import { SafeAreaView } from 'react-native';
+
+// ✅ OK
+import { SafeAreaView } from 'react-native-safe-area-context';
+```
+
+`SafeAreaProvider` は Expo Router が自動でラップするので手動配線は不要。上部のみ inset が欲しい場合は `<SafeAreaView edges={['top']}>` のように指定（タブが下にあるので bottom は不要）。
 
 ## Expo Router 6 のレイアウト構成
 
@@ -74,6 +91,32 @@
 
 各プロファイルの `env.EXPO_PUBLIC_API_URL` で、Worker の dev/prod を切り替える設計にする。
 
+## lib/ の構成（既に確立）
+
+- **`lib/data-loader.tsx`**: バンドル JSON ロード + リモート更新 + React Context。`useData()` で全 9 JSON にアクセス
+- **`lib/storage.ts`**: 汎用 AsyncStorage ラッパー（`getCached<T>` / `setCached<T>` / `clearCached`）。React 依存なし、純粋関数
+- **`lib/user-settings.tsx`**: UserSettings（地区/通知）の永続化 + React Context。`useUserSettings()` で `{settings, isHydrated, update, setAreaId, ...}` を取得
+- **`lib/schedule-calculator.ts`**: 純粋関数。`getNextCollectionDate` / `getAllNextCollections` / `getNextNotificationTime` / `formatNextCollection`
+- **`lib/area-detector.ts`**: 純粋関数。`detectArea(areas)` で「権限確認→GPS→最寄り判定」を一発で実行
+
+**ルール**:
+- **AsyncStorage 直アクセス禁止** → 必ず `lib/storage.ts` の `getCached`/`setCached`/`clearCached` 経由
+- **JSON データ取得は必ず `useData()` 経由**（または非React文脈なら `loadBundledData()`）
+- **設定値の読み書きは必ず `useUserSettings()` 経由**
+- **未実装**: `lib/api.ts`（09で作成予定、Worker `/api/identify` 呼び出し）、`lib/notifications.ts`（12 で作成予定、`expo-notifications` 集約）
+
+## DevDiagnostics パターン
+
+開発中の動作確認用 UI は `__DEV__` ガード下に書く:
+
+```tsx
+{__DEV__ && (
+  <DevDiagnostics ... />
+)}
+```
+
+Metro bundler が production build 時に dead code として除去するので、本番バンドルにコードが残らない。現状は `app/(tabs)/index.tsx` の末尾に `DevDiagnostics` 関数として診断パネル（データ確認、UserSettings 確認、GPS 判定、リセット）を集約。
+
 ## コーディング規約
 
 ### TypeScript全般
@@ -82,14 +125,13 @@
 - 型定義は明示的に。`any` は原則禁止
 - 関数の引数が3つ以上なら named parameters（`{ a, b, c }: Params`）を使う
 - ファイル名は kebab-case（`schedule-calculator.ts`）、コンポーネントは PascalCase（`ItemCard.tsx`）
+- 全 JSON / API / UserSettings の型は `types/index.ts` に集約
 
 ### Expoアプリ
 
 - 状態管理は基本 React の useState / useReducer。Redux等は導入しない（MVPでは不要）
-- AsyncStorageへのアクセスは必ず `lib/storage.ts` 経由（実装時に作成）
-- API呼び出しは必ず `lib/api.ts` 経由（実装時に作成）
 - インポートは `@/...` のパスエイリアスを使う（`tsconfig.json` で `"@/*": ["./*"]` を設定済み）
-- 文字列リテラル（UI表示文言）は将来の多言語化を見越して、なるべく1箇所にまとめる
+- 文字列リテラル（UI表示文言）は将来の多言語化を見越して、なるべく 1 箇所にまとめる
 
 ## よく使うコマンド（ルートで実行）
 
