@@ -108,28 +108,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Phase 3 完了 → Phase 4 着手前**。詳しい状態は `docs/00_INDEX.md` を参照。
 
-Worker デプロイ済み:
+### 完了済みチケット（17 本）
+
+- 03 デザインシステム / 04 プロジェクトセットアップ / 05 型定義
+- 06 Worker デプロイ / 07 データローダー / 08 ストレージ層 / 09 API クライアント
+- 10 収集日計算 / 11 地区判定 / 12 通知サービス
+- 13 オンボーディング / 14 ホーム / 15 カメラ / 16 結果 / 17 手動検索 / 18 収集日 / 21 設定
+
+### 実機検証済み（2026-05-17）
+
+- カメラ撮影 → Worker → Gemini → 品目判定 → /result 表示の一連がフロー動作
+- Worker ログに画像データが残らないこと（プライバシー設計の実証）
+- 電池→「乾燥剤」と Gemini が見間違うケース 1 件（データは両品目とも正常、AI ハルシネーション）。MVP 許容範囲として 24 番チケット観察項目に記録済み
+
+### Worker デプロイ状態
+
 - dev:  `https://kore-dou-suteru-api-dev.rabo-hohoemi.workers.dev`
 - prod: `https://kore-dou-suteru-api-production.rabo-hohoemi.workers.dev`
-
-### 完了済み
-- 要件定義書 v1.1 / Cloudflare Worker 雛形（コード完了 + デプロイ済み）
-- 03 デザイン叩き台 / 04 プロジェクトセットアップ / 05 型定義 / 06 Worker デプロイ
-- 07 データローダー / 08 ストレージ層 / 09 API クライアント / 10 収集日計算 / 11 地区判定
-- 12 通知サービス / 13 オンボーディング画面 / 14 ホーム画面 / 15 カメラ画面 / 16 結果画面 / 17 手動検索画面 / 18 収集日画面 / 21 設定画面
+- AI モデル: **`gemini-3.1-flash-lite`**（`worker/wrangler.toml`、dev/prod 共通）
+- KV ネームスペース: dev/prod 共有（レート制限は端末 ID 別キー）
+- `[env.X]` 配下に `kv_namespaces` と `vars` を明示する必要あり（上書きしない！ → `.claude/rules/gotchas.md` 参照）
 
 ### Phase 4（次、リリース準備）
-- **01 データ整備** ← skeleton 4 JSON を実データに、No.36 パターン確認、items.json 拡充
-- 19 Facilities / 20 RecycleStations / 02 行政アピール / 22 法務文書 / 23 EAS Build / 24 ユーザーテスト
 
-### Phase 3（Worker 必須）
-- 06 Worker デプロイ / 09 API / 15 Camera / 16 Result
+**推奨着手順**:
 
-### Phase 4
-- 19 Facilities / 20 RecycleStations / 01 データ整備 / 02 行政アピール / 22 法務 / 23 EAS / 24 ユーザーテスト
+1. **01 データ整備** — `basic-rules.json` / `special-disposal.json` / `facilities.json` / `recycle-stations.json` の 4 skeleton を実データに。`items.json` を 50〜100 品目に拡充。No.36（丹保・北条・飯沼南）のパターン確認
+2. **19 Facilities** / **20 RecycleStations** — 01 後にデータ駆動 UI 実装。完成時に `app/result.tsx` の `SPECIAL_HANDLING` ハードコードを除去
+3. **22 法務文書** / **02 行政アピール資料** — 01 と並行可
+4. **23 EAS Build / Play 配布** — クローズドテスト APK
+5. **24 ユーザーテスト** — ほほ笑みラボ生徒約 20 名
 
-### データ整備状況（[[01_data_preparation]] 関連）
-- 本実装済: `meta.json`, `categories.json`（13値）, `items.json`, `patterns.json`, `areas/areas.json`
+### データ整備状況
+
+- 本実装済: `meta.json`, `categories.json`（13 値）, `items.json`（95 品目）, `patterns.json`, `areas/areas.json`
 - skeleton（`_status: "skeleton"`）: `basic-rules.json`, `special-disposal.json`, `facilities.json`, `recycle-stations.json` ← 01 で実データ流し込み
 
 ## チケット管理（`docs/` 配下）

@@ -37,15 +37,15 @@
 | 08 | [ストレージ層](08_storage_layer.md) | `lib/storage.ts` AsyncStorageラッパー | ✅ 完了 |
 | 09 | [APIクライアント](09_api_client.md) | `lib/api.ts` Worker `/api/identify` 呼び出し | ✅ 完了 |
 | 10 | [収集日計算ロジック](10_schedule_calculator.md) | `lib/schedule-calculator.ts` patterns.jsonから次回日算出 | ✅ 完了 |
-| 11 | [地区判定（GPS）](11_area_detector.md) | `lib/area-detector.ts` GPS最近傍判定 | ⏳ Phase 1（次） |
+| 11 | [地区判定（GPS）](11_area_detector.md) | `lib/area-detector.ts` GPS最近傍判定 | ✅ 完了 |
 | 12 | [通知サービス](12_notifications.md) | `lib/notifications.ts` 前夜リマインダー | ✅ 完了 |
 
 ### D. 画面（app/）
 
 | # | チケット | 機能 | 画面 | 状態 |
 |---|---|---|---|---|
-| 13 | [オンボーディング画面](13_onboarding_screens.md) | F5 | Welcome / AreaSelect | ⏳ Phase 1 |
-| 14 | [ホーム画面](14_home_screen.md) | - | Home（カメラボタン・検索バー・タブ） | ⏳ Phase 1 |
+| 13 | [オンボーディング画面](13_onboarding_screens.md) | F5 | Welcome / AreaSelect | ✅ 完了 |
+| 14 | [ホーム画面](14_home_screen.md) | - | Home（カメラボタン・検索バー・タブ） | ✅ 完了 |
 | 15 | [カメラ画面](15_camera_screen.md) | F1 | Camera | ✅ 完了 |
 | 16 | [結果画面](16_result_screen.md) | F1 | Result | ✅ 完了 |
 | 17 | [手動検索画面](17_manual_search_screen.md) | F2 | ManualSearch | ✅ 完了 |
@@ -62,49 +62,31 @@
 | 23 | [EAS Build / Play配布](23_eas_build.md) | eas.json、Google Play クローズドテスト | ⏳ Phase 4 |
 | 24 | [ユーザーテスト](24_user_testing.md) | ほほ笑みラボ生徒テスト・フィードバック反映 | ⏳ Phase 4 |
 
-## 進行順（確定 2026-05-17）
+## 進行順（2026-05-17 更新）
 
-段階的に「使える状態」を作る方針で、4 フェーズに分割:
+### Phase 1〜3: ✅ 全て完了
 
-### Phase 1: ベース完成（Worker 不要）
-> 起動 → 地区選択 → ホーム表示 の最小ループ完成
+- Phase 1（ベース完成）: 11 / 13 / 14
+- Phase 2（データ表示系）: 18 / 12 / 17 / 21
+- Phase 3（F1 コア体験）: 06 / 09 / 15 / 16
 
-1. **11** 地区判定（GPS、純粋ロジック寄り） ← **次**
-2. **13** オンボーディング（Welcome + AreaSelect）
-3. **14** ホーム本実装（診断カード卒業、見栄え整える）
+実機検証済み。詳細は CLAUDE.md の「進捗」セクション。
 
-### Phase 2: データ表示系（Worker 不要、価値が増える）
-> 「カレンダー + 通知アプリ」として実用可
+### Phase 4: 残りのリリース準備（推奨順）
 
-4. **18** Schedule（10 の計算結果を画面化）
-5. **12** 通知サービス（前夜リマインダー）
-6. **17** ManualSearch（オフライン保険）
-7. **21** Settings（地区変更・通知設定 UI）
+> ストア公開・ユーザーテストへ。01 を起点に、データが入ると 19/20 が data-driven に書ける。
 
-### Phase 3: F1 コア体験（Worker 必須、まとめて片付ける）
-> 「これどう捨てる？」の目玉機能が動く
-
-8. **06** Worker デプロイ（対話的コマンド）
-9. **09** API クライアント
-10. **15** Camera
-11. **16** Result
-
-### Phase 4: 周辺機能 + リリース準備
-> ストア公開・ユーザーテストへ
-
-12. **19** Facilities
-13. **20** RecycleStations
-14. **01** データ整備（skeleton を実データに、PDF 照合）
-15. **02** 行政アピール資料
-16. **22** 法務文書
-17. **23** EAS Build / Play 配布
-18. **24** ユーザーテスト
+1. **01** データ整備（skeleton 4 JSON 実データ流し込み、items.json 拡充、No.36 確認）
+2. **19** Facilities / **20** RecycleStations（01 後にデータ駆動）
+3. **22** 法務文書 / **02** 行政アピール資料（**01 と並行可**）
+4. **23** EAS Build / Play 配布（preview APK）
+5. **24** ユーザーテスト（ほほ笑みラボ生徒）
 
 ### 判断ポイント
 
-- フェーズ内の順序は走りながら微調整可（例: Phase 2 で 18 と 12 を入れ替えるなど）
-- 行政アピール（02）の面談が決まったら Phase 1 と並行で前倒し
-- F1 を早く見たい場合は Phase 2 ↔ Phase 3 を入れ替え可
+- 行政アピール（02）の面談が決まったら 01 と並行で前倒し
+- 23 の APK ができたら 24 と並行でテスト配布開始可
+- 19/20 完成時に `app/result.tsx` の SPECIAL_HANDLING ハードコードを data-driven に置換するフォローアップ作業あり
 
 ## 関連ドキュメント
 

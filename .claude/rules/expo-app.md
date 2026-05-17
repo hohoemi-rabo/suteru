@@ -98,12 +98,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 - **`lib/user-settings.tsx`**: UserSettings（地区/通知）の永続化 + React Context。`useUserSettings()` で `{settings, isHydrated, update, setAreaId, ...}` を取得
 - **`lib/schedule-calculator.ts`**: 純粋関数。`getNextCollectionDate` / `getAllNextCollections` / `getNextNotificationTime` / `formatNextCollection`
 - **`lib/area-detector.ts`**: 純粋関数。`detectArea(areas)` で「権限確認→GPS→最寄り判定」を一発で実行
+- **`lib/notifications.ts`**: React 依存ゼロの async モジュール。`requestPermission` / `getPermissionStatus` / `rescheduleNotifications` / `cancelAllScheduled` / `configureNotificationHandler` / `getScheduledCount`。React 側からは `app/_layout.tsx` の `<NotificationsScheduler>` が settings / AppState 'active' で駆動
+- **`lib/text-search.ts`**: 純粋関数。`normalizeJa`（ひらがな→カタカナ吸収）+ `searchItems(items, query, max)`（name 完全 1000 / 前方 800 / 部分 600 / aliases の同順でスコア）
+- **`lib/api.ts`**: React 依存ゼロ。`identifyItem(base64, mimeType?)` で `/api/identify` を 10 秒タイムアウト・X-Device-Id ハッシュ付きで叩く。戻り値は判別ユニオン `IdentifyResult`（ok hit / ok null+reason / 失敗 errorCode+userMessage）。リトライなし
 
 **ルール**:
 - **AsyncStorage 直アクセス禁止** → 必ず `lib/storage.ts` の `getCached`/`setCached`/`clearCached` 経由
 - **JSON データ取得は必ず `useData()` 経由**（または非React文脈なら `loadBundledData()`）
 - **設定値の読み書きは必ず `useUserSettings()` 経由**
-- **未実装**: `lib/api.ts`（09で作成予定、Worker `/api/identify` 呼び出し）、`lib/notifications.ts`（12 で作成予定、`expo-notifications` 集約）
+- **Worker 呼び出しは `identifyItem()` 経由のみ** — 各画面で fetch を直書きしない
 
 ## DevDiagnostics パターン
 
