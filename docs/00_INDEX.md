@@ -52,7 +52,7 @@
 | 18 | [収集日画面](18_schedule_screen.md) | F3 | Schedule | ✅ 完了 |
 | 19 | [施設画面](19_facilities_screen.md) | F4 | Facilities | ⏳ Phase 4 |
 | 20 | [リサイクルステーション画面](20_recycle_stations_screen.md) | F4 | RecycleStations | ⏳ Phase 4 |
-| 21 | [設定画面](21_settings_screen.md) | - | Settings | ⏳ Phase 2 |
+| 21 | [設定画面](21_settings_screen.md) | - | Settings | ✅ 完了 |
 
 ### E. リリース準備
 

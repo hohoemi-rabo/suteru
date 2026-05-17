@@ -1,7 +1,7 @@
 # 21. 設定画面
 
 > 関連: `REQUIREMENTS.md` §6.1, §3.2
-> ステータス: 未着手
+> ステータス: ✅ 完了（2026-05-17）
 
 ## 目的
 
@@ -19,47 +19,50 @@
 
 ### 基本実装
 
-- [ ] `app/(tabs)/settings.tsx` 作成
-- [ ] グルーピング（地区／通知／データ／情報）
+- [×] `app/(tabs)/settings.tsx` 作成
+- [×] グルーピング（地区／通知／データ／アプリ情報／開発者）
 
 ### 地区変更
 
-- [ ] 現在地区名を表示
-- [ ] 「地区を変更」 → 8地区から選択する画面 or モーダル
-- [ ] 変更後 [[08_storage_layer]] で保存、[[12_notifications]] の通知を再スケジュール
+- [×] 現在地区名を表示
+- [×] 8地区インライン選択（onboarding と同じカード UI を流用）
+- [×] 誤タップ防止に Alert 確認後、`setAreaId` で保存
+- [×] 変更後 [[12_notifications]] の再スケジュールは `NotificationsScheduler` が自動実行
 
 ### 通知設定
 
-- [ ] 通知 ON/OFF スイッチ
-- [ ] OFF→ON 時：パーミッション再リクエスト＋通知予約
-- [ ] 通知時刻ピッカー（デフォルト 20:00、§11.4）
-- [ ] 変更時 [[12_notifications]] の `scheduleNextCollectionNotifications` 再実行
+- [×] 通知 ON/OFF スイッチ
+- [×] OFF→ON 時: `requestPermission()` で OS ダイアログ、拒否なら revert + Alert 案内
+- [×] 通知時刻プリセット（18/19/20/21/22 の 5 ボタン、デフォルト 20:00）
+- [×] 通知 OFF 時はプリセットを薄く・disabled に
+- [×] 変更時の通知再スケジュールは `NotificationsScheduler` が自動実行（`settings` 依存）
 
 ### データ更新
 
-- [ ] 「データ更新を確認」ボタン
-- [ ] 押下で [[07_data_loader]] の `checkForDataUpdate()` 呼び出し
-- [ ] 更新中ローディング、結果表示（最新／更新済み）
-- [ ] 現在の data version 表示（`meta.json.version`）
+- [×] 「データ更新を確認」ボタン
+- [×] 押下で [[07_data_loader]] の `useDataUpdater().check()` を呼び出し
+- [×] 更新中ローディング（ボタン disabled + "確認中…"）、結果を Alert
+- [×] 現在の data version + 最終更新日 表示
 
 ### 情報セクション
 
-- [ ] アプリバージョン（`app.json` の version）
-- [ ] ベータ版表示
-- [ ] [[22_legal_documents]] のプライバシーポリシーリンク（モーダル or WebView）
-- [ ] 利用規約リンク
-- [ ] 「公式情報」リンク（`meta.json.officialUrl`）
-- [ ] 連絡先（ほほ笑みラボ）
+- [×] アプリバージョン（`Constants.expoConfig?.version`）
+- [×] ベータ版表示はホーム/Scheduleで実施済みのため Settings では割愛（公式リンクで担保）
+- [×] [[22_legal_documents]] のプライバシーポリシーリンク（「準備中」と表記、タップで Alert）
+- [×] 利用規約リンク（「準備中」と表記、タップで Alert）
+- [×] 「公式情報」リンク（`meta.json.officialUrl`）
+- [×] 運営: ほほ笑みラボ
 
-### 開発者向け（任意）
+### 開発者向け（`__DEV__` のみ）
 
-- [ ] デバッグ：キャッシュクリア、AsyncStorage リセット
-- [ ] 開発ビルドでのみ表示する
+- [×] 設定リセット（オンボーディング再表示） — 確認 Alert あり
+- [×] データキャッシュをクリア — 確認 Alert + 完了 Alert（再起動案内）
+- [×] 開発ビルドでのみ表示（`__DEV__` ガード）
 
 ### アクセシビリティ
 
-- [ ] 各スイッチ・ボタンに明確なラベル
-- [ ] タップ領域 44pt 以上
+- [×] 各スイッチ・ボタンに `accessibilityLabel` / `accessibilityRole` / `accessibilityState`
+- [×] タップ領域は `min-h-11`（44pt）で統一
 
 ## 注意点
 
