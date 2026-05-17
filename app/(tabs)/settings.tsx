@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,6 +18,7 @@ const NOTIFICATION_TIME_PRESETS = ['18:00', '19:00', '20:00', '21:00', '22:00'] 
 
 export default function SettingsScreen() {
   const data = useData();
+  const router = useRouter();
   const {
     settings,
     setAreaId,
@@ -91,9 +93,8 @@ export default function SettingsScreen() {
     }
   };
 
-  const handlePreparingDoc = (label: string) => {
-    Alert.alert(label, '近日公開予定です。');
-  };
+  const handleOpenPrivacy = () => router.push('/legal/privacy-policy');
+  const handleOpenTerms = () => router.push('/legal/terms-of-use');
 
   // ----- 開発者 -----
   const handleReset = () => {
@@ -166,8 +167,8 @@ export default function SettingsScreen() {
             appVersion={appVersion}
             officialUrl={data.meta.officialUrl}
             onPressOfficial={handleOpenOfficial}
-            onPressPrivacy={() => handlePreparingDoc('プライバシーポリシー')}
-            onPressTerms={() => handlePreparingDoc('利用規約')}
+            onPressPrivacy={handleOpenPrivacy}
+            onPressTerms={handleOpenTerms}
           />
 
           {__DEV__ && (
@@ -398,14 +399,12 @@ function AppInfoSection({
         />
         <LinkRow
           label="プライバシーポリシー"
-          subtitle="準備中"
           icon="chevron-forward"
           onPress={onPressPrivacy}
           borderTop
         />
         <LinkRow
           label="利用規約"
-          subtitle="準備中"
           icon="chevron-forward"
           onPress={onPressTerms}
           borderTop

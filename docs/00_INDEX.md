@@ -58,7 +58,7 @@
 
 | # | チケット | 内容 | 状態 |
 |---|---|---|---|
-| 22 | [法務文書](22_legal_documents.md) | プライバシーポリシー・利用規約・各画面ディスクレイマー | ⏳ Phase 4 |
+| 22 | [法務文書](22_legal_documents.md) | プライバシーポリシー・利用規約・各画面ディスクレイマー | ✅ 完了 (2026-05-17) |
 | 23 | [EAS Build / Play配布](23_eas_build.md) | eas.json、Google Play クローズドテスト | ⏳ Phase 4 |
 | 24 | [ユーザーテスト](24_user_testing.md) | ほほ笑みラボ生徒テスト・フィードバック反映 | ⏳ Phase 4 |
 
@@ -78,9 +78,10 @@
 
 1. ✅ **01** データ整備 完了（2026-05-17） — 全 9 JSON が version 1.0.0、MVP 対象 8 区が No.01/15/32-37 に確定
 2. ✅ **19** Facilities / **20** RecycleStations 完了（2026-05-17） — `app/(tabs)/facilities.tsx` 本実装、`app/recycle-stations.tsx` 新規、`lib/recycle-station-utils.ts` 追加、`app/result.tsx` の SPECIAL_HANDLING をデータ駆動化
-3. **22** 法務文書 / **02** 行政アピール資料（並行可）
-4. **23** EAS Build / Play 配布（preview APK）
-5. **24** ユーザーテスト（ほほ笑みラボ生徒）
+3. ✅ **22** 法務文書 完了（2026-05-17） — `lib/legal-documents.ts` + `components/LegalDocumentScreen.tsx` + `app/legal/{privacy-policy,terms-of-use}.tsx`、`docs/legal/*.md` ミラー、result/recycle-stations/search にもベータ版バッジ追加
+4. **02** 行政アピール資料（22 完了済みのため独立に着手可）
+5. **23** EAS Build / Play 配布（preview APK） — 直前に `docs/legal/*.md` を GitHub Pages 等で公開し外部 URL を確定
+6. **24** ユーザーテスト（ほほ笑みラボ生徒）
 
 ### 完了に伴う影響と後続作業
 
@@ -89,6 +90,9 @@
 - **MapView 埋め込み** は MVP 未対応（外部 Google Maps リンク方式）。将来必要なら別チケット
 - **recycle-stations.json の各拠点 lat/lng (119件)** は別チケットに切り出し（MapView と「最寄りグループ推定」前提）
 - **施設の営業時間判定**（営業中/営業時間外バッジ）は MVP 未対応、必要なら別チケット
+- **法務文書の外部 URL 公開**は 23 EAS Build 直前。`docs/legal/*.md` を GitHub Pages または Notion で公開し Google Play 申請の URL に
+- **法務文書の弁護士・行政書士確認**は本格リリース前に推奨（MVP は雛形）
+- **飯田市公式情報の利用許諾打診**は 02 行政アピールと併せて
 
 ### 判断ポイント
 

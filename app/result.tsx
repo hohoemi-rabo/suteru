@@ -164,7 +164,10 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
       >
         <Ionicons name="chevron-back" size={24} color="#1F2937" />
       </Pressable>
-      <Text className="text-xl text-ink-900 font-bold">品目の詳細</Text>
+      <Text className="text-xl text-ink-900 font-bold flex-1">品目の詳細</Text>
+      <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
+        <Text className="text-xs text-brand-600">ベータ版</Text>
+      </View>
     </View>
   );
 }
