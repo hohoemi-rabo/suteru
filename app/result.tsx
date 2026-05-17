@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { detectArea } from '@/lib/area-detector';
 import { handleDetectionResultWithConfirm } from '@/lib/area-detection-ui';
+import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import {
   getNextStationCollection,
@@ -79,8 +80,7 @@ export default function ResultScreen() {
     );
   }
 
-  const colorMap = buildCategoryColorMap(data.categories);
-  const nameMap = buildCategoryNameMap(data.categories);
+  const { colorMap, nameMap } = buildCategoryMaps(data.categories);
 
   const area = data.areas.areas.find((a) => a.id === settings.areaId) ?? null;
   const pattern =
@@ -561,19 +561,5 @@ function findItem(items: Item[], rawName: string): Item | null {
   if (!rawName) return null;
   const q = normalizeJa(rawName);
   return items.find((it) => normalizeJa(it.name) === q) ?? null;
-}
-
-function buildCategoryColorMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.color;
-    return acc;
-  }, {} as Record<CategoryId, string>);
-}
-
-function buildCategoryNameMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.name;
-    return acc;
-  }, {} as Record<CategoryId, string>);
 }
 

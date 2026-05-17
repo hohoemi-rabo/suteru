@@ -12,16 +12,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import { searchItems, type ItemHit } from '@/lib/text-search';
-import type { CategoriesData, CategoryId, Item } from '@/types';
+import type { CategoryId, Item } from '@/types';
 
 export default function SearchScreen() {
   const data = useData();
   const [query, setQuery] = useState('');
 
-  const colorMap = buildCategoryColorMap(data.categories);
-  const nameMap = buildCategoryNameMap(data.categories);
+  const { colorMap, nameMap } = buildCategoryMaps(data.categories);
   const hits = searchItems(data.items.items, query);
 
   const handleBack = () => router.back();
@@ -245,20 +245,3 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   );
 }
 
-// ============================================================
-// ヘルパー: カテゴリ ID → name / color マップ
-// ============================================================
-
-function buildCategoryColorMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.color;
-    return acc;
-  }, {} as Record<CategoryId, string>);
-}
-
-function buildCategoryNameMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.name;
-    return acc;
-  }, {} as Record<CategoryId, string>);
-}

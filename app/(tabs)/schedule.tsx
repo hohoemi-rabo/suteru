@@ -5,10 +5,10 @@ import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import { requestPermission } from '@/lib/notifications';
 import {
-  COLLECTION_CATEGORIES,
   formatNextCollection,
   getAllNextCollections,
   getCollectionsInRange,
@@ -17,7 +17,6 @@ import {
 import { useUserSettings } from '@/lib/user-settings';
 import type {
   Area,
-  CategoriesData,
   CollectionCategoryId,
   NextCollection,
   Pattern,
@@ -39,8 +38,8 @@ export default function ScheduleScreen() {
       ? data.patterns.patterns[patternId]
       : undefined;
 
-  const categoryColorMap = buildCategoryColorMap(data.categories);
-  const categoryLabelMap = buildCategoryLabelMap(data.categories);
+  const { nameMap: categoryLabelMap, colorMap: categoryColorMap } =
+    buildCategoryMaps(data.categories);
 
   const handleOpenSettings = () => {
     router.push('/(tabs)/settings');
@@ -405,38 +404,6 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
 // ============================================================
 // ヘルパー
 // ============================================================
-
-function buildCategoryLabelMap(
-  data: CategoriesData,
-): Record<CollectionCategoryId, string> {
-  const nameMap = data.categories.reduce<Record<string, string>>((acc, c) => {
-    acc[c.id] = c.name;
-    return acc;
-  }, {});
-  return COLLECTION_CATEGORIES.reduce<Record<CollectionCategoryId, string>>(
-    (acc, id) => {
-      acc[id] = nameMap[id] ?? id;
-      return acc;
-    },
-    {} as Record<CollectionCategoryId, string>,
-  );
-}
-
-function buildCategoryColorMap(
-  data: CategoriesData,
-): Record<CollectionCategoryId, string> {
-  const colorMap = data.categories.reduce<Record<string, string>>((acc, c) => {
-    acc[c.id] = c.color;
-    return acc;
-  }, {});
-  return COLLECTION_CATEGORIES.reduce<Record<CollectionCategoryId, string>>(
-    (acc, id) => {
-      acc[id] = colorMap[id] ?? '#6B7280';
-      return acc;
-    },
-    {} as Record<CollectionCategoryId, string>,
-  );
-}
 
 function formatDayHeader(date: Date): string {
   return format(date, 'M月d日（E）', { locale: ja });
