@@ -1,9 +1,11 @@
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 
 import { useData } from '@/lib/data-loader';
+import { useUserSettings } from '@/lib/user-settings';
 
 export default function HomeScreen() {
   const data = useData();
+  const { settings, isHydrated } = useUserSettings();
 
   return (
     <SafeAreaView className="flex-1 bg-bg">
@@ -31,6 +33,21 @@ export default function HomeScreen() {
             収集パターン数: {Object.keys(data.patterns.patterns).length}
           </Text>
           <Text className="text-xs text-ink-500 mt-2">{data.meta.disclaimer}</Text>
+        </View>
+
+        {/* UserSettings 動作確認用（21_settings_screen で本実装される） */}
+        <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+          <Text className="text-sm text-ink-500">UserSettings 稼働確認</Text>
+          <Text className="text-base text-ink-900">
+            areaId: {settings.areaId ?? '未設定'}
+          </Text>
+          <Text className="text-base text-ink-900">
+            通知: {settings.notificationsEnabled ? 'ON' : 'OFF'}
+          </Text>
+          <Text className="text-base text-ink-900">通知時刻: {settings.notificationTime}</Text>
+          <Text className="text-base text-ink-900">
+            hydrated: {isHydrated ? 'yes' : 'no'}
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
