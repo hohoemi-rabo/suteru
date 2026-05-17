@@ -1,11 +1,11 @@
 {
-  "$schema_comment": "飯田市のごみ収集パターン定義。各地区はこのいずれかのパターンを参照する。",
-  "version": "0.1.0-draft",
-  "lastUpdated": "2026-05-12",
-  "sourceDocument": "飯田市ごみ収集カレンダー令和8年度（No.1, 10, 15, 17, 23, 25, 27, 36のPDFから抽出）",
+  "$schema_comment": "飯田市のごみ収集パターン定義。各地区は areas.json から patternId でこのいずれかを参照する。命名規則: pattern_<燃やす曜日略号>_<プラ曜日>_<埋立特定>[_<金属紙>] — 金属紙が埋立特定と同じ日なら省略。例: pattern_mt_fri_n13fri = 燃やす月木/プラ金/埋立特定金属紙すべて第1・3金。pattern_mt_mon_n13tue_n24mon = 燃やす月木/プラ月/埋立特定第1・3火/金属紙第2・4月。",
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-17",
+  "sourceDocument": "飯田市分別収集計画表 令和8年度 家庭用ごみ・リサイクルカレンダー（No.01, 15, 32, 33, 34, 35, 36, 37 の各PDFから抽出・PDF原本と照合済み）",
   "patterns": {
-    "pattern_mon_thu_fri": {
-      "description": "燃やす月木 / プラ金 / 第1・3金",
+    "pattern_mt_fri_n13fri": {
+      "description": "燃やすごみ月木 / プラ資源金 / 埋立特定金属紙すべて第1・3金（No.01 大門町等で使用）",
       "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
       "plastic_resource": { "type": "weekly",  "days": ["fri"] },
       "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "fri" },
@@ -13,17 +13,8 @@
       "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "fri" },
       "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "fri" }
     },
-    "pattern_mon_thu_thu": {
-      "description": "燃やす月木 / プラ木 / 第1・3木",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["thu"] },
-      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" }
-    },
-    "pattern_mon_thu_mon": {
-      "description": "燃やす月木 / プラ月 / 第2・4月",
+    "pattern_mt_mon_n24mon": {
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定金属紙すべて第2・4月（No.15 座光寺で使用）",
       "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
       "plastic_resource": { "type": "weekly",  "days": ["mon"] },
       "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "mon" },
@@ -31,37 +22,64 @@
       "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
       "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
     },
-    "pattern_tue_fri_wed": {
-      "description": "燃やす火金 / プラ水 / 第2・4水",
-      "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
-      "plastic_resource": { "type": "weekly",  "days": ["wed"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "wed" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "wed" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "wed" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "wed" }
+    "pattern_mt_mon_n13tue_n24mon": {
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3火 / 金属紙第2・4月（No.32 上黒田で使用）",
+      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
+      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
+      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "tue" },
+      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "tue" },
+      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
+      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
     },
-    "pattern_tue_fri_fri": {
-      "description": "燃やす火金 / プラ金 / 第2・4金",
-      "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
-      "plastic_resource": { "type": "weekly",  "days": ["fri"] },
+    "pattern_mt_mon_n13wed_n24mon": {
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3水 / 金属紙第2・4月（No.33 下黒田北で使用）",
+      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
+      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
+      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "wed" },
+      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "wed" },
+      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
+      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
+    },
+    "pattern_mt_mon_n24tue_n13mon": {
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4火 / 金属紙第1・3月（No.34 下黒田南で使用）",
+      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
+      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
+      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "tue" },
+      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "tue" },
+      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" },
+      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" }
+    },
+    "pattern_mt_mon_n24fri_n13mon": {
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4金 / 金属紙第1・3月(No.35 下黒田東で使用）",
+      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
+      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
       "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "fri" },
       "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "fri" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "fri" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "fri" }
+      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" },
+      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" }
     },
-    "pattern_tue_fri_thu": {
-      "description": "燃やす火金 / プラ木 / 第2・4木",
+    "pattern_tf_thu_n24wed_n13thu": {
+      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第2・4水 / 金属紙第1・3木（No.36 丹保・北条・飯沼南で使用）",
       "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
       "plastic_resource": { "type": "weekly",  "days": ["thu"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "thu" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "thu" },
+      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "wed" },
+      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "wed" },
+      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" },
+      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" }
+    },
+    "pattern_tf_thu_n13thu_n24thu": {
+      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第1・3木 / 金属紙第2・4木（No.37 南条・別府上・別府下で使用）",
+      "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
+      "plastic_resource": { "type": "weekly",  "days": ["thu"] },
+      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "thu" },
+      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "thu" },
       "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "thu" },
       "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "thu" }
     }
   },
   "notes": [
-    "OCRの読み取り精度に限界があるため、公開前にPDFと突き合わせて校正が必要",
-    "特にNo.36のパターンは要再確認",
-    "全市共通の収集ルール（袋、証紙、サイズ、重さ）はcommon/basic-rules.jsonに分離"
+    "全 8 パターンは令和8年度の各区PDF原本と照合済み（2026-05-17）",
+    "重要発見: 既存ドラフトは『埋立=金属=紙が同じ日』を前提にしていたが、実際は 8 区中 6 区で埋立と金属/紙が別の曜日。型定義は元から個別カテゴリ対応していたため互換性問題なし",
+    "ただし飯田市全 36+ 区のうち今回検証済みは 8 区のみ。他区を追加する際は PDF と照合の上、新パターンが必要かどうか判定すること"
   ]
 }

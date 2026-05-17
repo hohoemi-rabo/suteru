@@ -36,6 +36,9 @@ yarn-error.*
 # MCP server config (contains access tokens — never commit)
 .mcp.json
 
+# Source PDFs (Iida city official documents — kept local only)
+data/_sources/
+
 # typescript
 *.tsbuildinfo
 

@@ -1,72 +1,72 @@
 {
-  "$schema_comment": "飯田市のごみ収集地区一覧。各地区はpatterns.json内のpatternIdを参照する。座標は代表点（PDF地図のおおよその中心）。本番では正確な代表点を設定すること。",
-  "version": "0.1.0-draft",
-  "lastUpdated": "2026-05-12",
-  "areaCountNote": "飯田市のごみ収集地区は実際にはNo.36までの番号がある模様。MVPでカバーする範囲は要決定。以下は今回PDFをいただいた8地区分のみ。",
+  "$schema_comment": "飯田市のごみ収集地区一覧。各地区は patterns.json の patternId を参照する。代表点は GPS 最寄り地区判定に使用。MVP は PDF 入手済みの 8 区に限定（他区は近日対応予定として AreaSelect 画面に表記）。座標は OpenStreetMap Nominatim（©OpenStreetMap contributors, ODbL 1.0）で取得した地名レベルの中心点。サブ地区は地理的位置関係から数百m単位でオフセット。実機検証で誤判定があれば微調整。",
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-17",
+  "areaCountNote": "飯田市の収集区は No.01〜37 まで存在。MVP は PDF を入手済みの 8 区のみ対応。他区は順次拡張予定。",
   "areas": [
     {
       "id": "area_01",
       "no": 1,
       "name": "大門町・桜町・大王路・小伝馬町1・錦町・東新町・諏訪町",
-      "patternId": "pattern_mon_thu_fri",
-      "representativePoint": { "lat": 35.514, "lng": 137.821 },
-      "_note": "代表点は仮置き。正確な座標は後で確定"
-    },
-    {
-      "id": "area_10",
-      "no": 10,
-      "name": "扇町・水の手町・南常盤町・愛宕町",
-      "patternId": "pattern_mon_thu_thu",
-      "representativePoint": { "lat": 35.515, "lng": 137.829 },
-      "_note": "代表点は仮置き"
+      "patternId": "pattern_mt_fri_n13fri",
+      "representativePoint": { "lat": 35.5250, "lng": 137.8285 },
+      "_note": "OSM 飯田市大門町 の neighbourhood 中心。飯田市街中心部"
     },
     {
       "id": "area_15",
       "no": 15,
       "name": "座光寺",
-      "patternId": "pattern_mon_thu_mon",
-      "representativePoint": { "lat": 35.540, "lng": 137.838 },
-      "_note": "代表点は仮置き"
+      "patternId": "pattern_mt_mon_n24mon",
+      "representativePoint": { "lat": 35.5334, "lng": 137.8544 },
+      "_note": "OSM 飯田市座光寺 の中心"
     },
     {
-      "id": "area_17",
-      "no": 17,
-      "name": "水城・城",
-      "patternId": "pattern_tue_fri_wed",
-      "representativePoint": { "lat": 35.525, "lng": 137.853 },
-      "_note": "代表点は仮置き"
+      "id": "area_32",
+      "no": 32,
+      "name": "上黒田",
+      "patternId": "pattern_mt_mon_n13tue_n24mon",
+      "representativePoint": { "lat": 35.5328, "lng": 137.8287 },
+      "_note": "OSM 飯田市上黒田 の neighbourhood 中心（上郷黒田の上部分）"
     },
     {
-      "id": "area_23",
-      "no": 23,
-      "name": "千代",
-      "patternId": "pattern_mon_thu_thu",
-      "representativePoint": { "lat": 35.466, "lng": 137.890 },
-      "_note": "代表点は仮置き。No.10と同パターン"
+      "id": "area_33",
+      "no": 33,
+      "name": "下黒田北",
+      "patternId": "pattern_mt_mon_n13wed_n24mon",
+      "representativePoint": { "lat": 35.5290, "lng": 137.8391 },
+      "_note": "OSM 飯田市下黒田 中心から北へ約 150m オフセット。実機検証で要微調整"
     },
     {
-      "id": "area_25",
-      "no": 25,
-      "name": "竜丘・川路・三穂",
-      "patternId": "pattern_tue_fri_fri",
-      "representativePoint": { "lat": 35.487, "lng": 137.886 },
-      "_note": "代表点は仮置き"
+      "id": "area_34",
+      "no": 34,
+      "name": "下黒田南",
+      "patternId": "pattern_mt_mon_n24tue_n13mon",
+      "representativePoint": { "lat": 35.5260, "lng": 137.8391 },
+      "_note": "OSM 飯田市下黒田 中心から南へ約 150m オフセット。実機検証で要微調整"
     },
     {
-      "id": "area_27",
-      "no": 27,
-      "name": "伊賀良",
-      "patternId": "pattern_tue_fri_thu",
-      "representativePoint": { "lat": 35.498, "lng": 137.795 },
-      "_note": "代表点は仮置き"
+      "id": "area_35",
+      "no": 35,
+      "name": "下黒田東",
+      "patternId": "pattern_mt_mon_n24fri_n13mon",
+      "representativePoint": { "lat": 35.5276, "lng": 137.8410 },
+      "_note": "OSM 飯田市下黒田 中心から東へ約 150m オフセット。実機検証で要微調整"
     },
     {
       "id": "area_36",
       "no": 36,
       "name": "丹保・北条・飯沼南",
-      "patternId": "TBD_NEEDS_VERIFICATION",
-      "representativePoint": { "lat": 35.518, "lng": 137.846 },
-      "_note": "代表点は仮置き。PDFのOCRでパターン抽出に自信なし、要再確認"
+      "patternId": "pattern_tf_thu_n24wed_n13thu",
+      "representativePoint": { "lat": 35.5238, "lng": 137.8532 },
+      "_note": "OSM の 丹保(35.5242,137.8550)・北条(35.5256,137.8533)・飯沼(35.5215,137.8514) の平均"
+    },
+    {
+      "id": "area_37",
+      "no": 37,
+      "name": "南条・別府上・別府下",
+      "patternId": "pattern_tf_thu_n13thu_n24thu",
+      "representativePoint": { "lat": 35.5126, "lng": 137.8494 },
+      "_note": "OSM の 南条(35.5160,137.8519)・別府(35.5092,137.8469) の平均"
     }
   ]
 }

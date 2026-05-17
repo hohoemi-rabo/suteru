@@ -1,6 +1,6 @@
 {
   "$schema_comment": "カテゴリ定義。items.json の categoryId と一致する 13 値。color は tailwind.config.js の cat.* と同期。REQUIREMENTS.md §5.3 では「8カテゴリ」だが、実データは13値のため拡張済み。",
-  "version": "0.1.0-draft",
+  "version": "1.0.0",
   "lastUpdated": "2026-05-17",
   "categories": [
     {

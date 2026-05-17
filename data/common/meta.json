@@ -1,8 +1,8 @@
 {
   "$schema_comment": "アプリ全体のデータバージョン管理。リモート更新時にここの version が比較される。",
-  "version": "0.1.0-draft",
+  "version": "1.0.0",
   "lastUpdated": "2026-05-17",
-  "dataSource": "飯田市ごみ収集カレンダー令和8年度（PDFよりAI整形草稿、未校正）",
-  "disclaimer": "本データはベータ版です。最新情報は飯田市公式サイトをご確認ください。",
-  "officialUrl": "https://www.city.iida.lg.jp/"
+  "dataSource": "飯田市分別収集計画表 令和8年度（家庭用ごみ・リサイクルカレンダー）。MVPカバー範囲は8区分（No.01, 15, 32, 33, 34, 35, 36, 37）。PDF原本との照合済み。",
+  "disclaimer": "本アプリの分別情報は飯田市公式の令和8年度ごみ収集計画表をもとに作成しています（ベータ版）。最新・正確な情報は必ず飯田市公式サイトでご確認ください。",
+  "officialUrl": "https://www.city.iida.lg.jp/site/gomi/"
 }

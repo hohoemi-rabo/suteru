@@ -1,20 +1,19 @@
 {
-  "$schema_comment": "全市共通のごみ出し基本ルール。PDFと突き合わせて 01_data_preparation で本実装する。現状は skeleton。",
-  "version": "0.1.0-skeleton",
+  "$schema_comment": "全市共通のごみ出し基本ルール。飯田市分別収集計画表 令和8年度（家庭用ごみ・リサイクルカレンダー）から抽出。",
+  "version": "1.0.0",
   "lastUpdated": "2026-05-17",
-  "_status": "skeleton - 01_data_preparation で PDF と照合の上、本実装",
   "collectionTime": "収集日の当日午前7時まで",
-  "location": "お住まいの最寄りの集積所のみ利用可",
+  "location": "お住まいの最寄りの集積所のみご利用ください（場所が不明な方はお問い合わせください）",
   "bagRules": {
-    "designated": "（PDFと突き合わせて記入）",
-    "limitPerCollection": "1回の収集に出せるごみは種類ごと3つまで",
-    "weightLimit": "10kgまで",
-    "oversizeRule": "1m×1m×30cm以内なら集積所へ"
+    "designated": "飯田市指定ごみ袋（燃やすごみ・埋立ごみは「大」60円・「小」30円。ごみ処理手数料がごみ袋代に含まれています）",
+    "limitPerCollection": "1回の収集に出せるごみは種類ごと3つ（袋・束）まで",
+    "weightLimit": "10kgまで（片手で持てるくらい）",
+    "oversizeRule": "袋に入らないごみは、1m×1m×30cm以内なら集積所へ出せます。これを超えるサイズは稲葉クリーンセンターへ持ち込んでください"
   },
   "stampRules": {
-    "burnable": "120円分の収入証紙シール",
-    "landfill": "（PDFと突き合わせて記入）",
-    "metalResource": "証紙不要"
+    "burnable": "120円分の収入証紙シールを貼って出してください（指定袋に入らない大きさのもの）",
+    "landfill": "120円分の収入証紙シールを貼って出してください（指定袋に入らない大きさのもの）",
+    "metalResource": "証紙は不要です。そのまま出してください"
   },
-  "salesPoints": "（市販売所一覧をPDFから抽出）"
+  "salesPoints": "ごみ袋や証紙は、市役所売店・自治振興センター・スーパー・コンビニ等で販売中"
 }

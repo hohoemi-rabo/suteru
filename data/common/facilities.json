@@ -1,7 +1,68 @@
 {
-  "$schema_comment": "クリーンセンター・最終処分場・家電引取業者などの持ち込み施設。01_data_preparation で本実装。",
-  "version": "0.1.0-skeleton",
+  "$schema_comment": "ごみ持ち込み施設・資源ごみ受入業者の一覧。飯田市分別収集計画表 令和8年度（家庭用ごみ・リサイクルカレンダー）から抽出。lat/lng は Google Maps で校正予定の暫定値。",
+  "version": "1.0.0",
   "lastUpdated": "2026-05-17",
-  "_status": "skeleton - 01_data_preparation で施設データを埋める",
-  "facilities": []
+  "facilities": [
+    {
+      "id": "facility_inaba_clean_center",
+      "name": "南信州広域連合 稲葉クリーンセンター",
+      "purpose": "燃やすごみの直接持ち込み（大型・大量のごみ）",
+      "address": "飯田市下久堅稲葉1526番地1",
+      "lat": 35.473,
+      "lng": 137.864,
+      "phone": "0265-48-6648",
+      "fee": "220円/10kg",
+      "openDays": "月曜日〜金曜日（月曜日〜金曜日が祝日の場合、年末年始を除き受入れます）",
+      "openHours": "8:30-11:30 / 13:00-16:30"
+    },
+    {
+      "id": "facility_green_valley_chiyo",
+      "name": "飯田市最終処分場（グリーンバレー千代）",
+      "purpose": "埋立ごみの直接持ち込み（大型・大量のごみ）",
+      "address": "飯田市千栄1677番地4",
+      "lat": 35.444,
+      "lng": 137.890,
+      "phone": "0265-59-1153",
+      "fee": "150円/10kg",
+      "openDays": "月曜日〜金曜日（月曜日〜金曜日が祝日の場合、年末年始を除き午前中のみ受入れます）",
+      "openHours": "9:00-12:00 / 13:00-16:00"
+    },
+    {
+      "id": "facility_maeda_sangyo",
+      "name": "前田産業株式会社",
+      "purpose": "資源ごみ（金属・紙）受入／家電リサイクル法対象品の引取業者",
+      "address": "飯田市上郷別府3337番地15",
+      "lat": 35.518,
+      "lng": 137.842,
+      "phone": "0265-22-2488",
+      "openDays": "受入日・時間は電話でお問い合わせください"
+    },
+    {
+      "id": "facility_maeda_kk",
+      "name": "株式会社マエダ",
+      "purpose": "資源ごみ（金属・紙）受入",
+      "address": "飯田市松尾上溝3141番地",
+      "lat": 35.499,
+      "lng": 137.834,
+      "phone": "0265-22-5328",
+      "openDays": "受入日・時間は電話でお問い合わせください"
+    },
+    {
+      "id": "facility_nakata_shoji",
+      "name": "有限会社ナカタ商事",
+      "purpose": "資源ごみ（金属・紙）受入",
+      "address": "飯田市松尾代田862番地4",
+      "lat": 35.492,
+      "lng": 137.836,
+      "phone": "0265-23-1558",
+      "openDays": "受入日・時間は電話でお問い合わせください"
+    },
+    {
+      "id": "facility_maruba_shoten",
+      "name": "丸齒商店",
+      "purpose": "家電リサイクル法対象品の引取業者",
+      "address": "飯田市内（住所詳細はPDFに記載なし、要確認）",
+      "phone": "0265-34-4000"
+    }
+  ]
 }
