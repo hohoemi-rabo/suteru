@@ -34,6 +34,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │
 ├── app/                        ← Expo Router のページ
 │   ├── _layout.tsx             ← root Stack: DataProvider + UserSettingsProvider + NotificationsScheduler
+│   ├── camera.tsx              ← カメラ撮影＋判定（CameraView + ImageManipulator + identifyItem）
 │   ├── search.tsx              ← 手動品目検索（Bottom Sheet 風 Modal で詳細表示）
 │   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード
 │   └── (onboarding)/           ← Welcome / area-select / notifications
@@ -104,7 +105,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 進捗（2026-05-17 時点）
 
-**Phase 3 進行中（06, 09 完了）**。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 3 進行中（06, 09, 15 完了）**。詳しい状態は `docs/00_INDEX.md` を参照。
 
 Worker デプロイ済み:
 - dev:  `https://kore-dou-suteru-api-dev.rabo-hohoemi.workers.dev`
@@ -114,11 +115,10 @@ Worker デプロイ済み:
 - 要件定義書 v1.1 / Cloudflare Worker 雛形（コード完了 + デプロイ済み）
 - 03 デザイン叩き台 / 04 プロジェクトセットアップ / 05 型定義 / 06 Worker デプロイ
 - 07 データローダー / 08 ストレージ層 / 09 API クライアント / 10 収集日計算 / 11 地区判定
-- 12 通知サービス / 13 オンボーディング画面 / 14 ホーム画面 / 17 手動検索画面 / 18 収集日画面 / 21 設定画面
+- 12 通知サービス / 13 オンボーディング画面 / 14 ホーム画面 / 15 カメラ画面 / 17 手動検索画面 / 18 収集日画面 / 21 設定画面
 
-### Phase 3（次）
-- **15 Camera** ← 次の着手（expo-camera で撮影 UI、`identifyItem` を叩く）
-- 16 Result
+### Phase 3（残り）
+- **16 Result** ← 次の着手（Camera/Search 共通の正式 Result 画面、Bottom Sheet モーダルを置き換え）
 
 ### Phase 3（Worker 必須）
 - 06 Worker デプロイ / 09 API / 15 Camera / 16 Result

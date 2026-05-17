@@ -46,7 +46,7 @@
 |---|---|---|---|---|
 | 13 | [オンボーディング画面](13_onboarding_screens.md) | F5 | Welcome / AreaSelect | ⏳ Phase 1 |
 | 14 | [ホーム画面](14_home_screen.md) | - | Home（カメラボタン・検索バー・タブ） | ⏳ Phase 1 |
-| 15 | [カメラ画面](15_camera_screen.md) | F1 | Camera | ⏳ Phase 3 |
+| 15 | [カメラ画面](15_camera_screen.md) | F1 | Camera | ✅ 完了 |
 | 16 | [結果画面](16_result_screen.md) | F1 | Result | ⏳ Phase 3 |
 | 17 | [手動検索画面](17_manual_search_screen.md) | F2 | ManualSearch | ✅ 完了 |
 | 18 | [収集日画面](18_schedule_screen.md) | F3 | Schedule | ✅ 完了 |

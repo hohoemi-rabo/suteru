@@ -30,8 +30,7 @@ export default function HomeScreen() {
 
   const handleCameraPress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // TODO(15): router.push('/camera')
-    Alert.alert('カメラ画面', '15_camera_screen で実装予定です。');
+    router.push('/camera');
   };
 
   const handleSearchPress = () => {

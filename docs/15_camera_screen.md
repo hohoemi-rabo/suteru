@@ -1,7 +1,17 @@
 # 15. カメラ画面（F1）
 
 > 関連: `REQUIREMENTS.md` §3.1（メインフロー）, F1
-> ステータス: 未着手
+> ステータス: ✅ 完了（2026-05-17）
+
+## 実装メモ
+
+- `expo-camera@17.0.10` の `CameraView` + `useCameraPermissions()` を採用（モダン API）
+- `expo-image-manipulator@~14.0.8` を新規導入し、撮影後に長辺 **1280px / JPEG quality 0.7** に正規化。Worker 7MB 上限を確実に下回る
+- 結果モーダルは **Bottom Sheet 風 Modal をインライン実装**（17 と同様、Result 画面 16 ができたら router.push に差し替え）
+- 4 outcome 出し分け: hit / unknown_name（Gemini が辞書外品目を返した）/ not_identifiable / error
+- Worker → items.json の lookup は `normalizeJa` で完全一致 → ダメなら `searchItems(items, name, 1)` の fuzzy fallback
+- 連打防止: `state.kind !== 'ready'` ガード（lib/api.ts ではなく Camera 側の責務、09 で決めた通り）
+- プライバシー注記「画像は保存されません」を常時右上に表示
 
 ## 目的
 
@@ -18,51 +28,51 @@
 
 ### 基本実装
 
-- [ ] `app/camera.tsx` 作成（stack 遷移）
-- [ ] `expo-camera` の `CameraView` をマウント
-- [ ] カメラパーミッション未取得時の許可フロー
-- [ ] 戻るボタン（ヘッダーまたはオーバーレイ）
+- [×] `app/camera.tsx` 作成（Expo Router 自動検出、ルート直下）
+- [×] `expo-camera` の `CameraView` をマウント
+- [×] カメラパーミッション未取得時の許可フロー
+- [×] 戻るボタン（左上オーバーレイ）
 
 ### 撮影フロー
 
-- [ ] シャッターボタン押下 → `takePictureAsync({ base64: true, quality: 0.7 })`
-- [ ] 撮影直後にプレビュー（任意、UX判断）
-- [ ] expo-haptics で撮影フィードバック
+- [×] シャッターボタン押下 → `takePictureAsync({ quality: 0.8, base64: false, skipProcessing: true })`
+- [ ] 撮影直後のプレビュー — シニア配慮で省略、即判定へ
+- [×] expo-haptics で撮影フィードバック（Medium impact）
 
 ### 画像処理
 
-- [ ] 解像度を縮小（例：長辺 1280px 程度）
-- [ ] JPEG 圧縮（quality 0.7〜0.8）
-- [ ] base64 サイズが Worker 上限（5MB相当）に収まることを確認
-- [ ] 必要なら `expo-image-manipulator` を使う
+- [×] 解像度を縮小（長辺 1280px、`ImageManipulator.manipulateAsync`）
+- [×] JPEG 圧縮（quality 0.7）
+- [×] base64 サイズが Worker 上限（7MB）に収まる（`lib/api.ts:25` の MAX_BASE64_LEN で防御）
+- [×] `expo-image-manipulator` 導入
 
 ### Worker 呼び出し
 
-- [ ] [[09_api_client]] の `identifyItem(base64)` を呼ぶ
-- [ ] 通信中は **連打防止**（ボタン disable）
-- [ ] ローディング表示（安心感のあるアニメーション、§6.2）
+- [×] [[09_api_client]] の `identifyItem(base64, 'image/jpeg')` を呼ぶ
+- [×] 通信中は **連打防止**（state.kind !== 'ready' ガード）
+- [×] ローディング表示（ActivityIndicator + 「判定中…」+ 半透明オーバーレイ）
 
 ### 遷移
 
-- [ ] 成功（品目名あり）: `router.replace('/result', { identifiedName, source: 'camera' })`
-- [ ] 成功（不明）: 結果画面で「辞書にありません」を表示、`identifiedName=null` で渡す
-- [ ] エラー: アラートで「もう一度試す」「キャンセル」
+- [×] 成功（品目名ヒット）: Bottom Sheet モーダルで instruction / warnings 表示（16 完成時に router.push に差し替え）
+- [×] 成功（辞書外名 / 不明）: それぞれの専用モーダル + 文字検索誘導
+- [×] エラー: モーダルで `userMessage` 表示 + 「もう一度撮る」「文字検索を試す」
 
 ### エラーハンドリング
 
-- [ ] レート制限 429: 「リクエストが多すぎます、少々お待ちください」
-- [ ] ネット切断: 「通信状態をご確認ください」 + 文字入力検索への誘導
-- [ ] タイムアウト: 同上
-- [ ] カメラ拒否時: 設定アプリへの導線
+- [×] レート制限 429: `userMessage` で「リクエストが多すぎます…」（09 で対応済み、Camera は表示するだけ）
+- [×] ネット切断: 同上 + 「文字検索を試す」誘導
+- [×] タイムアウト: 同上
+- [×] カメラ拒否時: PermissionDenied 画面 → 「設定アプリを開く」or 「カメラを許可する」（canAskAgain で分岐）
 
 ### パーミッション
 
-- [ ] `app.json` plugins の cameraPermission 文言（[[04_project_setup]]）
-- [ ] 拒否時の UX：プライバシーポリシー説明と「設定で許可」ボタン
+- [×] `app.json:42-46` の cameraPermission 文言は既に整備済み（04 で対応）
+- [×] 拒否時の UX：プライバシー説明文 +「設定で許可」or「カメラを許可」ボタン
 
 ### プライバシー表示
 
-- [ ] 画面に「画像は保存されません」と一言記載（信頼の担保）
+- [×] 画面に「画像は保存されません」を右上に常時表示
 
 ## 注意点
 
