@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { detectArea, type DetectionResult } from '@/lib/area-detector';
 import { useData } from '@/lib/data-loader';
@@ -18,7 +19,7 @@ type DetectionState =
 
 export default function HomeScreen() {
   const data = useData();
-  const { settings, isHydrated } = useUserSettings();
+  const { settings, isHydrated, reset } = useUserSettings();
   const [detection, setDetection] = useState<DetectionState>({ status: 'idle' });
 
   // 表示地区: 設定値があればそれ、なければ最初の地区にフォールバック（診断用）
@@ -138,6 +139,19 @@ export default function HomeScreen() {
           <Text className="text-xs text-ink-500 mt-2">
             ※ 初回は位置情報の許可ダイアログが出ます。座標はサーバーに送信されません。
           </Text>
+        </View>
+
+        {/* デバッグ用: オンボーディング再表示。本番ビルドでは __DEV__ ガード追加検討 */}
+        <View className="rounded-2xl border border-warn-600 p-4 gap-2">
+          <Text className="text-sm text-warn-600">デバッグ</Text>
+          <Pressable
+            onPress={() => {
+              void reset();
+            }}
+            className="min-h-11 rounded-xl border-2 border-warn-600 px-4 py-2 items-center justify-center"
+          >
+            <Text className="text-base text-warn-600">設定をリセット（オンボーディング再表示）</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,7 +1,7 @@
-# 13. オンボーディング画面（Welcome / AreaSelect）
+# 13. オンボーディング画面（Welcome / AreaSelect / Notifications）
 
 > 関連: `REQUIREMENTS.md` §3.3（初回起動フロー）, §6.1
-> ステータス: 未着手
+> ステータス: 実装完了（地区未設定なら自動でオンボーディングへリダイレクト、3画面で完結）
 
 ## 目的
 
@@ -18,48 +18,57 @@
 
 ### ルーティング
 
-- [ ] `app/(onboarding)/_layout.tsx` 作成（Stack、headerShown: false）
-- [ ] `app/(onboarding)/welcome.tsx` 作成
-- [ ] `app/(onboarding)/area-select.tsx` 作成
-- [ ] `app/_layout.tsx` で初回起動判定し、未設定なら `(onboarding)/welcome` にリダイレクト
-- [ ] 完了後 `(tabs)` にリプレース遷移
+- [×] `app/(onboarding)/_layout.tsx` 作成（Stack、headerShown: false、initialRouteName: welcome）
+- [×] `app/(onboarding)/welcome.tsx` 作成
+- [×] `app/(onboarding)/area-select.tsx` 作成
+- [×] `app/(onboarding)/notifications.tsx` 作成（追加: 通知許可専用画面）
+- [×] `app/(tabs)/_layout.tsx` でガード実装（`!isHydrated` → null、`!areaId` → `<Redirect href="/(onboarding)/welcome">`）
+- [×] 完了後 `router.replace('/(tabs)')` でホームへ
 
 ### Welcome画面
 
-- [ ] アプリ名・キャッチコピー表示
-- [ ] イラスト or アイコン（[[03_design_system]] のロゴ使用）
-- [ ] 「はじめる」ボタン → AreaSelect へ
-- [ ] ベータ版表記
+- [×] アプリ名「これどう捨てる？」・キャッチコピー表示
+- [×] 視覚要素: `Ionicons leaf` の丸アイコン（ロゴ完成までの暫定）
+- [×] 「はじめる」ボタン（brand-500） → AreaSelect へ `router.push`
+- [×] ベータ版バッジ（brand-100）
 
 ### AreaSelect画面
 
-- [ ] 8地区のリスト表示（`data/areas/areas.json` から、[[07_data_loader]] 経由）
-- [ ] 地区名・地区番号を表示（タップしやすいサイズ）
-- [ ] **「上記以外のエリアは近日対応予定」を画面下部に明記**（§2.3）
-- [ ] 選択 → `setAreaId()` で保存（[[08_storage_layer]]）
-- [ ] 選択後、通知許可リクエストへ
+- [×] 8地区のリスト表示（`useData()` 経由）
+- [×] 地区名・地区番号（No.X）を表示、ラジオ選択 UI
+- [×] **「上記以外のエリアは近日対応予定」を画面下部に明記**（warn-100 背景）
+- [×] 選択 → `setAreaId()` で保存（[[08_storage_layer]]）
+- [×] 選択前は「次へ」ボタン disabled、選択後 → Notifications へ `router.replace`
 
 ### 通知許可フロー
 
-- [ ] 地区選択後、[[12_notifications]] の `requestNotificationPermission()` を呼ぶ
-- [ ] 許可/拒否どちらでもホームに進める
-- [ ] 拒否時：設定画面から後で許可可能な旨を簡潔に案内
+- [×] 専用画面で「通知をON / 後で」を選択（OS ダイアログの前にソフトプロンプト）
+- [×] ON: `Notifications.requestPermissionsAsync()` → 結果を `setNotificationsEnabled` に反映
+- [×] 後で: `setNotificationsEnabled(false)` でスキップ
+- [×] どちらでも `router.replace('/(tabs)')` でホームへ
+- [×] 説明文に「後でいつでも設定から変更できます」明記
+- 注: 12 通知サービスチケットで `lib/notifications.ts` 集約時に直接呼びを差し替える
 
 ### 状態管理
 
-- [ ] [[08_storage_layer]] の `isFirstLaunch()` で判定
-- [ ] 完了マークの保存（地区IDが入っているかで判定可、別フラグ不要）
+- [×] [[08_storage_layer]] の `useUserSettings()` の `isHydrated` / `areaId` で判定（`isFirstLaunch()` API より直接的）
+- [×] 完了マークは別フラグ不要（areaId 設定 = オンボーディング完了）
 
 ### デザイン
 
-- [ ] [[03_design_system]] の配色・タイポを使用
-- [ ] 大きなボタン（最低44pt）
-- [ ] 進捗インジケータ（1/2, 2/2 など）
+- [×] [[03_design_system]] の配色（brand-500/600、warn-600、ink-200/500/900）使用
+- [×] ボタン最低 44pt（`min-h-11`）
+- [×] 進捗インジケータ: AreaSelect = `1 / 2`、Notifications = `2 / 2`
 
 ### エラー処理
 
-- [ ] データ未ロード時のローディング表示
-- [ ] 地区データロード失敗時のリトライ
+- [×] `useData()` はバンドル即時返却のため、データ未ロードはほぼ発生しない
+- [×] `isHydrated=false` の間は `(tabs)/_layout.tsx` で null 返却（オンボーディング画面は Provider が hydrate 済の前提で動作）
+- [ ] 地区データロード失敗時のリトライ ← `useData()` がバンドルにフォールバックする設計のため不要と判断
+
+### 追加機能
+
+- [×] ホーム診断カードに **デバッグ用「設定をリセット」ボタン**を追加（`reset()` 呼び出し → ガードで自動的に Welcome へ）
 
 ## 注意点
 

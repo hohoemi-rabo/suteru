@@ -1,7 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Redirect, Tabs } from 'expo-router';
+
+import { useUserSettings } from '@/lib/user-settings';
 
 export default function TabLayout() {
+  const { settings, isHydrated } = useUserSettings();
+
+  // 永続化値の読み込み中は何も表示しない（AsyncStorage は数十ms）
+  if (!isHydrated) return null;
+
+  // 地区未設定ならオンボーディングへ強制リダイレクト
+  if (!settings.areaId) return <Redirect href="/(onboarding)/welcome" />;
+
   return (
     <Tabs
       screenOptions={{
