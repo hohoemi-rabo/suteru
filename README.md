@@ -1,50 +1,78 @@
-# Welcome to your Expo app 👋
+# これどう捨てる？（仮称）
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+飯田市のごみ分別を、カメラで撮るだけで教えてくれる Android アプリ。
 
-## Get started
+> **ステータス**: 開発中（ベータ版）。MVP（フェーズ1）実装フェーズ。
+>
+> 仕様の正本は [`REQUIREMENTS.md`](./REQUIREMENTS.md)、開発者向けガイドは [`CLAUDE.md`](./CLAUDE.md)、チケット索引は [`docs/00_INDEX.md`](./docs/00_INDEX.md)。
 
-1. Install dependencies
+## 何ができるか（予定）
 
-   ```bash
-   npm install
-   ```
+- カメラで撮影 → AI が品目を特定 → 飯田市ルールで分別方法を表示
+- 文字検索でも品目を調べられる
+- 地区別の次回収集日を表示、前夜に通知
+- クリーンセンター・リサイクルステーション等の施設情報
 
-2. Start the app
+## プロジェクト構成
 
-   ```bash
-   npx expo start
-   ```
+ルート直下は **Expo アプリ**。`worker/` のみ独立した Cloudflare Workers サブプロジェクト。
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+.
+├── app/                  Expo Router のページ
+├── components/           再利用コンポーネント
+├── lib/                  業務ロジック（実装時に作成）
+├── types/                TypeScript型定義
+├── data/                 バンドル用 JSON（共通・地区別）
+├── assets/               画像・フォント
+├── docs/                 機能・要件チケット
+├── .claude/rules/        Claude Code 向け詳細ルール
+└── worker/               Cloudflare Workers（Gemini API プロキシ）
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 技術スタック
 
-## Learn more
+- **モバイル**: Expo SDK 54 / React 19 / Expo Router 6 / TypeScript
+- **スタイル**: NativeWind v4 (Tailwind CSS)
+- **AI**: Gemini Vision API（Cloudflare Workers 経由でプロキシ）
+- **ストレージ**: AsyncStorage（設定）/ SecureStore（デバイスID）
+- **配布**: EAS Build → Google Play
 
-To learn more about developing your project with Expo, look at the following resources:
+## セットアップ
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npm install
+npm start              # Metro 起動（= expo start）
+npm run android        # Android エミュレータ
+npm run ios            # iOS シミュレータ
+npm run web            # Web で起動
+npm run lint           # ESLint
+```
 
-## Join the community
+依存追加時は `npm install` 直ではなく **必ず `npx expo install` を使用**（Expo SDK 54 互換バージョン）。
 
-Join our community of developers creating universal apps.
+## 環境変数
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+`.env.local` をルートに作成し、`.env.example` を参考に値を設定:
+
+```
+EXPO_PUBLIC_API_URL=http://localhost:8787
+```
+
+- `EXPO_PUBLIC_*` プレフィックス付きの値はビルドに平文で埋め込まれる。**APIキー等の機密値は絶対に入れない**
+- Gemini API キーは Worker 側の Secret として管理
+
+## Worker
+
+`worker/` は Cloudflare Workers の独立サブプロジェクト。詳細は [`worker/README.md`](./worker/README.md)。
+
+```bash
+cd worker
+npm install
+npm run dev            # ローカル: http://localhost:8787
+```
+
+## ライセンス・連絡先
+
+- 開発: ほほ笑みラボ
+- ベータ版のため、データの正確性は飯田市公式情報をご確認ください
