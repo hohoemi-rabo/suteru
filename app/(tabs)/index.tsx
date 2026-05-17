@@ -1,12 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { detectArea, type DetectionResult } from '@/lib/area-detector';
 import { useData } from '@/lib/data-loader';
+import { getScheduledCount } from '@/lib/notifications';
 import {
   COLLECTION_CATEGORIES,
   formatNextCollection,
@@ -179,6 +180,15 @@ function DevDiagnostics({
   onReset: () => void;
 }) {
   const [detection, setDetection] = useState<DetectionState>({ status: 'idle' });
+  const [scheduledCount, setScheduledCount] = useState<number | null>(null);
+
+  const refreshScheduledCount = async () => {
+    setScheduledCount(await getScheduledCount());
+  };
+
+  useEffect(() => {
+    void refreshScheduledCount();
+  }, [settings.notificationsEnabled, settings.notificationTime, settings.areaId]);
 
   const displayAreaId = settings.areaId ?? data.areas.areas[0]?.id ?? null;
   const displayArea = data.areas.areas.find((a) => a.id === displayAreaId) ?? null;
@@ -268,6 +278,21 @@ function DevDiagnostics({
           </Text>
         </Pressable>
         {detection.status === 'done' && <DetectionResultView result={detection.result} />}
+      </View>
+
+      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+        <Text className="text-sm text-ink-500">通知スケジュール</Text>
+        <Text className="text-base text-ink-900">
+          予約済み: {scheduledCount === null ? '—' : `${scheduledCount} 件`}
+        </Text>
+        <Pressable
+          onPress={() => {
+            void refreshScheduledCount();
+          }}
+          className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+        >
+          <Text className="text-base text-white">再読込</Text>
+        </Pressable>
       </View>
 
       <View className="rounded-2xl border border-warn-600 p-4 gap-2">

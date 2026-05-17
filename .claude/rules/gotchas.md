@@ -19,7 +19,8 @@
 - **`reactCompiler` 有効**: `useMemo` / `useCallback` の手動最適化は基本不要。逆に React Compiler が嫌う書き方（条件分岐内のフック等）に注意
 - **`npm install` 直は NG**: Expo SDK 54 と非互換バージョンが入りうる。**必ず `npx expo install`**（純粋 JS パッケージ、例: `date-fns` のみ例外）
 - **`SafeAreaView` は `react-native-safe-area-context` から**: `react-native` 側は deprecated。詳細は `.claude/rules/expo-app.md` §SafeAreaView
-- **`expo-notifications` の Expo Go 警告**: SDK 53+ から Expo Go では remote push が削除され、`import * as Notifications from 'expo-notifications'` で警告ログが出る（実害なし）。`app/(onboarding)/notifications.tsx` で `Constants.appOwnership === 'expo'` ガードで API 呼び出しをスキップしている。本番ビルド（23 EAS）で警告は消える
+- **`expo-notifications` の Expo Go 警告**: SDK 53+ から Expo Go では remote push が削除され、`import * as Notifications from 'expo-notifications'` で警告ログが出る（実害なし）。`lib/notifications.ts` の `requestPermission()` / `getPermissionStatus()` が `Constants.appOwnership === 'expo'` ガードで API 呼び出しをスキップする（許可済み扱いで通す）。本番ビルド（23 EAS）で警告は消える
+- **通知の実動作確認は Dev Build / 本番ビルドで**: Expo Go では `scheduleNotificationAsync` を呼んでも警告のみで実通知は届かない。`lib/notifications.ts` の `getScheduledCount()` で何件登録されたかは確認可能。実動作確認は `npx expo run:android` で dev build をビルドするか、`eas build --profile development` を使う
 - **`lib/storage.ts` 経由のみ**: AsyncStorage に直接 import せず、必ず `getCached` / `setCached` 経由
 
 ## ディレクトリ運用

@@ -33,7 +33,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── 00_INDEX.md             ← チケット索引・Phase 進捗（最初に見る）
 │
 ├── app/                        ← Expo Router のページ
-│   ├── _layout.tsx             ← root Stack: DataProvider + UserSettingsProvider
+│   ├── _layout.tsx             ← root Stack: DataProvider + UserSettingsProvider + NotificationsScheduler
 │   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード
 │   └── (onboarding)/           ← Welcome / area-select / notifications
 ├── lib/                        ← 業務ロジック（純粋関数 or React Context）
@@ -41,7 +41,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── storage.ts              ← 汎用 AsyncStorage ラッパー（getCached/setCached/clearCached）
 │   ├── user-settings.tsx       ← UserSettings 永続化 + Provider/useUserSettings
 │   ├── schedule-calculator.ts  ← 次回収集日算出（純粋関数、date-fns）
-│   └── area-detector.ts        ← GPS 最寄り地区判定（純粋関数、Haversine）
+│   ├── area-detector.ts        ← GPS 最寄り地区判定（純粋関数、Haversine）
+│   └── notifications.ts        ← 通知サービス（expo-notifications、14日先までローカル予約）
 ├── types/index.ts              ← 全 JSON / API / UserSettings の型定義
 ├── components/                 ← 再利用コンポーネント（現状ほぼ未使用）
 ├── assets/                     ← 画像・フォント
@@ -100,17 +101,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 進捗（2026-05-17 時点）
 
-**Phase 2 進行中（18 完了）**。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 2 進行中（12, 18 完了）**。詳しい状態は `docs/00_INDEX.md` を参照。
 
 ### 完了済み
 - 要件定義書 v1.1 / Cloudflare Worker 雛形（コード完了、デプロイ未実施）
 - 03 デザイン叩き台 / 04 プロジェクトセットアップ / 05 型定義
 - 07 データローダー / 08 ストレージ層 / 10 収集日計算 / 11 地区判定
-- 13 オンボーディング画面 / 14 ホーム画面 / 18 収集日画面
+- 12 通知サービス / 13 オンボーディング画面 / 14 ホーム画面 / 18 収集日画面
 
 ### Phase 2（次）
-- **12 通知サービス** ← 次の着手
-- 17 ManualSearch / 21 Settings
+- **17 ManualSearch** ← 次の着手
+- 21 Settings
 
 ### Phase 3（Worker 必須）
 - 06 Worker デプロイ / 09 API / 15 Camera / 16 Result

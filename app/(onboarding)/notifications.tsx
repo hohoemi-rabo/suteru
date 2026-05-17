@@ -1,17 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
-import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { requestPermission } from '@/lib/notifications';
 import { useUserSettings } from '@/lib/user-settings';
-
-// Expo Go (SDK 53+) では expo-notifications の権限 API が動作しないため、
-// Expo Go 上ではダイアログをスキップして「許可された前提」で記録する。
-// 実機の開発ビルド・本番ビルドでは正常に動作する。
-const isExpoGo = Constants.appOwnership === 'expo';
 
 export default function NotificationsScreen() {
   const { setNotificationsEnabled } = useUserSettings();
@@ -20,14 +14,7 @@ export default function NotificationsScreen() {
   const handleEnable = async () => {
     setIsRequesting(true);
     try {
-      let granted = false;
-      if (isExpoGo) {
-        // Expo Go では権限 API が動かないので「ON 希望」のみ記録
-        granted = true;
-      } else {
-        const result = await Notifications.requestPermissionsAsync();
-        granted = result.granted;
-      }
+      const granted = await requestPermission();
       await setNotificationsEnabled(granted);
     } finally {
       setIsRequesting(false);

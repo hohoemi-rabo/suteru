@@ -6,6 +6,7 @@ import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useData } from '@/lib/data-loader';
+import { requestPermission } from '@/lib/notifications';
 import {
   COLLECTION_CATEGORIES,
   formatNextCollection,
@@ -53,8 +54,20 @@ export default function ScheduleScreen() {
     }
   };
 
-  const handleToggleNotifications = (value: boolean) => {
-    void setNotificationsEnabled(value);
+  const handleToggleNotifications = async (value: boolean) => {
+    if (!value) {
+      await setNotificationsEnabled(false);
+      return;
+    }
+    const granted = await requestPermission();
+    if (!granted) {
+      Alert.alert(
+        '通知が許可されていません',
+        '端末の設定アプリ → アプリ → 通知 から「これどう捨てる？」の通知を許可してください。',
+      );
+      return;
+    }
+    await setNotificationsEnabled(true);
   };
 
   return (
@@ -88,7 +101,9 @@ export default function ScheduleScreen() {
           <NotificationsRow
             enabled={settings.notificationsEnabled}
             time={settings.notificationTime}
-            onToggle={handleToggleNotifications}
+            onToggle={(value) => {
+              void handleToggleNotifications(value);
+            }}
           />
 
           <Footer onPressOfficial={handleOpenOfficial} />
@@ -320,7 +335,7 @@ function NotificationsRow({
             明日のごみ出しを通知する
           </Text>
           <Text className="text-xs text-ink-500">
-            前日 {time} にお知らせする予定（通知サービスは準備中）
+            前日 {time} に「明日は○○の日です」とお知らせします
           </Text>
         </View>
         <Switch

@@ -38,7 +38,7 @@
 | 09 | [APIクライアント](09_api_client.md) | `lib/api.ts` Worker `/api/identify` 呼び出し | ⏳ Phase 3 |
 | 10 | [収集日計算ロジック](10_schedule_calculator.md) | `lib/schedule-calculator.ts` patterns.jsonから次回日算出 | ✅ 完了 |
 | 11 | [地区判定（GPS）](11_area_detector.md) | `lib/area-detector.ts` GPS最近傍判定 | ⏳ Phase 1（次） |
-| 12 | [通知サービス](12_notifications.md) | `lib/notifications.ts` 前夜リマインダー | ⏳ Phase 2 |
+| 12 | [通知サービス](12_notifications.md) | `lib/notifications.ts` 前夜リマインダー | ✅ 完了 |
 
 ### D. 画面（app/）
 
