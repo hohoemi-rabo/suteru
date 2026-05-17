@@ -11,7 +11,17 @@
  *   （basic-rules.json「収集日の当日午前7時まで」に準拠）
  */
 
-import { addDays, addMonths, format, getDate, getDay, isSameDay, setDate, startOfDay } from 'date-fns';
+import {
+  addDays,
+  addMonths,
+  format,
+  getDate,
+  getDay,
+  isSameDay,
+  setDate,
+  startOfDay,
+  startOfWeek,
+} from 'date-fns';
 import { ja } from 'date-fns/locale';
 
 import type {
@@ -180,6 +190,91 @@ export function getAllNextCollections(
   }));
   result.sort((a, b) => a.date.getTime() - b.date.getTime());
   return result;
+}
+
+/**
+ * Pattern について from から days 日先までの全収集日を、日付単位で集約して返す。
+ *
+ * 同一日に複数カテゴリが収集される場合は entries にまとめる。
+ * Schedule 画面の「今後の予定」リストで使う。
+ *
+ * @param pattern 地区の収集パターン
+ * @param categoryLabels CollectionCategoryId → 表示名
+ * @param from 基準日時
+ * @param days 何日先まで列挙するか（例: 28 で 4 週間）
+ */
+export function getCollectionsInRange(
+  pattern: Pattern,
+  categoryLabels: Record<CollectionCategoryId, string>,
+  from: Date,
+  days: number,
+): { date: Date; entries: NextCollection[] }[] {
+  const base = startOfDay(from);
+  const includeToday = shouldIncludeToday(from);
+  const endTime = addDays(base, days).getTime();
+  const byDate = new Map<number, NextCollection[]>();
+
+  for (const categoryId of COLLECTION_CATEGORIES) {
+    const categoryPattern = pattern[categoryId];
+    // 当日含む基準日を起点にして繰り返し進める
+    let cursor = includeToday ? base : addDays(base, 1);
+    while (true) {
+      const next = getNextCollectionDate(categoryPattern, cursor);
+      if (next.getTime() >= endTime) break;
+      const key = next.getTime();
+      const list = byDate.get(key) ?? [];
+      list.push({
+        categoryId,
+        categoryName: categoryLabels[categoryId] ?? categoryId,
+        date: next,
+      });
+      byDate.set(key, list);
+      // 翌日以降で再探索
+      cursor = addDays(next, 1);
+    }
+  }
+
+  return [...byDate.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([, entries]) => ({
+      date: entries[0].date,
+      entries: entries.sort((a, b) => COLLECTION_CATEGORIES.indexOf(a.categoryId) - COLLECTION_CATEGORIES.indexOf(b.categoryId)),
+    }));
+}
+
+/**
+ * 日付単位の収集配列を、月曜始まりの週で固定 4 週分にグルーピング。
+ *
+ * - from を含む週を weekOffset = 0、以降 1, 2, 3 と続く
+ * - 該当週に収集が無くてもセクションは残す（days: []）
+ *
+ * Schedule 画面で「今週／来週／…」見出し付きで表示するため。
+ */
+export function groupByWeek(
+  collections: { date: Date; entries: NextCollection[] }[],
+  from: Date,
+  weekCount = 4,
+): { weekStart: Date; weekOffset: number; days: { date: Date; entries: NextCollection[] }[] }[] {
+  const firstWeekStart = startOfWeek(from, { weekStartsOn: 1 });
+  const weeks = Array.from({ length: weekCount }, (_, i) => ({
+    weekStart: addDays(firstWeekStart, i * 7),
+    weekOffset: i,
+    days: [] as { date: Date; entries: NextCollection[] }[],
+  }));
+
+  for (const day of collections) {
+    const dayStart = startOfDay(day.date).getTime();
+    const offset = Math.floor((dayStart - firstWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
+    if (offset >= 0 && offset < weekCount) {
+      weeks[offset].days.push(day);
+    }
+  }
+
+  for (const week of weeks) {
+    week.days.sort((a, b) => a.date.getTime() - b.date.getTime());
+  }
+
+  return weeks;
 }
 
 /**

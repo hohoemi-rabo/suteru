@@ -100,17 +100,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 進捗（2026-05-17 時点）
 
-**Phase 1 完了 → Phase 2 着手前**。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 2 進行中（18 完了）**。詳しい状態は `docs/00_INDEX.md` を参照。
 
 ### 完了済み
 - 要件定義書 v1.1 / Cloudflare Worker 雛形（コード完了、デプロイ未実施）
 - 03 デザイン叩き台 / 04 プロジェクトセットアップ / 05 型定義
 - 07 データローダー / 08 ストレージ層 / 10 収集日計算 / 11 地区判定
-- 13 オンボーディング画面 / 14 ホーム画面
+- 13 オンボーディング画面 / 14 ホーム画面 / 18 収集日画面
 
 ### Phase 2（次）
-- **18 Schedule（収集日画面）** ← 次の着手
-- 12 通知サービス / 17 ManualSearch / 21 Settings
+- **12 通知サービス** ← 次の着手
+- 17 ManualSearch / 21 Settings
 
 ### Phase 3（Worker 必須）
 - 06 Worker デプロイ / 09 API / 15 Camera / 16 Result
