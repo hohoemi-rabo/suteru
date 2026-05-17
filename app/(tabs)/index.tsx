@@ -30,8 +30,7 @@ export default function HomeScreen() {
   };
 
   const handleSearchPress = () => {
-    // TODO(17): router.push('/search')
-    Alert.alert('文字検索', '17_manual_search_screen で実装予定です。');
+    router.push('/search');
   };
 
   const handleAreaPress = async () => {
