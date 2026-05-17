@@ -52,10 +52,11 @@ Expo テンプレートの雛形（タブナビゲーション + サンプル画
 - [×] `.env` の取り扱い方針を README に追加
 - [×] `EXPO_PUBLIC_API_URL` のデフォルト値を `.env.example` に記載
 - [ ] `process.env.EXPO_PUBLIC_API_URL` 参照箇所の整理（[[09_api_client]] 実装時に対応）
+- [×] `process.env.EXPO_PUBLIC_DATA_HOST` を `.env.example` に追記（[[07_data_loader]] で追加）
 
 ### ディレクトリ構造の整備（必要になってから）
 
-- [ ] `lib/` を実際に lib コードを書く時に作成（先回り作成しない方針）
+- [×] `lib/` を実際に lib コードを書く時に作成（先回り作成しない方針）← [[07_data_loader]] で作成
 - [×] `types/` を [[05_type_definitions]] 着手時に作成
 - [ ] `app/(onboarding)/` を [[13_onboarding_screens]] 着手時に作成
 

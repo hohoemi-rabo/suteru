@@ -1,7 +1,7 @@
-# 07. データローダー（lib/data-loader.ts）
+# 07. データローダー（lib/data-loader.tsx）
 
 > 関連: `REQUIREMENTS.md` §5.5（データ更新の流れ）, §8.2
-> ステータス: 未着手
+> ステータス: 実装完了（リモートホスト未設定のため remote 部分は no-op）。実ファイル名は `lib/data-loader.tsx`（JSX を含むため）
 
 ## 目的
 
@@ -18,37 +18,46 @@
 
 ### 基本実装
 
-- [ ] `lib/data-loader.ts` 作成
-- [ ] バンドル JSON のインポート（`import items from '@/data/common/items.json'` 形式）
-- [ ] [[05_type_definitions]] の型を適用してエクスポート
-- [ ] 起動時に同期的にバンドル版を返す `loadBundledData()` 関数
-- [ ] グローバルなデータシングルトン（React Context経由でアプリに提供）
+- [×] `lib/data-loader.tsx` 作成（JSX含むため .tsx）
+- [×] バンドル JSON のインポート（9ファイル全て静的 import）
+- [×] [[05_type_definitions]] の型を適用してエクスポート
+- [×] 起動時に同期的にバンドル版を返す `loadBundledData()` 関数
+- [×] グローバルなデータシングルトン（React Context経由でアプリに提供）
 
 ### リモート更新ロジック
 
-- [ ] リモートホスト（GitHub raw or Cloudflare R2）の URL を環境変数で持つ
-- [ ] `meta.json` をフェッチし、ローカル AsyncStorage の version と比較
-- [ ] 新バージョンなら全 JSON をダウンロード
-- [ ] AsyncStorage に保存（[[08_storage_layer]] のラッパー経由）
-- [ ] ダウンロード失敗時はバンドル版にフォールバック
-- [ ] タイムアウト・ネットワーク切断時のハンドリング
+- [×] リモートホスト（GitHub raw or Cloudflare R2）の URL を環境変数で持つ（`EXPO_PUBLIC_DATA_HOST`、未設定なら no-op）
+- [×] `meta.json` をフェッチし、ローカル AsyncStorage の version と比較（`compareVersion`）
+- [×] 新バージョンなら全 JSON をダウンロード（Promise.all で並行）
+- [×] AsyncStorage に保存（[[08_storage_layer]] の `getCached`/`setCached` 経由）
+- [×] ダウンロード失敗時はバンドル版にフォールバック
+- [×] タイムアウト・ネットワーク切断時のハンドリング（AbortController で10秒）
 
 ### 起動時統合
 
-- [ ] root layout（`app/_layout.tsx`）でバンドル版を即時提供
-- [ ] バックグラウンドでリモート更新チェック（UIブロックしない）
-- [ ] 更新成功時のフィードバック（再起動を促すか、次回起動で適用するか方針決定）
+- [×] root layout（`app/_layout.tsx`）でバンドル版を即時提供
+- [×] バックグラウンドでリモート更新チェック（UIブロックしない）
+- [×] 更新成功時のフィードバック → state 自動更新で次回レンダーから反映、再起動不要
 
 ### 手動更新
 
-- [ ] 設定画面用のエクスポート関数 `checkForDataUpdate()` を提供
-- [ ] 更新中のローディング状態を返せるようにする
+- [×] 設定画面用のエクスポート関数 `useDataUpdater()` を提供（check メソッドが `'updated' | 'no-change' | 'no-host' | 'error'` を返す）
+- [×] 更新中のローディング状態を返せるようにする（`isChecking`）
 
 ### キャッシュ整合性
 
-- [ ] AsyncStorage 内の各ファイル version を `meta.json.version` で揃える
-- [ ] 部分的に古いデータが残るケースの回避（all-or-nothingで更新）
-- [ ] バージョン不整合時のリセット手段
+- [×] AsyncStorage 内の各ファイル version を `meta.json.version` で揃える（all-or-nothing で AppData 全体を1キーで保存）
+- [×] 部分的に古いデータが残るケースの回避（all-or-nothing で setCached）
+- [ ] バージョン不整合時のリセット手段 ← 設定画面（21）のリセットボタンで `clearCached(STORAGE_KEYS.CACHED_DATA_BUNDLE)` 呼ぶ予定
+
+### 不足 JSON ファイルの作成（07 実装に必要だったので併せて実施、本来は [[01_data_preparation]] のスコープ）
+
+- [×] `data/common/meta.json` 本実装
+- [×] `data/common/categories.json` 本実装（13エントリ、Tailwindパレット連携）
+- [×] `data/common/basic-rules.json` skeleton（`_status: skeleton`）
+- [×] `data/common/special-disposal.json` skeleton
+- [×] `data/common/facilities.json` skeleton
+- [×] `data/common/recycle-stations.json` skeleton
 
 ## 注意点
 

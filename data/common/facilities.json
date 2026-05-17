@@ -1,0 +1,7 @@
+{
+  "$schema_comment": "クリーンセンター・最終処分場・家電引取業者などの持ち込み施設。01_data_preparation で本実装。",
+  "version": "0.1.0-skeleton",
+  "lastUpdated": "2026-05-17",
+  "_status": "skeleton - 01_data_preparation で施設データを埋める",
+  "facilities": []
+}

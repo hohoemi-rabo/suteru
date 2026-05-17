@@ -1,0 +1,20 @@
+{
+  "$schema_comment": "全市共通のごみ出し基本ルール。PDFと突き合わせて 01_data_preparation で本実装する。現状は skeleton。",
+  "version": "0.1.0-skeleton",
+  "lastUpdated": "2026-05-17",
+  "_status": "skeleton - 01_data_preparation で PDF と照合の上、本実装",
+  "collectionTime": "収集日の当日午前7時まで",
+  "location": "お住まいの最寄りの集積所のみ利用可",
+  "bagRules": {
+    "designated": "（PDFと突き合わせて記入）",
+    "limitPerCollection": "1回の収集に出せるごみは種類ごと3つまで",
+    "weightLimit": "10kgまで",
+    "oversizeRule": "1m×1m×30cm以内なら集積所へ"
+  },
+  "stampRules": {
+    "burnable": "120円分の収入証紙シール",
+    "landfill": "（PDFと突き合わせて記入）",
+    "metalResource": "証紙不要"
+  },
+  "salesPoints": "（市販売所一覧をPDFから抽出）"
+}

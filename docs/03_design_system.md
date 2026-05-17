@@ -94,7 +94,7 @@
 ### 配色パレットの確定
 
 - [×] アプリ全体のベースカラー（明るい緑 or 水色系）を決定 → 明るい緑 `#22C55E` 系
-- [ ] カテゴリ8色を決定し、`categories.json` の `color` と紐付け（[[01_data_preparation]]）← Tailwind側は叩き台で確定、`categories.json` 作成時に最終同期
+- [×] カテゴリ8色を決定し、`categories.json` の `color` と紐付け（[[07_data_loader]] で 13エントリの `categories.json` を作成し、Tailwind と同期済み）
 - [×] アクセント色（CTA・警告・成功）を決定
 - [×] ダーク／ライト両対応するかの方針確認（MVPはライトのみ可）
 - [×] `tailwind.config.js` の `theme.extend.colors` に登録

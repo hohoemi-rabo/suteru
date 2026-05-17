@@ -1,0 +1,8 @@
+{
+  "$schema_comment": "アプリ全体のデータバージョン管理。リモート更新時にここの version が比較される。",
+  "version": "0.1.0-draft",
+  "lastUpdated": "2026-05-17",
+  "dataSource": "飯田市ごみ収集カレンダー令和8年度（PDFよりAI整形草稿、未校正）",
+  "disclaimer": "本データはベータ版です。最新情報は飯田市公式サイトをご確認ください。",
+  "officialUrl": "https://www.city.iida.lg.jp/"
+}

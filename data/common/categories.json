@@ -1,0 +1,140 @@
+{
+  "$schema_comment": "カテゴリ定義。items.json の categoryId と一致する 13 値。color は tailwind.config.js の cat.* と同期。REQUIREMENTS.md §5.3 では「8カテゴリ」だが、実データは13値のため拡張済み。",
+  "version": "0.1.0-draft",
+  "lastUpdated": "2026-05-17",
+  "categories": [
+    {
+      "id": "burnable",
+      "name": "燃やすごみ",
+      "color": "#E63946",
+      "icon": "flame",
+      "bagType": "指定の燃やすごみ袋",
+      "stampRequired": true,
+      "description": "週2回収集。生ごみ・紙くず・衣類・革・ゴム・草など。",
+      "notes": ["120円分の収入証紙シールが必要", "1回の収集に出せるのは種類ごと3袋まで"]
+    },
+    {
+      "id": "plastic_resource",
+      "name": "プラスチック資源",
+      "color": "#F59E0B",
+      "icon": "recycle",
+      "bagType": "指定のプラ資源袋",
+      "stampRequired": false,
+      "description": "週1回収集。プラスチック容器・包装フィルム・キャップなど。",
+      "notes": ["水でゆすぎ、汚れを落として出す", "汚れが落ちないものは燃やすごみへ"]
+    },
+    {
+      "id": "plastic_product",
+      "name": "プラ製品",
+      "color": "#F59E0B",
+      "icon": "recycle",
+      "bagType": "指定のプラ製品袋",
+      "stampRequired": false,
+      "description": "プラスチック製品（容器包装でないもの）。タッパー・スポンジ・歯ブラシなど。",
+      "notes": ["プラ資源とは別の袋で出す"]
+    },
+    {
+      "id": "landfill",
+      "name": "埋立ごみ",
+      "color": "#6B7280",
+      "icon": "trash",
+      "bagType": "指定の埋立ごみ袋",
+      "stampRequired": true,
+      "description": "第1・3または第2・4の月1〜2回。陶器・ガラス・電球など。",
+      "notes": ["割れたものは紙で包み「われもの」と書く"]
+    },
+    {
+      "id": "hazardous",
+      "name": "特定（有害）ごみ",
+      "color": "#EA580C",
+      "icon": "warning",
+      "bagType": "中身の見える透明袋",
+      "stampRequired": false,
+      "description": "月1〜2回。乾電池・蛍光管・スプレー缶・充電池内蔵家電など。",
+      "notes": ["他のごみと絶対に混ぜない（火災の危険）", "集積所の見えやすい場所へ"]
+    },
+    {
+      "id": "metal_resource",
+      "name": "金属類資源",
+      "color": "#475569",
+      "icon": "tools",
+      "bagType": "袋不要（紐でくくる）",
+      "stampRequired": false,
+      "description": "月1〜2回。空き缶・鍋・ストーブ・自転車など。",
+      "notes": ["証紙不要", "灯油・電池は事前に抜く"]
+    },
+    {
+      "id": "paper_resource",
+      "name": "紙類資源",
+      "color": "#92400E",
+      "icon": "paper",
+      "bagType": "ひもで十字にしばる",
+      "stampRequired": false,
+      "description": "月1〜2回。新聞・段ボール・雑誌・チラシ・厚紙。",
+      "notes": ["におい付き・油付きの紙は燃やすごみへ"]
+    },
+    {
+      "id": "bottle_pet",
+      "name": "びん・ペットボトル（リサイクルステーション）",
+      "color": "#0EA5E9",
+      "icon": "bottle",
+      "bagType": "リサイクルステーション専用",
+      "stampRequired": false,
+      "description": "市内どこのステーションでも利用可。毎週土曜 7:30-9:00 等。",
+      "notes": ["キャップとラベルを外し、中をゆすぐ", "ガラスびんは3色（透明・茶・その他）に分ける"]
+    },
+    {
+      "id": "oversized",
+      "name": "大型ごみ",
+      "color": "#7C3AED",
+      "icon": "box",
+      "bagType": "袋不要（証紙シール貼付）",
+      "stampRequired": true,
+      "description": "1m×1m×30cm以内なら集積所へ。布団・カーペット・衣装ケースなど。",
+      "notes": ["120円の収入証紙を本体に貼る", "サイズ超過は稲葉クリーンセンターへ持ち込み"]
+    },
+    {
+      "id": "home_appliances",
+      "name": "家電リサイクル法対象（集積所不可）",
+      "color": "#1E3A8A",
+      "icon": "appliance",
+      "bagType": "－",
+      "stampRequired": false,
+      "description": "テレビ・冷蔵庫・冷凍庫・エアコン・洗濯機・衣類乾燥機。集積所には絶対に出さない。",
+      "notes": ["販売店に引取り依頼、郵便局でリサイクル料金を払って引取業者、または市の粗大ごみ戸別収集"],
+      "outOfScope": ["通常の集積所収集"]
+    },
+    {
+      "id": "pc",
+      "name": "パソコン類（集積所不可）",
+      "color": "#1E3A8A",
+      "icon": "computer",
+      "bagType": "－",
+      "stampRequired": false,
+      "description": "デスクトップ・ノート・モニター・周辺機器。集積所には絶対に出さない。",
+      "notes": ["メーカー直接、販売店、またはパソコン3R推進協会（03-5282-7685）へ"],
+      "outOfScope": ["通常の集積所収集"]
+    },
+    {
+      "id": "small_appliances",
+      "name": "小型家電リサイクル",
+      "color": "#10B981",
+      "icon": "phone",
+      "bagType": "回収ボックス",
+      "stampRequired": false,
+      "description": "スマートフォン・携帯電話など。市内ホームセンターで無料回収。",
+      "notes": []
+    },
+    {
+      "id": "not_accepted",
+      "name": "市では回収しないもの",
+      "color": "#DC2626",
+      "icon": "ban",
+      "bagType": "－",
+      "stampRequired": false,
+      "description": "タイヤ・自動車バッテリー・自動車部品・消火器・医療廃棄物など。",
+      "notes": ["販売店または産業廃棄物処理業許可業者へ"],
+      "outOfScope": ["市の収集・施設持ち込み"]
+    }
+  ]
+}

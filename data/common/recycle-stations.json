@@ -1,0 +1,11 @@
+{
+  "$schema_comment": "リサイクルステーション（ア〜ク 8グループ）のデータ。市内どこのステーションも利用可。01_data_preparation で本実装。",
+  "version": "0.1.0-skeleton",
+  "lastUpdated": "2026-05-17",
+  "_status": "skeleton - 01_data_preparation で ア〜ク 全グループのスケジュールと拠点を埋める",
+  "description": "市内どこのリサイクルステーションも利用可能",
+  "openTime": "午前7時30分〜9時",
+  "items": ["ペットボトル", "ガラスびん", "アルミ缶", "スチール缶"],
+  "cancellationRule": "（雨天時等のキャンセル条件をPDFから抽出）",
+  "groups": []
+}
