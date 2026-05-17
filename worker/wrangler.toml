@@ -16,7 +16,7 @@ name = "kore-dou-suteru-api-dev"
 # wrangler kv:namespace create "RATE_LIMIT" で作成し、IDを以下に貼る
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
-id = "PLACEHOLDER_KV_NAMESPACE_ID"
+id = "77ad0d59ada24cd08a4d3ea65b7d58af"
 
 # 環境変数（secretsは wrangler secret put で設定）
 # - GEMINI_API_KEY: Google AI StudioのAPIキー（必須、secretで設定）

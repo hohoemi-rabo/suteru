@@ -27,7 +27,7 @@
 | 03 | [デザインシステム](03_design_system.md) | 配色パレット、タイポグラフィ、NativeWind 導入 | ✅ 完了（叩き台） |
 | 04 | [プロジェクトセットアップ](04_project_setup.md) | Expo 依存追加、テンプレート整理、ルートREADME差し替え | ✅ 完了 |
 | 05 | [型定義](05_type_definitions.md) | `types/index.ts` で要件定義§5.3の型を整備 | ✅ 完了 |
-| 06 | [Workerデプロイ](06_worker_deployment.md) | KV namespace 作成、Secret 登録、dev/prod デプロイ | ⏳ Phase 3 |
+| 06 | [Workerデプロイ](06_worker_deployment.md) | KV namespace 作成、Secret 登録、dev/prod デプロイ | ✅ 完了 |
 
 ### C. ライブラリ層（lib/）
 

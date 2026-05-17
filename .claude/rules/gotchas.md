@@ -12,7 +12,9 @@
 
 ## Worker
 
-- **`worker/wrangler.toml` の KV id がプレースホルダ**: `PLACEHOLDER_KV_NAMESPACE_ID` のまま。デプロイ前に `wrangler kv:namespace create "RATE_LIMIT"` で作成して置換が必要
+- **デプロイ済み（2026-05-17、06 番）**: dev / prod URL は `docs/06_worker_deployment.md` 参照。KV ネームスペースは dev/prod 共有方針
+- **Secret は env ごと独立**: `GEMINI_API_KEY` を更新するときは `--env development` と `--env production` の両方に `wrangler secret put` する（片方だけ更新すると不整合）
+- **wrangler v3 系**: `kv:namespace create`（コロン）を使う。v4 にバージョンアップしたら `kv namespace create`（スペース）に変わる
 
 ## Expoアプリ
 
