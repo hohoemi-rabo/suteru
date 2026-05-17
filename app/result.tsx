@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { detectArea, type DetectionResult } from '@/lib/area-detector';
+import { detectArea } from '@/lib/area-detector';
+import { handleDetectionResultWithConfirm } from '@/lib/area-detection-ui';
 import { useData } from '@/lib/data-loader';
 import {
   getNextStationCollection,
@@ -48,8 +49,7 @@ export default function ResultScreen() {
     source?: 'camera' | 'search';
   }>();
   const data = useData();
-  const { settings } = useUserSettings();
-  const [overrideAreaId, setOverrideAreaId] = useState<string | null>(null);
+  const { settings, setAreaId } = useUserSettings();
   const [isDetecting, setIsDetecting] = useState(false);
 
   const rawName = params.identifiedName ?? '';
@@ -82,12 +82,10 @@ export default function ResultScreen() {
   const colorMap = buildCategoryColorMap(data.categories);
   const nameMap = buildCategoryNameMap(data.categories);
 
-  const effectiveAreaId = overrideAreaId ?? settings.areaId;
-  const effectiveArea =
-    data.areas.areas.find((a) => a.id === effectiveAreaId) ?? null;
+  const area = data.areas.areas.find((a) => a.id === settings.areaId) ?? null;
   const pattern =
-    effectiveArea && effectiveArea.patternId !== 'TBD_NEEDS_VERIFICATION'
-      ? data.patterns.patterns[effectiveArea.patternId]
+    area && area.patternId !== 'TBD_NEEDS_VERIFICATION'
+      ? data.patterns.patterns[area.patternId]
       : undefined;
 
   const isCollection = COLLECTION_CATEGORY_SET.has(item.categoryId);
@@ -100,7 +98,7 @@ export default function ResultScreen() {
     setIsDetecting(true);
     try {
       const result = await detectArea(data.areas.areas);
-      handleDetectionResult(result, setOverrideAreaId);
+      handleDetectionResultWithConfirm(result, area, setAreaId);
     } finally {
       setIsDetecting(false);
     }
@@ -119,11 +117,9 @@ export default function ResultScreen() {
         {isCollection ? (
           <CollectionSection
             nextDate={nextDate}
-            effectiveArea={effectiveArea}
-            overrideAreaId={overrideAreaId}
+            area={area}
             isDetecting={isDetecting}
             onDetectHere={() => void handleDetectHere()}
-            onClearOverride={() => setOverrideAreaId(null)}
             onChangeArea={() => router.replace('/(tabs)/settings')}
           />
         ) : (
@@ -210,39 +206,19 @@ function ItemDetailCard({
 
 function CollectionSection({
   nextDate,
-  effectiveArea,
-  overrideAreaId,
+  area,
   isDetecting,
   onDetectHere,
-  onClearOverride,
   onChangeArea,
 }: {
   nextDate: Date | null;
-  effectiveArea: Area | null;
-  overrideAreaId: string | null;
+  area: Area | null;
   isDetecting: boolean;
   onDetectHere: () => void;
-  onClearOverride: () => void;
   onChangeArea: () => void;
 }) {
   return (
     <View className="gap-3">
-      {overrideAreaId && (
-        <View className="rounded-xl bg-accent-500/15 px-3 py-2 flex-row items-center gap-2">
-          <Ionicons name="location" size={14} color="#0EA5E9" />
-          <Text className="flex-1 text-sm text-ink-900">
-            現在地: {effectiveArea?.name ?? '—'}（一時的）
-          </Text>
-          <Pressable
-            onPress={onClearOverride}
-            accessibilityRole="button"
-            accessibilityLabel="地区を元に戻す"
-          >
-            <Text className="text-sm text-accent-500 underline">解除</Text>
-          </Pressable>
-        </View>
-      )}
-
       <View className="rounded-2xl border border-ink-200 p-4 gap-2">
         <Text className="text-sm text-ink-500">次回収集日</Text>
         {nextDate ? (
@@ -255,7 +231,7 @@ function CollectionSection({
           </Text>
         )}
         <Text className="text-xs text-ink-500">
-          地区: {effectiveArea?.name ?? '未設定'}
+          地区: {area?.name ?? '未設定'}
         </Text>
       </View>
 
@@ -264,13 +240,13 @@ function CollectionSection({
           onPress={onDetectHere}
           disabled={isDetecting}
           accessibilityRole="button"
-          accessibilityLabel="現在地で確認"
+          accessibilityLabel="現在地から地区を判定して設定を更新"
           className={`min-h-11 rounded-xl px-4 py-3 items-center justify-center ${
             isDetecting ? 'bg-ink-200' : 'bg-accent-500'
           }`}
         >
           <Text className={`text-base font-bold ${isDetecting ? 'text-ink-500' : 'text-white'}`}>
-            {isDetecting ? '現在地を取得中…' : '現在地で確認'}
+            {isDetecting ? '現在地を取得中…' : '現在地から地区を設定'}
           </Text>
         </Pressable>
         <Pressable
@@ -598,42 +574,3 @@ function buildCategoryNameMap(data: CategoriesData): Record<CategoryId, string> 
   }, {} as Record<CategoryId, string>);
 }
 
-function handleDetectionResult(
-  result: DetectionResult,
-  setOverrideAreaId: (id: string) => void,
-): void {
-  if (!result.ok) {
-    if (result.error === 'permission_denied') {
-      Alert.alert(
-        '位置情報の許可が必要です',
-        '端末の設定アプリ → アプリ → 位置情報 で許可してください。',
-        [
-          { text: 'キャンセル', style: 'cancel' },
-          { text: '設定を開く', onPress: () => void Linking.openSettings() },
-        ],
-      );
-    } else {
-      Alert.alert('位置情報を取得できませんでした', detectionErrorLabel(result.error));
-    }
-    return;
-  }
-  if (result.area === null) {
-    Alert.alert(
-      '対応エリア外です',
-      `最寄り地区まで ${result.nearestDistanceKm.toFixed(1)} km。設定の地区はそのままです。`,
-    );
-    return;
-  }
-  setOverrideAreaId(result.area.id);
-}
-
-function detectionErrorLabel(error: string): string {
-  switch (error) {
-    case 'timeout':
-      return '位置情報の取得がタイムアウトしました。電波状況をご確認ください。';
-    case 'unavailable':
-      return 'この端末では位置情報が利用できません。';
-    default:
-      return '不明なエラーが発生しました。';
-  }
-}
