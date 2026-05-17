@@ -4,7 +4,6 @@ import { useState } from 'react';
 import {
   Alert,
   Linking,
-  Modal,
   Pressable,
   ScrollView,
   Text,
@@ -20,17 +19,21 @@ import type { CategoriesData, CategoryId, Item } from '@/types';
 export default function SearchScreen() {
   const data = useData();
   const [query, setQuery] = useState('');
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
 
   const colorMap = buildCategoryColorMap(data.categories);
   const nameMap = buildCategoryNameMap(data.categories);
   const hits = searchItems(data.items.items, query);
 
-  const handleClose = () => setSelectedItem(null);
-
   const handleBack = () => router.back();
 
   const handleClear = () => setQuery('');
+
+  const handleSelectItem = (item: Item) => {
+    router.push({
+      pathname: '/result',
+      params: { identifiedName: item.name, source: 'search' },
+    });
+  };
 
   const handleOpenOfficial = async () => {
     try {
@@ -63,20 +66,13 @@ export default function SearchScreen() {
               hits={hits}
               colorMap={colorMap}
               nameMap={nameMap}
-              onPressItem={setSelectedItem}
+              onPressItem={handleSelectItem}
             />
           )}
 
           <Footer onPressOfficial={handleOpenOfficial} />
         </ScrollView>
       </View>
-
-      <ItemDetailSheet
-        item={selectedItem}
-        colorMap={colorMap}
-        nameMap={nameMap}
-        onClose={handleClose}
-      />
     </SafeAreaView>
   );
 }
@@ -243,85 +239,6 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         <Ionicons name="open-outline" size={14} color="#16A34A" />
       </Pressable>
     </View>
-  );
-}
-
-// ============================================================
-// セクション: 品目詳細 Bottom Sheet（Result 画面 16 までの暫定）
-// ============================================================
-
-function ItemDetailSheet({
-  item,
-  colorMap,
-  nameMap,
-  onClose,
-}: {
-  item: Item | null;
-  colorMap: Record<CategoryId, string>;
-  nameMap: Record<CategoryId, string>;
-  onClose: () => void;
-}) {
-  return (
-    <Modal
-      visible={!!item}
-      animationType="slide"
-      transparent
-      onRequestClose={onClose}
-    >
-      <Pressable
-        className="flex-1 bg-black/40 justify-end"
-        onPress={onClose}
-        accessibilityRole="button"
-        accessibilityLabel="閉じる"
-      >
-        <View
-          className="rounded-t-3xl bg-bg p-6 gap-4"
-          onStartShouldSetResponder={() => true}
-        >
-          <View className="self-center w-12 h-1 rounded-full bg-ink-200" />
-
-          {item && (
-            <>
-              <View
-                className="self-start rounded-full px-3 py-1.5"
-                style={{ backgroundColor: colorMap[item.categoryId] ?? '#6B7280' }}
-              >
-                <Text className="text-sm text-white font-bold">
-                  {nameMap[item.categoryId] ?? item.categoryId}
-                </Text>
-              </View>
-
-              <Text className="text-2xl text-ink-900 font-bold">{item.name}</Text>
-
-              <Text className="text-base text-ink-900 leading-relaxed">
-                {item.instruction}
-              </Text>
-
-              {item.warnings.length > 0 && (
-                <View className="rounded-xl bg-warn-100 p-3 gap-1">
-                  {item.warnings.map((w) => (
-                    <Text key={w} className="text-sm text-warn-600">⚠ {w}</Text>
-                  ))}
-                </View>
-              )}
-
-              <Text className="text-xs text-ink-500">
-                詳しい画面（収集日・関連施設の案内）は近日公開予定です。
-              </Text>
-
-              <Pressable
-                onPress={onClose}
-                accessibilityRole="button"
-                accessibilityLabel="閉じる"
-                className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
-              >
-                <Text className="text-base text-white font-bold">閉じる</Text>
-              </Pressable>
-            </>
-          )}
-        </View>
-      </Pressable>
-    </Modal>
   );
 }
 

@@ -1,7 +1,18 @@
 # 16. 結果画面（F1 / F2 共通）
 
 > 関連: `REQUIREMENTS.md` §3.1, §6.3 Result画面
-> ステータス: 未着手
+> ステータス: ✅ 完了（2026-05-17）
+
+## 実装メモ
+
+- `app/result.tsx` を新規作成。`useLocalSearchParams<{identifiedName, source}>()` で受け取り、`items.json` から `normalizeJa` 経由で再検索
+- カメラ・検索の Bottom Sheet 暫定 UI は本チケットで全削除し、両者とも `router.push('/result', ...)` で遷移
+  - `app/search.tsx` の `ItemDetailSheet` + `selectedItem` state は完全に削除
+  - `app/camera.tsx` の `HitContent` は削除、`outcome.kind === 'hit'` 時のみ router.push（残り 3 outcome は Modal 継続）
+- 13 カテゴリのうち定期収集 6 種 (`CollectionCategoryId`) は次回収集日を `formatNextCollection` で表示
+- 残り 7 種（bottle_pet / oversized / home_appliances / pc / small_appliances / plastic_product / not_accepted）は `SPECIAL_HANDLING` ハードコードラベル + ヒント表示、19 番（Facilities）完成時にデータ駆動化
+- 「現在地で確認」は定期収集カテゴリのみ表示、`detectArea` で取得した area で一時オーバーライド（永続化しない、画面ローカル state）
+- 戻る: header back → `router.back()`、画面下部 CTA「ホームに戻る」→ `router.replace('/(tabs)')`
 
 ## 目的
 
@@ -18,51 +29,54 @@
 
 ### 基本実装
 
-- [ ] `app/result.tsx` 作成
-- [ ] パラメータ `identifiedName: string | null`、`source: 'camera' | 'search'`
-- [ ] [[07_data_loader]] の items / categories / patterns を取得
-- [ ] `items.json` から `name` または `aliases` でマッチ
+- [×] `app/result.tsx` 作成
+- [×] パラメータ `identifiedName: string`、`source: 'camera' | 'search'`（source は受けるだけ、現状は分岐に未使用）
+- [×] [[07_data_loader]] の items / categories / patterns を取得
+- [×] `items.json` から `name` の `normalizeJa` 完全一致でマッチ（aliases は呼び出し側 17/15 で fuzzy 解決済み）
 
 ### ヒット時UI
 
-- [ ] 上部: 品目名（大きく、24pt以上）
-- [ ] カテゴリバッジ（カテゴリ色、`categories.json` の `color`）
-- [ ] 指示文（読みやすく整形、改行を保持）
-- [ ] 警告（あれば赤背景で強調、`item.warnings[]` を箇条書き）
-- [ ] 次回収集日（[[10_schedule_calculator]] で算出、「次は5月14日（木）」形式）
-- [ ] 関連施設リンク（[[19_facilities_screen]] へ、該当する場合）
+- [×] 上部: 品目名（text-2xl bold）
+- [×] カテゴリバッジ（`categories.json` の `color` を style 注入）
+- [×] 指示文（text-base leading-relaxed）
+- [×] 警告（warn-100 ボックス + ⚠ プレフィクス）
+- [×] 次回収集日（`getNextCollectionDate` + `formatNextCollection`、定期収集カテゴリのみ）
+- [ ] 関連施設リンク → 19 番完成時に SPECIAL_HANDLING をデータ駆動化して追加
 
-### ミス時UI
+### ミス時UI（NotInDictionary）
 
-- [ ] 「すみません、辞書にありません」メッセージ
-- [ ] 識別された品目名（あれば）を補助表示
-- [ ] 手動検索ボタン（[[17_manual_search_screen]]）
-- [ ] 市公式サイトへのリンク
+- [×] 「『◯◯』は辞書にありません」メッセージ
+- [×] 識別された品目名を rawName で表示
+- [×] 手動検索ボタン → `router.replace('/search')`
+- [×] 市公式サイトへのリンク
+- [×] ホームに戻るボタン
 
 ### 「現在地で確認」機能
 
-- [ ] ボタン押下で [[11_area_detector]] の `findNearestArea()` を呼ぶ
-- [ ] 取得した地区で次回収集日を再計算して表示
-- [ ] 元の地区とは別の地区で見ていることを画面上に明示
-- [ ] 「設定の地区を変更」リンクを提供
+- [×] ボタン押下で `detectArea()` を呼ぶ（定期収集カテゴリのみ表示）
+- [×] 取得した地区で次回収集日を再計算（local state でオーバーライド）
+- [×] 「現在地: ○○（一時的）」バナーで明示 + 解除ボタン
+- [×] 「地区を変更（設定へ）」リンクを提供
+- [×] 永続化しない（設定の地区は元のまま）
 
 ### 共通要素
 
-- [ ] ベータ版表示
-- [ ] 「公式情報を参照」リンク（`meta.json.officialUrl`）
-- [ ] 「ディスクレイマー」テキスト（`meta.json.disclaimer`）
-- [ ] 戻るボタンでホームに戻る
+- [×] ベータ版表示（Footer の disclaimer 経由）
+- [×] 「飯田市公式サイトを開く」リンク（`meta.officialUrl`）
+- [×] `meta.disclaimer` テキスト
+- [×] 戻るボタン → `router.back()`、CTA「ホームに戻る」 → `router.replace('/(tabs)')`
 
 ### 検索ロジック
 
-- [ ] 大文字小文字・全半角を正規化してマッチ
-- [ ] `aliases` 配列での部分一致／完全一致の方針決定
-- [ ] 複数ヒット時の表示（リストで選択させるか、最初の1件を出すか）
+- [×] `normalizeJa` でカタカナ正規化してマッチ
+- [×] 完全一致のみ（呼び出し側 17/15 で fuzzy 解決済みの name を渡す前提）
+- [×] 複数ヒット問題は発生しない（exact match なので最大 1 件）
 
 ### 共有・追加アクション
 
-- [ ] MVP では履歴保存・お気に入り・共有は **不要**（§2.2）
-- [ ] 後継として「もう一度カメラ」「ホームに戻る」ボタンは置く
+- [×] 履歴・お気に入り・共有は MVP 対象外（§2.2 で確認）
+- [ ] 「もう一度カメラ」CTA は省略（シニア配慮で選択肢を絞る、戻るボタンで足りる）
+- [×] 「ホームに戻る」ボタン配置
 
 ## 注意点
 

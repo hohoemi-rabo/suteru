@@ -18,7 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { identifyItem, type IdentifyResult } from '@/lib/api';
 import { useData } from '@/lib/data-loader';
 import { normalizeJa, searchItems } from '@/lib/text-search';
-import type { CategoriesData, CategoryId, Item } from '@/types';
+import type { Item } from '@/types';
 
 const RESIZE_WIDTH_PX = 1280;
 const JPEG_COMPRESS = 0.7;
@@ -106,7 +106,16 @@ export default function CameraScreen() {
       }
 
       const result = await identifyItem(manipulated.base64, 'image/jpeg');
-      setState({ kind: 'result', outcome: toOutcome(result, data.items.items) });
+      const outcome = toOutcome(result, data.items.items);
+      if (outcome.kind === 'hit') {
+        setState({ kind: 'ready' });
+        router.push({
+          pathname: '/result',
+          params: { identifiedName: outcome.item.name, source: 'camera' },
+        });
+        return;
+      }
+      setState({ kind: 'result', outcome });
     } catch (err) {
       if (__DEV__) console.warn('[camera] shutter failed:', err);
       setState({
@@ -165,7 +174,6 @@ export default function CameraScreen() {
 
       <ResultSheet
         outcome={state.kind === 'result' ? state.outcome : null}
-        categories={data.categories}
         onClose={handleCloseResult}
         onGoToSearch={handleGoToSearch}
       />
@@ -305,18 +313,13 @@ function PermissionDenied({
 
 function ResultSheet({
   outcome,
-  categories,
   onClose,
   onGoToSearch,
 }: {
   outcome: IdentifyOutcome | null;
-  categories: CategoriesData;
   onClose: () => void;
   onGoToSearch: () => void;
 }) {
-  const colorMap = buildCategoryColorMap(categories);
-  const nameMap = buildCategoryNameMap(categories);
-
   return (
     <Modal
       visible={!!outcome}
@@ -336,9 +339,6 @@ function ResultSheet({
         >
           <View className="self-center w-12 h-1 rounded-full bg-ink-200" />
 
-          {outcome?.kind === 'hit' && (
-            <HitContent item={outcome.item} colorMap={colorMap} nameMap={nameMap} onClose={onClose} />
-          )}
           {outcome?.kind === 'unknown_name' && (
             <UnknownNameContent
               rawName={outcome.rawName}
@@ -359,49 +359,6 @@ function ResultSheet({
         </View>
       </Pressable>
     </Modal>
-  );
-}
-
-function HitContent({
-  item,
-  colorMap,
-  nameMap,
-  onClose,
-}: {
-  item: Item;
-  colorMap: Record<CategoryId, string>;
-  nameMap: Record<CategoryId, string>;
-  onClose: () => void;
-}) {
-  return (
-    <>
-      <View
-        className="self-start rounded-full px-3 py-1.5"
-        style={{ backgroundColor: colorMap[item.categoryId] ?? '#6B7280' }}
-      >
-        <Text className="text-sm text-white font-bold">
-          {nameMap[item.categoryId] ?? item.categoryId}
-        </Text>
-      </View>
-      <Text className="text-2xl text-ink-900 font-bold">{item.name}</Text>
-      <Text className="text-base text-ink-900 leading-relaxed">{item.instruction}</Text>
-      {item.warnings.length > 0 && (
-        <View className="rounded-xl bg-warn-100 p-3 gap-1">
-          {item.warnings.map((w) => (
-            <Text key={w} className="text-sm text-warn-600">⚠ {w}</Text>
-          ))}
-        </View>
-      )}
-      <Text className="text-xs text-ink-500">
-        詳しい画面（収集日・関連施設の案内）は近日公開予定です。
-      </Text>
-      <Pressable
-        onPress={onClose}
-        className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
-      >
-        <Text className="text-base text-white font-bold">もう一度撮る</Text>
-      </Pressable>
-    </>
   );
 }
 
@@ -529,16 +486,3 @@ function toOutcome(result: IdentifyResult, items: Item[]): IdentifyOutcome {
   return { kind: 'unknown_name', rawName: result.identifiedName };
 }
 
-function buildCategoryColorMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.color;
-    return acc;
-  }, {} as Record<CategoryId, string>);
-}
-
-function buildCategoryNameMap(data: CategoriesData): Record<CategoryId, string> {
-  return data.categories.reduce<Record<CategoryId, string>>((acc, c) => {
-    acc[c.id] = c.name;
-    return acc;
-  }, {} as Record<CategoryId, string>);
-}
