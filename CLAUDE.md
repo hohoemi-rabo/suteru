@@ -36,20 +36,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── _layout.tsx             ← root Stack: DataProvider + UserSettingsProvider + NotificationsScheduler
 │   ├── camera.tsx              ← カメラ撮影＋判定（CameraView + ImageManipulator + identifyItem）
 │   ├── search.tsx              ← 手動品目検索（一覧、ヒットタップで /result へ push）
-│   ├── result.tsx              ← F1/F2 共通の結果画面（カテゴリ別表示 + 次回収集日 + 現在地で確認）
+│   ├── result.tsx              ← F1/F2 共通の結果画面（カテゴリ別表示 + 次回収集日 + GPS判定で地区永続化）
+│   ├── recycle-stations.tsx    ← リサイクルステーション 8グループ一覧（タブ外、Facilities から push）
 │   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード
-│   └── (onboarding)/           ← Welcome / area-select / notifications
+│   ├── (onboarding)/           ← Welcome / area-select / notifications
+│   └── legal/                  ← プライバシーポリシー / 利用規約（設定から push）
 ├── lib/                        ← 業務ロジック（純粋関数 or React Context）
 │   ├── data-loader.tsx         ← AppData の bundle 即返却 + リモート更新（DataProvider/useData）
 │   ├── storage.ts              ← 汎用 AsyncStorage ラッパー（getCached/setCached/clearCached）
 │   ├── user-settings.tsx       ← UserSettings 永続化 + Provider/useUserSettings
 │   ├── schedule-calculator.ts  ← 次回収集日算出（純粋関数、date-fns）
+│   ├── recycle-station-utils.ts ← リサイクルステーション次回開催日（dates 配列スキャン）
 │   ├── area-detector.ts        ← GPS 最寄り地区判定（純粋関数、Haversine）
+│   ├── area-detection-ui.ts    ← GPS判定結果の確認ダイアログ→setAreaId 共通フロー
 │   ├── notifications.ts        ← 通知サービス（expo-notifications、14日先までローカル予約）
 │   ├── text-search.ts          ← 品目検索の正規化＋スコアリング（純粋関数、ひらがな⇄カナ吸収）
+│   ├── category-maps.ts        ← categoryId → name/color マップを 1 loop で構築（純粋関数）
+│   ├── legal-documents.ts      ← プライバシーポリシー / 利用規約の本文（LegalDocument 型）
 │   └── api.ts                  ← Worker /api/identify クライアント（10秒タイムアウト、デバイスIDハッシュ送信）
 ├── types/index.ts              ← 全 JSON / API / UserSettings の型定義
-├── components/                 ← 再利用コンポーネント（現状ほぼ未使用）
+├── components/                 ← 再利用コンポーネント
+│   └── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
 ├── assets/                     ← 画像・フォント
 ├── scripts/                    ← Expoテンプレートのスクリプト
 ├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/ink/cat カラー）
@@ -61,10 +68,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── app.json                    ← reactCompiler/typedRoutes 有効、各種 plugins 設定済み
 ├── tsconfig.json               ← パスエイリアス: "@/*" → "./*"、worker/ 除外
 │
-├── data/                       ← バンドル用 JSON（9ファイル、6 はまだ skeleton）
+├── data/                       ← バンドル用 JSON（全 9 ファイル v1.0.0、PDF 原本照合済み）
 │   ├── common/                 ← meta / categories / items / patterns / basic-rules /
 │   │                              special-disposal / facilities / recycle-stations
-│   └── areas/                  ← areas.json
+│   ├── areas/                  ← areas.json（MVP 対象 8 区: No.01/15/32/33/34/35/36/37）
+│   └── _sources/               ← 原本 PDF（.gitignore 済、コミットしない）
+│
+├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開用、lib/legal-documents.ts と同期）
 │
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様
@@ -89,8 +99,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | データ構造を変える | `REQUIREMENTS.md` §5 + `types/index.ts` |
 | データを画面から使う | `lib/data-loader.tsx` の `useData()` を使う |
 | 設定値（地区・通知）を読み書き | `lib/user-settings.tsx` の `useUserSettings()` |
+| カテゴリ ID → 表示名/色を引く | `lib/category-maps.ts` の `buildCategoryMaps(data.categories)` |
 | 次回収集日の計算 | `lib/schedule-calculator.ts` の `getNextCollectionDate` / `getAllNextCollections` |
+| リサイクルステーションの次回開催日 | `lib/recycle-station-utils.ts` の `getNextStationCollection` / `getUpcomingStationDates` |
 | GPS で最寄り地区判定 | `lib/area-detector.ts` の `detectArea()` |
+| GPS判定後に確認ダイアログ→設定永続化 | `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` |
+| 法務文書（プライバシー/利用規約）を編集 | `lib/legal-documents.ts` + 同期して `docs/legal/*.md` も更新 |
 | Workerのプロンプトを調整する | `worker/docs/prompt-design.md` → `worker/src/prompt.ts` |
 | 行政アピールの材料 | `REQUIREMENTS.md` §10、`docs/02_admin_pitch_materials.md` |
 | 何ができていて何が残っているか | `docs/00_INDEX.md`（各チケットに ✅/⏳ マーク） |
@@ -106,14 +120,24 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 進捗（2026-05-17 時点）
 
-**Phase 3 完了 → Phase 4 着手前**。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 4 を 4/7 完了**。残りは 02 行政アピール資料 / 23 EAS Build / 24 ユーザーテストの 3 本。詳しい状態は `docs/00_INDEX.md` を参照。
 
-### 完了済みチケット（17 本）
+### 完了済みチケット（21 本）
 
-- 03 デザインシステム / 04 プロジェクトセットアップ / 05 型定義
-- 06 Worker デプロイ / 07 データローダー / 08 ストレージ層 / 09 API クライアント
-- 10 収集日計算 / 11 地区判定 / 12 通知サービス
-- 13 オンボーディング / 14 ホーム / 15 カメラ / 16 結果 / 17 手動検索 / 18 収集日 / 21 設定
+- **Phase 1〜3**: 03〜18, 21（17 本）
+- **Phase 4 完了分（4 本）**:
+  - 01 データ整備（全 9 JSON v1.0.0、PDF 原本照合済み、MVP 区差し替え）
+  - 19 Facilities（タブ実装、外部 Google Maps リンク、リサイクルステーションへの動線）
+  - 20 RecycleStations（push 画面、8 グループ × 119 拠点を次回開催日順で展開）
+  - 22 法務文書（プライバシーポリシー + 利用規約、設定タブから push、Markdown ミラー）
+
+### 残り Phase 4 チケット（3 本）
+
+| # | 内容 | 備考 |
+|---|---|---|
+| **02** | 行政アピール資料 | 飯田市環境課向け 1 ページ資料、コード変更なし |
+| **23** | EAS Build / Play 配布 | preview APK、`docs/legal/*.md` を GitHub Pages 等で公開し URL 化、データセーフティフォーム |
+| **24** | ユーザーテスト | ほほ笑みラボ生徒約 20 名、23 で APK 配布後に着手 |
 
 ### 実機検証済み（2026-05-17）
 
@@ -129,20 +153,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - KV ネームスペース: dev/prod 共有（レート制限は端末 ID 別キー）
 - `[env.X]` 配下に `kv_namespaces` と `vars` を明示する必要あり（上書きしない！ → `.claude/rules/gotchas.md` 参照）
 
-### Phase 4（次、リリース準備）
+### データ整備状況（01 完了済み）
 
-**推奨着手順**:
+- **全 9 JSON が version 1.0.0**、令和8年度 PDF 原本と照合済み
+- **MVP 対象 8 区が差し替わった**: 旧 OCR ベース 5 区（No.10/17/23/25/27、PDF 未入手で検証不可）を削除し、PDF 入手済みの 8 区に統一
+  - 確定 8 区: **No.01 / 15 / 32 / 33 / 34 / 35 / 36 / 37**
+  - 01 は市街中心、15 は座光寺、32〜35 は下黒田周辺クラスタ、36 は丹保・北条・飯沼南、37 は南条・別府上・別府下
+- **patterns.json 構造が改訂**: 旧ドラフトは「埋立=金属=紙が同じ日」前提だったが、実際は 8 区中 6 区で別曜日。命名規則を `pattern_<燃やす>_<プラ>_<埋立特定>[_<金属紙>]` に統一
+- **スプレー缶/カセットボンベは飯田市では `metal_resource`**（多くの自治体の `hazardous` とは異なる）。items.json で訂正済み
+- **No.37 の存在**: REQUIREMENTS.md §2.3 は「No.36 まで」と書いてあるが、実態は No.37 まで。REQUIREMENTS.md の修正が後続課題
+- 内訳: items 95 品目 / facilities 6 施設 / recycle-stations 8 グループ × 119 拠点 / special-disposal 7 エントリ / patterns 8 種
+- 原本 PDF は `data/_sources/` に保管（`.gitignore` で除外）
 
-1. **01 データ整備** — `basic-rules.json` / `special-disposal.json` / `facilities.json` / `recycle-stations.json` の 4 skeleton を実データに。`items.json` を 50〜100 品目に拡充。No.36（丹保・北条・飯沼南）のパターン確認
-2. **19 Facilities** / **20 RecycleStations** — 01 後にデータ駆動 UI 実装。完成時に `app/result.tsx` の `SPECIAL_HANDLING` ハードコードを除去
-3. **22 法務文書** / **02 行政アピール資料** — 01 と並行可
-4. **23 EAS Build / Play 配布** — クローズドテスト APK
-5. **24 ユーザーテスト** — ほほ笑みラボ生徒約 20 名
+### result.tsx の GPS 地区判定（11be98a で変更）
 
-### データ整備状況
+- 旧仕様: 「現在地で確認」ボタン → 一時的に地区を上書き表示、ホームに戻ると元の地区に戻る
+- 新仕様: 「現在地から地区を設定」ボタン → 確認ダイアログ → `UserSettings.areaId` を永続化更新
+- 共通フローは `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` に集約（将来ホーム画面などに同じ動線を追加する場合も再利用可）
 
-- 本実装済: `meta.json`, `categories.json`（13 値）, `items.json`（95 品目）, `patterns.json`, `areas/areas.json`
-- skeleton（`_status: "skeleton"`）: `basic-rules.json`, `special-disposal.json`, `facilities.json`, `recycle-stations.json` ← 01 で実データ流し込み
+### コードレビュー指摘の状態（vercel-react-best-practices）
+
+- ✅ #2 カテゴリ Map ヘルパー DRY 化（`lib/category-maps.ts` 作成、3 ファイルの重複削除、97c911c）
+- ⏳ #1 `router` 直接 import vs `useRouter()` Hook の混在統一（軽微、未着手）
+- ⏳ #3 `app/camera.tsx` の no-op `onCameraReady` コールバック削除（軽微、未着手）
+
+### 後続作業（チケット未切り出し）
+
+- recycle-stations.json 各拠点 119 件への lat/lng 付与（MapView 導入と「最寄りグループ推定」の前提）
+- 法務文書の外部 URL 公開（23 EAS Build 直前）
+- 法務文書の弁護士・行政書士確認（本格リリース前推奨）
+- 飯田市公式情報の利用許諾打診（02 と並行）
+- REQUIREMENTS.md §2.3 の「No.36 まで」→「No.37 まで」修正
 
 ## チケット管理（`docs/` 配下）
 
