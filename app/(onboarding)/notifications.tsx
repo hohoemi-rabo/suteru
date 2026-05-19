@@ -37,7 +37,7 @@ export default function NotificationsScreen() {
 
         <View className="items-center gap-6 my-8">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="notifications" size={48} color="#16A34A" />
+            <Ionicons name="notifications" size={48} color="#166534" />
           </View>
           <View className="gap-3 px-4">
             <Text className="text-base text-ink-900 text-center leading-relaxed">

@@ -59,7 +59,7 @@ export default function RecycleStationsScreen() {
 
         <View className="gap-3">
           <Text className="text-base text-ink-900 font-bold">グループ一覧（ア〜ク）</Text>
-          <Text className="text-xs text-ink-500">
+          <Text className="text-sm text-ink-500">
             次回開催日が近い順に表示しています。市内どこのステーションも利用できます。
           </Text>
           <View className="gap-2">
@@ -133,18 +133,18 @@ function InfoCard({
       <Text className="text-sm text-ink-900 leading-relaxed">{description}</Text>
 
       <View className="gap-1">
-        <Text className="text-xs text-ink-500">開催時間</Text>
+        <Text className="text-sm text-ink-500">開催時間</Text>
         <Text className="text-base text-ink-900">{openTime}</Text>
       </View>
 
       <View className="gap-1">
-        <Text className="text-xs text-ink-500">出せるもの</Text>
+        <Text className="text-sm text-ink-500">出せるもの</Text>
         <Text className="text-base text-ink-900">{items.join('・')}</Text>
       </View>
 
       <View className="rounded-xl bg-warn-100 px-3 py-2 flex-row items-start gap-2">
-        <Ionicons name="warning" size={14} color="#DC2626" style={{ marginTop: 2 }} />
-        <Text className="flex-1 text-xs text-warn-600 leading-relaxed">
+        <Ionicons name="warning" size={14} color="#991B1B" style={{ marginTop: 2 }} />
+        <Text className="flex-1 text-sm text-warn-600 leading-relaxed">
           {cancellationRule}
         </Text>
       </View>
@@ -267,10 +267,10 @@ function LocationRow({
       <Text className="text-sm text-ink-900 font-bold">{location.name}</Text>
       <View className="flex-row items-center gap-1">
         <Ionicons name="location-outline" size={12} color="#6B7280" />
-        <Text className="flex-1 text-xs text-ink-500" numberOfLines={2}>
+        <Text className="flex-1 text-sm text-ink-500" numberOfLines={2}>
           {location.address}
         </Text>
-        <Ionicons name="open-outline" size={12} color="#16A34A" />
+        <Ionicons name="open-outline" size={12} color="#166534" />
       </View>
     </Pressable>
   );
@@ -289,14 +289,14 @@ function Footer({
 }) {
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500 leading-relaxed">{disclaimer}</Text>
+      <Text className="text-sm text-ink-500 leading-relaxed">{disclaimer}</Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

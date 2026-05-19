@@ -84,11 +84,11 @@ function Header({
           accessibilityRole="button"
           className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5"
         >
-          <Ionicons name="location" size={14} color="#16A34A" />
+          <Ionicons name="location" size={14} color="#166534" />
           <Text className="text-sm text-brand-600">
             {area ? truncate(area.name, 8) : '地区未設定'}
           </Text>
-          <Ionicons name="chevron-forward" size={14} color="#16A34A" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       </View>
       <Text className="text-sm text-ink-500">
@@ -133,7 +133,7 @@ function RecycleStationLink({
               今年度の開催スケジュールを確認
             </Text>
           )}
-          <Text className="text-xs text-ink-500">
+          <Text className="text-sm text-ink-500">
             ペットボトル・ガラスびん・空き缶
           </Text>
         </View>
@@ -161,7 +161,7 @@ function FacilitySection({
     <View className="gap-2">
       <Text className="text-base text-ink-900 font-bold">{title}</Text>
       {description && (
-        <Text className="text-xs text-ink-500">{description}</Text>
+        <Text className="text-sm text-ink-500">{description}</Text>
       )}
       <View className="gap-2">
         {facilities.map((facility) => (
@@ -203,7 +203,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
     <View className="rounded-2xl border border-ink-200 p-4 gap-3">
       <View className="gap-1">
         <Text className="text-base text-ink-900 font-bold">{facility.name}</Text>
-        <Text className="text-xs text-ink-500">{facility.purpose}</Text>
+        <Text className="text-sm text-ink-500">{facility.purpose}</Text>
       </View>
 
       <Pressable
@@ -212,27 +212,27 @@ function FacilityCard({ facility }: { facility: Facility }) {
         accessibilityLabel={`${facility.name}の住所を地図で開く`}
         className="flex-row items-start gap-2"
       >
-        <Ionicons name="location-outline" size={16} color="#6B7280" style={{ marginTop: 2 }} />
-        <Text className="flex-1 text-sm text-ink-900 leading-relaxed">
+        <Ionicons name="location-outline" size={18} color="#6B7280" style={{ marginTop: 2 }} />
+        <Text className="flex-1 text-base text-ink-900 leading-relaxed">
           {facility.address}
         </Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" style={{ marginTop: 2 }} />
+        <Ionicons name="open-outline" size={16} color="#166534" style={{ marginTop: 2 }} />
       </Pressable>
 
       {(facility.openDays || facility.openHours) && (
         <View className="gap-1">
           {facility.openDays && (
             <View className="flex-row items-start gap-2">
-              <Ionicons name="calendar-outline" size={14} color="#6B7280" style={{ marginTop: 2 }} />
-              <Text className="flex-1 text-sm text-ink-900 leading-relaxed">
+              <Ionicons name="calendar-outline" size={16} color="#6B7280" style={{ marginTop: 2 }} />
+              <Text className="flex-1 text-base text-ink-900 leading-relaxed">
                 {facility.openDays}
               </Text>
             </View>
           )}
           {facility.openHours && (
             <View className="flex-row items-center gap-2">
-              <Ionicons name="time-outline" size={14} color="#6B7280" />
-              <Text className="flex-1 text-sm text-ink-900">{facility.openHours}</Text>
+              <Ionicons name="time-outline" size={16} color="#6B7280" />
+              <Text className="flex-1 text-base text-ink-900">{facility.openHours}</Text>
             </View>
           )}
         </View>
@@ -240,8 +240,8 @@ function FacilityCard({ facility }: { facility: Facility }) {
 
       {facility.fee && (
         <View className="flex-row items-center gap-2">
-          <Ionicons name="cash-outline" size={14} color="#6B7280" />
-          <Text className="text-sm text-ink-900">料金: {facility.fee}</Text>
+          <Ionicons name="cash-outline" size={16} color="#6B7280" />
+          <Text className="text-base text-ink-900">料金: {facility.fee}</Text>
         </View>
       )}
 
@@ -265,7 +265,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500 leading-relaxed">
+      <Text className="text-sm text-ink-500 leading-relaxed">
         施設の営業時間や受入条件は変更される場合があります。事前に電話でご確認ください。
       </Text>
       <Pressable
@@ -274,7 +274,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

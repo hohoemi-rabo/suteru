@@ -78,7 +78,7 @@ function IntroBlock({
     <View className="rounded-2xl bg-accent-500/10 border border-accent-500/30 p-4 gap-2">
       <View className="flex-row items-center gap-2">
         <Ionicons name="calendar-outline" size={16} color="#0EA5E9" />
-        <Text className="text-xs text-ink-500">施行日: {effectiveDate}</Text>
+        <Text className="text-sm text-ink-500">施行日: {effectiveDate}</Text>
       </View>
       <Text className="text-sm text-ink-900 leading-relaxed">{intro}</Text>
     </View>
@@ -98,13 +98,13 @@ function SectionBlock({
 }) {
   return (
     <View className="gap-2">
-      <Text className="text-base text-ink-900 font-bold">
+      <Text className="text-lg text-ink-900 font-bold">
         {index}. {section.heading}
       </Text>
       {section.body.map((paragraph, i) => (
         <Text
           key={`p-${i}`}
-          className="text-sm text-ink-900 leading-relaxed"
+          className="text-base text-ink-900 leading-relaxed"
         >
           {paragraph}
         </Text>
@@ -113,8 +113,8 @@ function SectionBlock({
         <View className="gap-1.5 pl-2">
           {section.bullets.map((bullet, i) => (
             <View key={`b-${i}`} className="flex-row gap-2">
-              <Text className="text-sm text-ink-900">・</Text>
-              <Text className="flex-1 text-sm text-ink-900 leading-relaxed">
+              <Text className="text-base text-ink-900">・</Text>
+              <Text className="flex-1 text-base text-ink-900 leading-relaxed">
                 {bullet}
               </Text>
             </View>
@@ -133,14 +133,14 @@ function RevisionHistoryBlock({ history }: { history: LegalRevision[] }) {
   if (history.length === 0) return null;
   return (
     <View className="gap-2">
-      <Text className="text-base text-ink-900 font-bold">改定履歴</Text>
+      <Text className="text-lg text-ink-900 font-bold">改定履歴</Text>
       <View className="rounded-xl border border-ink-200 overflow-hidden">
         {history.map((rev, idx) => (
           <View
             key={`${rev.date}-${idx}`}
             className={`px-4 py-3 gap-1 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
           >
-            <Text className="text-xs text-ink-500">{rev.date}</Text>
+            <Text className="text-sm text-ink-500">{rev.date}</Text>
             <Text className="text-sm text-ink-900">{rev.note}</Text>
           </View>
         ))}
@@ -165,16 +165,16 @@ function ContactBlock({ email }: { email: string }) {
 
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500">連絡先</Text>
+      <Text className="text-sm text-ink-500">連絡先</Text>
       <Pressable
         onPress={handlePressEmail}
         accessibilityRole="link"
         accessibilityLabel={`${email} にメールを送る`}
         className="flex-row items-center gap-2"
       >
-        <Ionicons name="mail-outline" size={16} color="#16A34A" />
-        <Text className="flex-1 text-sm text-brand-600 underline">{email}</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="mail-outline" size={18} color="#166534" />
+        <Text className="flex-1 text-base text-brand-600 underline">{email}</Text>
+        <Ionicons name="open-outline" size={16} color="#166534" />
       </Pressable>
     </View>
   );

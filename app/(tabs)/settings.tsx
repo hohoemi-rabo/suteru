@@ -137,8 +137,11 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
       <ScrollView contentContainerClassName="pb-8">
-        <View className="px-6 pt-2 pb-4">
+        <View className="px-6 pt-2 pb-4 flex-row items-end gap-2">
           <Text className="text-2xl text-ink-900 font-bold">設定</Text>
+          <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-1">
+            <Text className="text-xs text-brand-600">ベータ版</Text>
+          </View>
         </View>
 
         <View className="px-4 gap-6">
@@ -269,7 +272,7 @@ function NotificationSection({
             <Text className="text-base text-ink-900 font-bold">
               明日のごみ出しを通知する
             </Text>
-            <Text className="text-xs text-ink-500">
+            <Text className="text-sm text-ink-500">
               前日 {time} に「明日は○○の日です」とお知らせします
             </Text>
           </View>
@@ -312,7 +315,7 @@ function NotificationSection({
           })}
         </View>
         {!enabled && (
-          <Text className="text-xs text-ink-500">
+          <Text className="text-sm text-ink-500">
             通知を ON にすると時刻を選べます。
           </Text>
         )}

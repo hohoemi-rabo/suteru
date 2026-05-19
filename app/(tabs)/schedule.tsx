@@ -142,9 +142,9 @@ function Header({
           accessibilityRole="button"
           className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5"
         >
-          <Ionicons name="location" size={14} color="#16A34A" />
+          <Ionicons name="location" size={14} color="#166534" />
           <Text className="text-sm text-brand-600">変更</Text>
-          <Ionicons name="chevron-forward" size={14} color="#16A34A" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       </View>
       {pattern && (
@@ -333,7 +333,7 @@ function NotificationsRow({
           <Text className="text-base text-ink-900 font-bold">
             明日のごみ出しを通知する
           </Text>
-          <Text className="text-xs text-ink-500">
+          <Text className="text-sm text-ink-500">
             前日 {time} に「明日は○○の日です」とお知らせします
           </Text>
         </View>
@@ -355,7 +355,7 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
     <View className="rounded-2xl bg-warn-100 p-5 gap-3">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="alert-circle" size={20} color="#DC2626" />
+        <Ionicons name="alert-circle" size={20} color="#991B1B" />
         <Text className="text-base text-warn-600 font-bold">
           このエリアの収集パターンは準備中です
         </Text>
@@ -370,7 +370,7 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
@@ -383,10 +383,10 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500 leading-relaxed">
+      <Text className="text-sm text-ink-500 leading-relaxed">
         データは令和 8 年度ベース・ベータ版です。
       </Text>
-      <Text className="text-xs text-ink-500 leading-relaxed">
+      <Text className="text-sm text-ink-500 leading-relaxed">
         祝日休止は反映されていません。お住まいの地区の案内も合わせてご確認ください。
       </Text>
       <Pressable
@@ -395,7 +395,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

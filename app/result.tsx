@@ -195,7 +195,7 @@ function ItemDetailCard({
       {item.warnings.length > 0 && (
         <View className="rounded-xl bg-warn-100 p-3 gap-1">
           {item.warnings.map((w) => (
-            <Text key={w} className="text-sm text-warn-600">⚠ {w}</Text>
+            <Text key={w} className="text-base text-warn-600">⚠ {w}</Text>
           ))}
         </View>
       )}
@@ -233,7 +233,7 @@ function CollectionSection({
             このエリアの収集パターンは準備中です。
           </Text>
         )}
-        <Text className="text-xs text-ink-500">
+        <Text className="text-sm text-ink-500">
           地区: {area?.name ?? '未設定'}
         </Text>
       </View>
@@ -258,7 +258,7 @@ function CollectionSection({
           className="flex-row items-center gap-1 self-end"
         >
           <Text className="text-sm text-brand-600 underline">地区を変更（設定へ）</Text>
-          <Ionicons name="chevron-forward" size={14} color="#16A34A" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       </View>
     </View>
@@ -340,7 +340,7 @@ function BottlePetSection({
 
       {next ? (
         <View className="rounded-xl bg-accent-500/10 px-3 py-3 gap-1">
-          <Text className="text-xs text-ink-500">次の開催</Text>
+          <Text className="text-sm text-ink-500">次の開催</Text>
           <Text className="text-lg text-ink-900 font-bold">
             {formatNextCollection(next.date)}
           </Text>
@@ -359,7 +359,7 @@ function BottlePetSection({
       {category.notes.length > 0 && (
         <View className="gap-1">
           {category.notes.map((note) => (
-            <Text key={note} className="text-xs text-ink-500 leading-relaxed">
+            <Text key={note} className="text-sm text-ink-500 leading-relaxed">
               ・{note}
             </Text>
           ))}
@@ -413,7 +413,7 @@ function CategoryRuleSection({
 
       {facilities.length > 0 && (
         <View className="rounded-xl bg-ink-200/30 px-3 py-3 gap-2">
-          <Text className="text-xs text-ink-500">関連する連絡先</Text>
+          <Text className="text-sm text-ink-500">関連する連絡先</Text>
           {facilities.map((f) => (
             <FacilityQuickRow key={f.id} name={f.name} phone={f.phone} />
           ))}
@@ -428,7 +428,7 @@ function CategoryRuleSection({
           className="flex-row items-center gap-1 self-end"
         >
           <Text className="text-sm text-brand-600 underline">施設一覧を見る</Text>
-          <Ionicons name="chevron-forward" size={14} color="#16A34A" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       )}
     </View>
@@ -514,7 +514,7 @@ function NotInDictionary({
           className="flex-row items-center gap-1 self-center"
         >
           <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-          <Ionicons name="open-outline" size={14} color="#16A34A" />
+          <Ionicons name="open-outline" size={14} color="#166534" />
         </Pressable>
         <Pressable
           onPress={onHome}
@@ -540,14 +540,14 @@ function Footer({
 }) {
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500 leading-relaxed">{disclaimer}</Text>
+      <Text className="text-sm text-ink-500 leading-relaxed">{disclaimer}</Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

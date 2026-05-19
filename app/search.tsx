@@ -173,7 +173,7 @@ function ResultList({
             />
             <View className="flex-1 gap-0.5">
               <Text className="text-base text-ink-900">{hit.item.name}</Text>
-              <Text className="text-xs text-ink-500">
+              <Text className="text-sm text-ink-500">
                 {nameMap[hit.item.categoryId] ?? hit.item.categoryId}
                 {hit.matchedField === 'alias' && '（別名で一致）'}
               </Text>
@@ -217,7 +217,7 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
@@ -230,7 +230,7 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
     <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500 leading-relaxed">
+      <Text className="text-sm text-ink-500 leading-relaxed">
         辞書はベータ版です。最新の正式情報は飯田市公式サイトをご確認ください。
       </Text>
       <Pressable
@@ -239,7 +239,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#16A34A" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

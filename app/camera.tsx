@@ -11,6 +11,7 @@ import {
   Modal,
   Pressable,
   Text,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,6 +23,13 @@ import type { Item } from '@/types';
 
 const RESIZE_WIDTH_PX = 1280;
 const JPEG_COMPRESS = 0.7;
+/**
+ * 判定枠の比率（min(画面幅, 画面高さ) に対する正方形の一辺の割合）。
+ * 写真クロップにも同じ比率を使う：min(photo.width, photo.height) * FRAME_RATIO の中心正方形を切り出す。
+ */
+const FRAME_RATIO = 0.75;
+/** 枠を画面中心からどれだけ上にオフセットするか（シャッターボタン分の余白） */
+const FRAME_VERTICAL_OFFSET = 40;
 
 // ============================================================
 // 状態モデル
@@ -47,6 +55,12 @@ export default function CameraScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [state, setState] = useState<CameraState>({ kind: 'ready' });
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
+  // 判定枠（中央寄り、シャッターの分だけ少し上にオフセット）の寸法・位置
+  const frameSize = Math.min(screenWidth, screenHeight) * FRAME_RATIO;
+  const frameLeft = (screenWidth - frameSize) / 2;
+  const frameTop = (screenHeight - frameSize) / 2 - FRAME_VERTICAL_OFFSET;
 
   // 初回マウントで未確定なら許可ダイアログを要求
   useEffect(() => {
@@ -75,10 +89,12 @@ export default function CameraScreen() {
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
     try {
+      // EXIF 正規化のため skipProcessing は false（既定）にしておく。
+      // skipProcessing: true だと向きが端末依存になり、後段の crop 座標が
+      // 画面上の枠と一致しなくなる。
       const photo = await cameraRef.current.takePictureAsync({
         quality: 0.8,
         base64: false,
-        skipProcessing: true,
       });
       if (!photo?.uri) {
         setState({
@@ -88,9 +104,25 @@ export default function CameraScreen() {
         return;
       }
 
+      // 画面の枠と同じ比率で写真の中心正方形をクロップ → 枠外を判定対象から外す
+      const photoMinDim = Math.min(photo.width, photo.height);
+      const cropSide = Math.floor(photoMinDim * FRAME_RATIO);
+      const cropOriginX = Math.floor((photo.width - cropSide) / 2);
+      const cropOriginY = Math.floor((photo.height - cropSide) / 2);
+
       const manipulated = await ImageManipulator.manipulateAsync(
         photo.uri,
-        [{ resize: { width: RESIZE_WIDTH_PX } }],
+        [
+          {
+            crop: {
+              originX: cropOriginX,
+              originY: cropOriginY,
+              width: cropSide,
+              height: cropSide,
+            },
+          },
+          { resize: { width: RESIZE_WIDTH_PX } },
+        ],
         {
           compress: JPEG_COMPRESS,
           format: ImageManipulator.SaveFormat.JPEG,
@@ -157,13 +189,12 @@ export default function CameraScreen() {
   return (
     <SafeAreaView className="flex-1 bg-black" edges={['top', 'bottom']}>
       <View className="flex-1">
-        <CameraView
-          ref={cameraRef}
-          facing="back"
-          style={{ flex: 1 }}
-          onCameraReady={() => {
-            // ready 状態は最初から true。Hook 仕様上ここで何もしなくて OK
-          }}
+        <CameraView ref={cameraRef} facing="back" style={{ flex: 1 }} />
+
+        <FrameOverlay
+          frameSize={frameSize}
+          frameLeft={frameLeft}
+          frameTop={frameTop}
         />
 
         <TopOverlay onPressBack={handleBack} />
@@ -178,6 +209,119 @@ export default function CameraScreen() {
         onGoToSearch={handleGoToSearch}
       />
     </SafeAreaView>
+  );
+}
+
+// ============================================================
+// 判定枠オーバーレイ（中心の四角枠 + 周囲の暗幕 + 角ブラケット + 撮影ヒント）
+// ============================================================
+
+function FrameOverlay({
+  frameSize,
+  frameLeft,
+  frameTop,
+}: {
+  frameSize: number;
+  frameLeft: number;
+  frameTop: number;
+}) {
+  const frameRight = frameLeft + frameSize;
+  const frameBottom = frameTop + frameSize;
+  const bracket = Math.max(20, Math.round(frameSize * 0.08));
+  const bracketThickness = 4;
+
+  return (
+    <View className="absolute inset-0" pointerEvents="none">
+      {/* 暗幕: 上 / 下 / 左 / 右 の 4 つで枠の外側を覆う */}
+      <View
+        className="absolute left-0 right-0 bg-black/55"
+        style={{ top: 0, height: Math.max(0, frameTop) }}
+      />
+      <View
+        className="absolute left-0 right-0 bg-black/55"
+        style={{ top: frameBottom, bottom: 0 }}
+      />
+      <View
+        className="absolute bg-black/55"
+        style={{ top: frameTop, left: 0, width: frameLeft, height: frameSize }}
+      />
+      <View
+        className="absolute bg-black/55"
+        style={{ top: frameTop, right: 0, width: frameLeft, height: frameSize }}
+      />
+
+      {/* 枠の細い白枠線 */}
+      <View
+        className="absolute border border-white/60 rounded-2xl"
+        style={{ top: frameTop, left: frameLeft, width: frameSize, height: frameSize }}
+      />
+
+      {/* 4 隅の白い角ブラケット（L 字） */}
+      <View
+        className="absolute"
+        style={{
+          top: frameTop - bracketThickness / 2,
+          left: frameLeft - bracketThickness / 2,
+          width: bracket,
+          height: bracket,
+          borderTopWidth: bracketThickness,
+          borderLeftWidth: bracketThickness,
+          borderColor: '#FFFFFF',
+          borderTopLeftRadius: 16,
+        }}
+      />
+      <View
+        className="absolute"
+        style={{
+          top: frameTop - bracketThickness / 2,
+          left: frameRight - bracket + bracketThickness / 2,
+          width: bracket,
+          height: bracket,
+          borderTopWidth: bracketThickness,
+          borderRightWidth: bracketThickness,
+          borderColor: '#FFFFFF',
+          borderTopRightRadius: 16,
+        }}
+      />
+      <View
+        className="absolute"
+        style={{
+          top: frameBottom - bracket + bracketThickness / 2,
+          left: frameLeft - bracketThickness / 2,
+          width: bracket,
+          height: bracket,
+          borderBottomWidth: bracketThickness,
+          borderLeftWidth: bracketThickness,
+          borderColor: '#FFFFFF',
+          borderBottomLeftRadius: 16,
+        }}
+      />
+      <View
+        className="absolute"
+        style={{
+          top: frameBottom - bracket + bracketThickness / 2,
+          left: frameRight - bracket + bracketThickness / 2,
+          width: bracket,
+          height: bracket,
+          borderBottomWidth: bracketThickness,
+          borderRightWidth: bracketThickness,
+          borderColor: '#FFFFFF',
+          borderBottomRightRadius: 16,
+        }}
+      />
+
+      {/* 枠の下に撮影ヒント */}
+      <View
+        className="absolute left-0 right-0 items-center"
+        style={{ top: frameBottom + 16 }}
+      >
+        <View className="rounded-full bg-black/55 px-4 py-2">
+          <Text className="text-base text-white font-bold">
+            ごみを枠の中に収めて撮影
+          </Text>
+        </View>
+      </View>
+    </View>
   );
 }
 
@@ -197,7 +341,7 @@ function TopOverlay({ onPressBack }: { onPressBack: () => void }) {
         <Ionicons name="chevron-back" size={24} color="white" />
       </Pressable>
       <View className="rounded-full bg-black/40 px-3 py-1.5">
-        <Text className="text-xs text-white">画像は保存されません</Text>
+        <Text className="text-sm text-white">画像は保存されません</Text>
       </View>
     </View>
   );
@@ -266,7 +410,7 @@ function PermissionDenied({
 
         <View className="items-center gap-6">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="camera" size={48} color="#16A34A" />
+            <Ionicons name="camera" size={48} color="#166534" />
           </View>
           <View className="gap-3">
             <Text className="text-2xl text-ink-900 font-bold text-center">

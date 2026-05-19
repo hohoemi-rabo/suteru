@@ -57,7 +57,7 @@ export function configureNotificationHandler(): void {
     void Notifications.setNotificationChannelAsync(NOTIFICATION_CHANNEL_ID, {
       name: 'ごみ収集リマインダー',
       importance: Notifications.AndroidImportance.HIGH,
-      lightColor: '#16A34A',
+      lightColor: '#166534',
       sound: 'default',
     });
   }

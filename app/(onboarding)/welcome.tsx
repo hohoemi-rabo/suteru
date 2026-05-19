@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
       <View className="flex-1 px-6 pt-16 pb-8 items-center justify-between">
         <View className="items-center gap-6 mt-12">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="leaf" size={56} color="#16A34A" />
+            <Ionicons name="leaf" size={56} color="#166534" />
           </View>
           <View className="items-center gap-2">
             <Text className="text-3xl text-ink-900 font-bold">これどう捨てる？</Text>
@@ -23,7 +23,7 @@ export default function WelcomeScreen() {
         </View>
 
         <View className="w-full gap-4">
-          <Text className="text-xs text-ink-500 text-center">
+          <Text className="text-sm text-ink-500 text-center">
             設定の前に、お住まいの地区を選んでいただきます。
           </Text>
           <Pressable
