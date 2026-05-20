@@ -1,7 +1,7 @@
 {
-  "$schema_comment": "カテゴリ定義。items.json の categoryId と一致する 13 値。color は tailwind.config.js の cat.* と同期。REQUIREMENTS.md §5.3 では「8カテゴリ」だが、実データは13値のため拡張済み。",
-  "version": "1.0.0",
-  "lastUpdated": "2026-05-17",
+  "$schema_comment": "カテゴリ定義。items.json の categoryId と一致する 11 値。color は tailwind.config.js の cat.* と同期。公式さんあ〜るへの全置換に伴い plastic_product（プラ資源に統合）と oversized（公式は素材別分類のため）を削除。",
+  "version": "1.1.0",
+  "lastUpdated": "2026-05-20",
   "categories": [
     {
       "id": "burnable",
@@ -22,16 +22,6 @@
       "stampRequired": false,
       "description": "週1回収集。プラスチック容器・包装フィルム・キャップなど。",
       "notes": ["水でゆすぎ、汚れを落として出す", "汚れが落ちないものは燃やすごみへ"]
-    },
-    {
-      "id": "plastic_product",
-      "name": "プラ製品",
-      "color": "#F59E0B",
-      "icon": "recycle",
-      "bagType": "指定のプラ製品袋",
-      "stampRequired": false,
-      "description": "プラスチック製品（容器包装でないもの）。タッパー・スポンジ・歯ブラシなど。",
-      "notes": ["プラ資源とは別の袋で出す"]
     },
     {
       "id": "landfill",
@@ -82,16 +72,6 @@
       "stampRequired": false,
       "description": "市内どこのステーションでも利用可。毎週土曜 7:30-9:00 等。",
       "notes": ["キャップとラベルを外し、中をゆすぐ", "ガラスびんは3色（透明・茶・その他）に分ける"]
-    },
-    {
-      "id": "oversized",
-      "name": "大型ごみ",
-      "color": "#7C3AED",
-      "icon": "box",
-      "bagType": "袋不要（証紙シール貼付）",
-      "stampRequired": true,
-      "description": "1m×1m×30cm以内なら集積所へ。布団・カーペット・衣装ケースなど。",
-      "notes": ["120円の収入証紙を本体に貼る", "サイズ超過は稲葉クリーンセンターへ持ち込み"]
     },
     {
       "id": "home_appliances",

@@ -12,19 +12,18 @@
 export type WeekDay = 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun';
 
 /**
- * 全カテゴリID。items.json の categoryId と一致。
+ * 全カテゴリID。items.json の categoryId と一致（11 値）。
+ * 公式さんあ〜るへの全置換に伴い plastic_product / oversized を削除。
  * patternsId（収集パターンに紐づくもの）と非収集カテゴリの両方を含む。
  */
 export type CategoryId =
   | 'burnable'
   | 'plastic_resource'
-  | 'plastic_product'
   | 'landfill'
   | 'hazardous'
   | 'metal_resource'
   | 'paper_resource'
   | 'bottle_pet'
-  | 'oversized'
   | 'home_appliances'
   | 'pc'
   | 'small_appliances'

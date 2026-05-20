@@ -36,7 +36,6 @@ const COLLECTION_CATEGORY_SET = new Set<CategoryId>(COLLECTION_CATEGORIES);
 const FACILITY_PURPOSE_HINTS: Partial<
   Record<Exclude<CategoryId, CollectionCategoryId>, string>
 > = {
-  oversized: '直接持ち込み',
   home_appliances: '家電リサイクル法対象品の引取業者',
 };
 
