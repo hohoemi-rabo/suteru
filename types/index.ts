@@ -199,6 +199,8 @@ export interface Facility {
   fee?: string;
   openDays?: string;
   openHours?: string;
+  /** 受入品目（持ち込み施設のみ）。ガイドブック P9 由来 */
+  acceptedItems?: string[];
 }
 
 export interface FacilitiesData {

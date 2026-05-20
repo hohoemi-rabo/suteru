@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import LinkedText from '@/components/LinkedText';
 import { detectArea } from '@/lib/area-detector';
 import { handleDetectionResultWithConfirm } from '@/lib/area-detection-ui';
 import { buildCategoryMaps } from '@/lib/category-maps';
@@ -190,7 +191,10 @@ function ItemDetailCard({
         <Text className="text-sm text-white font-bold">{categoryName}</Text>
       </View>
       <Text className="text-2xl text-ink-900 font-bold">{item.name}</Text>
-      <Text className="text-base text-ink-900 leading-relaxed">{item.instruction}</Text>
+      <LinkedText
+        text={item.instruction}
+        className="text-base text-ink-900 leading-relaxed"
+      />
       {item.warnings.length > 0 && (
         <View className="rounded-xl bg-warn-100 p-3 gap-1">
           {item.warnings.map((w) => (

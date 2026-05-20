@@ -24,6 +24,7 @@ export default function FacilitiesScreen() {
 
   const handleOpenSettings = () => router.push('/(tabs)/settings');
   const handleOpenRecycleStations = () => router.push('/recycle-stations');
+  const handleOpenDisaster = () => router.push('/disaster-waste');
   const handleOpenOfficial = async () => {
     try {
       await Linking.openURL(data.meta.officialUrl);
@@ -52,10 +53,38 @@ export default function FacilitiesScreen() {
             />
           ))}
 
+          <DisasterLink onPress={handleOpenDisaster} />
+
           <Footer onPressOfficial={handleOpenOfficial} />
         </View>
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+// ============================================================
+// セクション: 災害時のごみへのリンク
+// ============================================================
+
+function DisasterLink({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="災害時のごみについて見る"
+      className="rounded-2xl border border-ink-200 p-4 flex-row items-center gap-3"
+    >
+      <View className="w-11 h-11 rounded-full bg-warn-100 items-center justify-center">
+        <Ionicons name="warning-outline" size={22} color="#991B1B" />
+      </View>
+      <View className="flex-1 gap-0.5">
+        <Text className="text-base text-ink-900 font-bold">災害時のごみ</Text>
+        <Text className="text-sm text-ink-500">
+          大規模災害時のごみ出し・携帯トイレの備え
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+    </Pressable>
   );
 }
 
@@ -232,6 +261,18 @@ function FacilityCard({ facility }: { facility: Facility }) {
         <View className="flex-row items-center gap-2">
           <Ionicons name="cash-outline" size={16} color="#6B7280" />
           <Text className="text-base text-ink-900">料金: {facility.fee}</Text>
+        </View>
+      )}
+
+      {facility.acceptedItems && facility.acceptedItems.length > 0 && (
+        <View className="rounded-xl bg-ink-200/30 px-3 py-2 gap-1">
+          <View className="flex-row items-center gap-2">
+            <Ionicons name="checkmark-circle-outline" size={16} color="#6B7280" />
+            <Text className="text-sm text-ink-500">受入品目</Text>
+          </View>
+          <Text className="text-base text-ink-900 leading-relaxed">
+            {facility.acceptedItems.join('・')}
+          </Text>
         </View>
       )}
 
