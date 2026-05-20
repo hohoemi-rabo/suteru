@@ -36,9 +36,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── _layout.tsx             ← root Stack: DataProvider + UserSettingsProvider + NotificationsScheduler
 │   ├── camera.tsx              ← カメラ撮影＋判定（CameraView + ImageManipulator + identifyItem）
 │   ├── search.tsx              ← 手動品目検索（一覧、ヒットタップで /result へ push）
-│   ├── result.tsx              ← F1/F2 共通の結果画面（カテゴリ別表示 + 次回収集日 + GPS判定で地区永続化）
+│   ├── result.tsx              ← F1/F2 共通の結果画面（指示文は LinkedText で電話/URLタップ可 + 次回収集日 + GPS判定で地区永続化）
 │   ├── recycle-stations.tsx    ← リサイクルステーション 8グループ一覧（タブ外、Facilities から push）
-│   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード
+│   ├── disaster-waste.tsx      ← 災害時のごみ・携帯トイレ案内（タブ外、Facilities から push、ガイドブックP36）
+│   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード（収集日はリスト/カレンダー切替）
 │   ├── (onboarding)/           ← Welcome / area-select / notifications
 │   └── legal/                  ← プライバシーポリシー / 利用規約（設定から push）
 ├── lib/                        ← 業務ロジック（純粋関数 or React Context）
@@ -47,6 +48,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── user-settings.tsx       ← UserSettings 永続化 + Provider/useUserSettings
 │   ├── schedule-calculator.ts  ← 次回収集日算出（純粋関数、date-fns）
 │   ├── recycle-station-utils.ts ← リサイクルステーション次回開催日（dates 配列スキャン）
+│   ├── calendar-utils.ts       ← 収集日カレンダーの月グリッド生成（純粋関数、getCollectionsInRange 再利用）
 │   ├── area-detector.ts        ← GPS 最寄り地区判定（純粋関数、Haversine）
 │   ├── area-detection-ui.ts    ← GPS判定結果の確認ダイアログ→setAreaId 共通フロー
 │   ├── notifications.ts        ← 通知サービス（expo-notifications、14日先までローカル予約）
@@ -56,6 +58,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── api.ts                  ← Worker /api/identify クライアント（10秒タイムアウト、デバイスIDハッシュ送信）
 ├── types/index.ts              ← 全 JSON / API / UserSettings の型定義
 ├── components/                 ← 再利用コンポーネント
+│   ├── AreaSelectorRow.tsx     ← ヘッダー共通の「現在の地区」行（ホーム/収集日/施設で共用）
+│   ├── ScheduleCalendar.tsx    ← 収集日のカレンダー表示（月グリッド + 色ドット + 凡例）
+│   ├── LinkedText.tsx          ← テキスト中の電話番号/URL をタップ可能に（tel: / ブラウザ）
 │   └── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
 ├── assets/                     ← 画像・フォント
 ├── scripts/                    ← Expoテンプレートのスクリプト
@@ -104,6 +109,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | リサイクルステーションの次回開催日 | `lib/recycle-station-utils.ts` の `getNextStationCollection` / `getUpcomingStationDates` |
 | GPS で最寄り地区判定 | `lib/area-detector.ts` の `detectArea()` |
 | GPS判定後に確認ダイアログ→設定永続化 | `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` |
+| 収集日のカレンダー月グリッドを作る | `lib/calendar-utils.ts` の `buildMonthGrid()` → `components/ScheduleCalendar.tsx` |
+| ヘッダーの「現在の地区」行 | `components/AreaSelectorRow.tsx`（ホーム/収集日/施設で共用） |
+| テキスト中の電話/URL をタップ可能にする | `components/LinkedText.tsx` |
 | 法務文書（プライバシー/利用規約）を編集 | `lib/legal-documents.ts` + 同期して `docs/legal/*.md` も更新 |
 | Workerのプロンプトを調整する | `worker/docs/prompt-design.md` → `worker/src/prompt.ts` |
 | 行政アピールの材料 | `REQUIREMENTS.md` §10、`docs/02_admin_pitch_materials.md` |
@@ -118,7 +126,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. **オフラインでも基本機能**: カメラ判定以外はオフラインで動く
 4. **ベータ表示**: データは未確定なので、各画面に「ベータ版」「公式情報を参照」のディスクレイマー
 
-## 進捗（2026-05-17 時点）
+## 進捗（2026-05-20 時点）
 
 **Phase 4 を 4/7 完了**。残りは 02 行政アピール資料 / 23 EAS Build / 24 ユーザーテストの 3 本。詳しい状態は `docs/00_INDEX.md` を参照。
 
@@ -175,11 +183,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 新仕様: 「現在地から地区を設定」ボタン → 確認ダイアログ → `UserSettings.areaId` を永続化更新
 - 共通フローは `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` に集約（将来ホーム画面などに同じ動線を追加する場合も再利用可）
 
-### UI/UX ブラッシュアップ（0d8c53b）
+### UI/UX ブラッシュアップ
 
-- **WCAG AA カラーパス**: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換
-- **文字サイズ底上げ**: disclaimer/警告/住所/施設情報など重要情報を text-xs→sm / sm→base に。ベータ版バッジは全画面統一（settings 含む）
-- **カメラ判定枠**: `app/camera.tsx` に中央の正方形枠（75%）+ 暗幕 + 角ブラケット + ヒント文。撮影時に枠サイズで中心クロップしてから Gemini 送信 → 枠外は判定対象外
+- **WCAG AA カラーパス**（0d8c53b）: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換
+- **文字サイズ底上げ**（0d8c53b）: disclaimer/警告/住所/施設情報など重要情報を text-xs→sm / sm→base に。ベータ版バッジは全画面統一（settings 含む）
+- **カメラ判定枠**（0d8c53b）: `app/camera.tsx` に中央の正方形枠（75%）+ 暗幕 + 角ブラケット + ヒント文。撮影時に枠サイズで中心クロップしてから Gemini 送信 → 枠外は判定対象外
+- **収集日カレンダー表示**（e235473）: 収集日画面に「リスト / カレンダー」トグル。`components/ScheduleCalendar.tsx` + `lib/calendar-utils.ts`（月グリッド + 色ドット + 凡例 + 日付タップ詳細）
+- **ヘッダー 3 画面統一**（17e8783）: ホーム/収集日/施設のヘッダーを「タイトル + ベータ版」+「現在の地区」専用行の 2 行構成に。`components/AreaSelectorRow.tsx` を共用
+- **ガイドブック要点の表面化**（ea21671）: ① `components/LinkedText.tsx` で result の指示文中の電話/URL をタップ可能化、② 施設に受入品目（`Facility.acceptedItems`）、③ `app/disaster-waste.tsx` で災害時のごみ・携帯トイレ案内（施設からpush）
 - 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン
 
 ### コードレビュー指摘の状態（vercel-react-best-practices）
@@ -198,6 +209,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 飯田市公式情報の利用許諾打診（02 と並行）
 - PDF とさんあ〜るのプラ分類体系の差異の最終確認（現状はさんあ〜る優先）
 - REQUIREMENTS.md §2.3 の「No.36 まで」→「No.37 まで」修正
+- **ガイドブックとカレンダーの食い違いの市確認**（稲葉クリーンセンター料金 220 vs 180円、家電引取業者の住所/業者名/電話）。詳細は `.claude/rules/gotchas.md` データまわり参照
 
 ## チケット管理（`docs/` 配下）
 
