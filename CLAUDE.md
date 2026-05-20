@@ -68,11 +68,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── app.json                    ← reactCompiler/typedRoutes 有効、各種 plugins 設定済み
 ├── tsconfig.json               ← パスエイリアス: "@/*" → "./*"、worker/ 除外
 │
-├── data/                       ← バンドル用 JSON（全 9 ファイル v1.0.0、PDF 原本照合済み）
+├── data/                       ← バンドル用 JSON（品目辞書は公式さんあ〜る、収集日系は PDF）
 │   ├── common/                 ← meta / categories / items / patterns / basic-rules /
 │   │                              special-disposal / facilities / recycle-stations
 │   ├── areas/                  ← areas.json（MVP 対象 8 区: No.01/15/32/33/34/35/36/37）
-│   └── _sources/               ← 原本 PDF（.gitignore 済、コミットしない）
+│   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
 ├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開用、lib/legal-documents.ts と同期）
 │
@@ -153,17 +153,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - KV ネームスペース: dev/prod 共有（レート制限は端末 ID 別キー）
 - `[env.X]` 配下に `kv_namespaces` と `vars` を明示する必要あり（上書きしない！ → `.claude/rules/gotchas.md` 参照）
 
-### データ整備状況（01 完了済み）
+### データ整備状況
 
-- **全 9 JSON が version 1.0.0**、令和8年度 PDF 原本と照合済み
-- **MVP 対象 8 区が差し替わった**: 旧 OCR ベース 5 区（No.10/17/23/25/27、PDF 未入手で検証不可）を削除し、PDF 入手済みの 8 区に統一
-  - 確定 8 区: **No.01 / 15 / 32 / 33 / 34 / 35 / 36 / 37**
-  - 01 は市街中心、15 は座光寺、32〜35 は下黒田周辺クラスタ、36 は丹保・北条・飯沼南、37 は南条・別府上・別府下
-- **patterns.json 構造が改訂**: 旧ドラフトは「埋立=金属=紙が同じ日」前提だったが、実際は 8 区中 6 区で別曜日。命名規則を `pattern_<燃やす>_<プラ>_<埋立特定>[_<金属紙>]` に統一
-- **スプレー缶/カセットボンベは飯田市では `metal_resource`**（多くの自治体の `hazardous` とは異なる）。items.json で訂正済み
-- **No.37 の存在**: REQUIREMENTS.md §2.3 は「No.36 まで」と書いてあるが、実態は No.37 まで。REQUIREMENTS.md の修正が後続課題
-- 内訳: items 95 品目 / facilities 6 施設 / recycle-stations 8 グループ × 119 拠点 / special-disposal 7 エントリ / patterns 8 種
-- 原本 PDF は `data/_sources/` に保管（`.gitignore` で除外）
+- **品目辞書（items.json）は飯田市公式アプリ「さんあ〜る」589品目に全置換**（81d0200、version 1.1.0）
+  - 出典: `https://manage.delight-system.com/threeR/web/bunbetsu?jichitaiId=iidashi`（飯田市公式の分別検索アプリ）。利用許諾は 02 行政アピールで対応予定
+  - 旧 95 品目（手作り）→ 589 品目。検索でヒットしない品目が激減
+  - `categoryId` は公式の主区分（先頭区分）を 11 値にマップ。複数区分の部品別の捨て方は `instruction` に保持（【埋】【特】等）
+  - 別名（aliases）は公式の `data-keyword` から抽出（検索品質維持）。5品目は公式に別名データが無く空
+  - 生データ・変換中間ファイルは `data/_sources/sanaru-bunbetsu.json` / `items-converted.json`（gitignore）
+- **カテゴリが 13 → 11 に**（categories.json version 1.1.0）: `plastic_product`（公式はプラを資源(プラ)1本化）と `oversized`（公式は大型品も素材別分類）を削除。`types/index.ts` の CategoryId も 11 値
+- **収集日・施設・リサイクルステーションは引き続き令和8年度 PDF ベース**（8区: No.01/15/32-37）
+  - facilities 6 施設 / recycle-stations 8 グループ × 119 拠点 / special-disposal 7 エントリ / patterns 8 種 / basic-rules
+- **MVP 対象 8 区**: No.01 / 15 / 32 / 33 / 34 / 35 / 36 / 37（01 市街中心、15 座光寺、32〜35 下黒田周辺、36 丹保・北条・飯沼南、37 南条・別府上・別府下）
+- **patterns.json**: 8 区中 6 区で「埋立 と 金属/紙 が別曜日」。命名規則 `pattern_<燃やす>_<プラ>_<埋立特定>[_<金属紙>]`
+- **No.37 の存在**: REQUIREMENTS.md §2.3 は「No.36 まで」だが実態は No.37 まで（要修正）
+- **注意: PDF とさんあ〜るで分類体系が一部異なる**（プラの分け方など）。品目辞書はさんあ〜る、収集パターンは PDF が正本
 
 ### result.tsx の GPS 地区判定（11be98a で変更）
 
@@ -171,18 +175,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - 新仕様: 「現在地から地区を設定」ボタン → 確認ダイアログ → `UserSettings.areaId` を永続化更新
 - 共通フローは `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` に集約（将来ホーム画面などに同じ動線を追加する場合も再利用可）
 
+### UI/UX ブラッシュアップ（0d8c53b）
+
+- **WCAG AA カラーパス**: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換
+- **文字サイズ底上げ**: disclaimer/警告/住所/施設情報など重要情報を text-xs→sm / sm→base に。ベータ版バッジは全画面統一（settings 含む）
+- **カメラ判定枠**: `app/camera.tsx` に中央の正方形枠（75%）+ 暗幕 + 角ブラケット + ヒント文。撮影時に枠サイズで中心クロップしてから Gemini 送信 → 枠外は判定対象外
+- 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン
+
 ### コードレビュー指摘の状態（vercel-react-best-practices）
 
 - ✅ #2 カテゴリ Map ヘルパー DRY 化（`lib/category-maps.ts` 作成、3 ファイルの重複削除、97c911c）
+- ✅ #3 `app/camera.tsx` の no-op `onCameraReady` コールバック削除（カメラ枠実装時に対応、0d8c53b）
 - ⏳ #1 `router` 直接 import vs `useRouter()` Hook の混在統一（軽微、未着手）
-- ⏳ #3 `app/camera.tsx` の no-op `onCameraReady` コールバック削除（軽微、未着手）
 
 ### 後続作業（チケット未切り出し）
 
+- **さんあ〜る品目データの利用許諾**（飯田市・delight-system）— 02 行政アピールで対応。リリース前必須
+- items.json の警告（warnings）整備 — 公式変換では全 warnings 空。重要注意（火災・けが等）は instruction 内にあるが、別フィールド化は未
 - recycle-stations.json 各拠点 119 件への lat/lng 付与（MapView 導入と「最寄りグループ推定」の前提）
 - 法務文書の外部 URL 公開（23 EAS Build 直前）
 - 法務文書の弁護士・行政書士確認（本格リリース前推奨）
 - 飯田市公式情報の利用許諾打診（02 と並行）
+- PDF とさんあ〜るのプラ分類体系の差異の最終確認（現状はさんあ〜る優先）
 - REQUIREMENTS.md §2.3 の「No.36 まで」→「No.37 まで」修正
 
 ## チケット管理（`docs/` 配下）
