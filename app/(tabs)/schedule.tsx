@@ -2,9 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import ScheduleCalendar from '@/components/ScheduleCalendar';
 import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import { requestPermission } from '@/lib/notifications';
@@ -26,10 +28,13 @@ const UPCOMING_DAYS = 28;
 const WEEK_COUNT = 4;
 const WEEK_LABELS = ['今週', '来週', '再来週', '4 週目'] as const;
 
+type ViewMode = 'list' | 'calendar';
+
 export default function ScheduleScreen() {
   const data = useData();
   const { settings, setNotificationsEnabled } = useUserSettings();
   const router = useRouter();
+  const [viewMode, setViewMode] = useState<ViewMode>('list');
 
   const area = data.areas.areas.find((a) => a.id === settings.areaId) ?? null;
   const patternId = area?.patternId;
@@ -82,16 +87,27 @@ export default function ScheduleScreen() {
                 categoryLabelMap={categoryLabelMap}
                 categoryColorMap={categoryColorMap}
               />
-              <CategoryCards
-                pattern={pattern}
-                categoryLabelMap={categoryLabelMap}
-                categoryColorMap={categoryColorMap}
-              />
-              <UpcomingList
-                pattern={pattern}
-                categoryLabelMap={categoryLabelMap}
-                categoryColorMap={categoryColorMap}
-              />
+              <ViewToggle mode={viewMode} onChange={setViewMode} />
+              {viewMode === 'list' ? (
+                <>
+                  <CategoryCards
+                    pattern={pattern}
+                    categoryLabelMap={categoryLabelMap}
+                    categoryColorMap={categoryColorMap}
+                  />
+                  <UpcomingList
+                    pattern={pattern}
+                    categoryLabelMap={categoryLabelMap}
+                    categoryColorMap={categoryColorMap}
+                  />
+                </>
+              ) : (
+                <ScheduleCalendar
+                  pattern={pattern}
+                  categoryLabelMap={categoryLabelMap}
+                  categoryColorMap={categoryColorMap}
+                />
+              )}
             </>
           ) : (
             <TbdFallback onPressOfficial={handleOpenOfficial} />
@@ -151,6 +167,64 @@ function Header({
         <Text className="text-sm text-ink-500">{pattern.description}</Text>
       )}
     </View>
+  );
+}
+
+// ============================================================
+// セクション: 表示切替トグル（リスト / カレンダー）
+// ============================================================
+
+function ViewToggle({
+  mode,
+  onChange,
+}: {
+  mode: 'list' | 'calendar';
+  onChange: (m: 'list' | 'calendar') => void;
+}) {
+  return (
+    <View className="flex-row rounded-full bg-ink-200/50 p-1">
+      <ToggleButton
+        label="リスト"
+        icon="list"
+        active={mode === 'list'}
+        onPress={() => onChange('list')}
+      />
+      <ToggleButton
+        label="カレンダー"
+        icon="calendar"
+        active={mode === 'calendar'}
+        onPress={() => onChange('calendar')}
+      />
+    </View>
+  );
+}
+
+function ToggleButton({
+  label,
+  icon,
+  active,
+  onPress,
+}: {
+  label: string;
+  icon: 'list' | 'calendar';
+  active: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected: active }}
+      accessibilityLabel={`${label}表示`}
+      className={`flex-1 flex-row items-center justify-center gap-1.5 min-h-11 rounded-full ${
+        active ? 'bg-bg' : ''
+      }`}
+    >
+      <Ionicons name={icon} size={16} color={active ? '#166534' : '#6B7280'} />
+      <Text className={`text-base ${active ? 'text-brand-600 font-bold' : 'text-ink-500'}`}>
+        {label}
+      </Text>
+    </Pressable>
   );
 }
 
