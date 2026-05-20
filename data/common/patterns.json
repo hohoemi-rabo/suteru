@@ -5,76 +5,388 @@
   "sourceDocument": "飯田市分別収集計画表 令和8年度 家庭用ごみ・リサイクルカレンダー（No.01, 15, 32, 33, 34, 35, 36, 37 の各PDFから抽出・PDF原本と照合済み）",
   "patterns": {
     "pattern_mt_fri_n13fri": {
-      "description": "燃やすごみ月木 / プラ資源金 / 埋立特定金属紙すべて第1・3金（No.01 大門町等で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["fri"] },
-      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "fri" },
-      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "fri" },
-      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "fri" },
-      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "fri" }
+      "description": "燃やすごみ月木 / プラ資源金 / 埋立特定金属紙すべて第1・3金",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "fri"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "fri"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "fri"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "fri"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "fri"
+      }
     },
     "pattern_mt_mon_n24mon": {
-      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定金属紙すべて第2・4月（No.15 座光寺で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "mon" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "mon" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定金属紙すべて第2・4月",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "mon"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      }
     },
     "pattern_mt_mon_n13tue_n24mon": {
-      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3火 / 金属紙第2・4月（No.32 上黒田で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
-      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "tue" },
-      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "tue" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3火 / 金属紙第2・4月",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "mon"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "tue"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "tue"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      }
     },
     "pattern_mt_mon_n13wed_n24mon": {
-      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3水 / 金属紙第2・4月（No.33 下黒田北で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
-      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "wed" },
-      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "wed" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "mon" }
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第1・3水 / 金属紙第2・4月",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "mon"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "wed"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "wed"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "mon"
+      }
     },
     "pattern_mt_mon_n24tue_n13mon": {
-      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4火 / 金属紙第1・3月（No.34 下黒田南で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "tue" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "tue" },
-      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" },
-      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" }
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4火 / 金属紙第1・3月",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "mon"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "tue"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "tue"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "mon"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "mon"
+      }
     },
     "pattern_mt_mon_n24fri_n13mon": {
-      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4金 / 金属紙第1・3月(No.35 下黒田東で使用）",
-      "burnable":         { "type": "weekly",  "days": ["mon", "thu"] },
-      "plastic_resource": { "type": "weekly",  "days": ["mon"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "fri" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "fri" },
-      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" },
-      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "mon" }
+      "description": "燃やすごみ月木 / プラ資源月 / 埋立特定第2・4金 / 金属紙第1・3月",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "mon"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "fri"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "fri"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "mon"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "mon"
+      }
     },
     "pattern_tf_thu_n24wed_n13thu": {
-      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第2・4水 / 金属紙第1・3木（No.36 丹保・北条・飯沼南で使用）",
-      "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
-      "plastic_resource": { "type": "weekly",  "days": ["thu"] },
-      "landfill":         { "type": "nth_day", "nth": [2, 4], "day": "wed" },
-      "hazardous":        { "type": "nth_day", "nth": [2, 4], "day": "wed" },
-      "metal_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "paper_resource":   { "type": "nth_day", "nth": [1, 3], "day": "thu" }
+      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第2・4水 / 金属紙第1・3木",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "tue",
+          "fri"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "thu"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "wed"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "wed"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      }
     },
     "pattern_tf_thu_n13thu_n24thu": {
-      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第1・3木 / 金属紙第2・4木（No.37 南条・別府上・別府下で使用）",
-      "burnable":         { "type": "weekly",  "days": ["tue", "fri"] },
-      "plastic_resource": { "type": "weekly",  "days": ["thu"] },
-      "landfill":         { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "hazardous":        { "type": "nth_day", "nth": [1, 3], "day": "thu" },
-      "metal_resource":   { "type": "nth_day", "nth": [2, 4], "day": "thu" },
-      "paper_resource":   { "type": "nth_day", "nth": [2, 4], "day": "thu" }
+      "description": "燃やすごみ火金 / プラ資源木 / 埋立特定第1・3木 / 金属紙第2・4木",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "tue",
+          "fri"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "thu"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "thu"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          2,
+          4
+        ],
+        "day": "thu"
+      }
     }
   },
   "notes": [

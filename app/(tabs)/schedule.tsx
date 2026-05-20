@@ -127,12 +127,12 @@ function Header({
 }) {
   return (
     <View className="px-4 pt-2 pb-4 gap-1">
-      <View className="flex-row justify-between items-center">
-        <View className="flex-row items-end gap-2 flex-1">
-          <Text className="text-xl text-ink-900 font-bold" numberOfLines={1}>
-            {area ? truncate(area.name, 12) : '地区未設定'}
+      <View className="flex-row justify-between items-center gap-2">
+        <View className="flex-row items-end gap-2 flex-1 shrink">
+          <Text className="text-xl text-ink-900 font-bold shrink" numberOfLines={1}>
+            {area ? area.name : '地区未設定'}
           </Text>
-          <View className="rounded-full bg-brand-100 px-2 py-0.5">
+          <View className="rounded-full bg-brand-100 px-2 py-0.5 shrink-0">
             <Text className="text-xs text-brand-600">ベータ版</Text>
           </View>
         </View>
@@ -140,7 +140,7 @@ function Header({
           onPress={onPressChange}
           accessibilityLabel="地区を変更する（設定画面を開く）"
           accessibilityRole="button"
-          className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5"
+          className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5 shrink-0"
         >
           <Ionicons name="location" size={14} color="#166534" />
           <Text className="text-sm text-brand-600">変更</Text>
@@ -209,16 +209,18 @@ function CategoryCards({
         {list.map((nc, idx) => (
           <View
             key={nc.categoryId}
-            className={`flex-row items-center justify-between px-4 py-3 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
+            className={`flex-row items-center justify-between gap-3 px-4 py-3 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
           >
-            <View className="flex-row items-center gap-3 flex-1">
+            <View className="flex-row items-center gap-3 flex-1 shrink">
               <View
-                className="w-3 h-3 rounded-full"
+                className="w-3 h-3 rounded-full shrink-0"
                 style={{ backgroundColor: categoryColorMap[nc.categoryId] }}
               />
-              <Text className="text-base text-ink-900">{nc.categoryName}</Text>
+              <Text className="text-base text-ink-900 shrink" numberOfLines={1}>
+                {nc.categoryName}
+              </Text>
             </View>
-            <Text className="text-base text-ink-900">
+            <Text className="text-base text-ink-900 font-medium shrink-0">
               {formatNextCollection(nc.date)}
             </Text>
           </View>
@@ -417,9 +419,4 @@ function formatWeekRange(weekStart: Date): string {
     { locale: ja },
   );
   return `${start} 〜 ${end}`;
-}
-
-function truncate(s: string, max: number): string {
-  if (s.length <= max) return s;
-  return `${s.slice(0, max)}…`;
 }
