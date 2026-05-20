@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import AreaSelectorRow from '@/components/AreaSelectorRow';
 import {
   getConfiguredApiUrl,
   identifyItem,
@@ -82,25 +83,17 @@ export default function HomeScreen() {
 // ============================================================
 
 function HomeHeader({ area, onPressArea }: { area: Area | null; onPressArea: () => void }) {
-  const label = area ? truncate(area.name, 10) : '未設定';
   return (
-    <View className="flex-row justify-between items-center px-4 pt-2 pb-4">
+    <View className="px-4 pt-2 pb-4 gap-2">
+      {/* 1 行目: アプリ名 + ベータ版 */}
       <View className="flex-row items-end gap-2">
         <Text className="text-xl text-ink-900 font-bold">これどう捨てる？</Text>
-        <View className="rounded-full bg-brand-100 px-2 py-0.5">
+        <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-0.5">
           <Text className="text-xs text-brand-600">ベータ版</Text>
         </View>
       </View>
-      <Pressable
-        onPress={onPressArea}
-        accessibilityLabel={`現在の地区: ${area?.name ?? '未設定'}、タップで設定を開く`}
-        accessibilityRole="button"
-        className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5"
-      >
-        <Ionicons name="location" size={14} color="#166534" />
-        <Text className="text-sm text-brand-600">{label}</Text>
-        <Ionicons name="chevron-forward" size={14} color="#166534" />
-      </Pressable>
+      {/* 2 行目: 地区セレクタ（目立つ専用行） */}
+      <AreaSelectorRow area={area} onPress={onPressArea} />
     </View>
   );
 }
@@ -407,13 +400,4 @@ function detectionErrorLabel(error: string): string {
     default:
       return '不明なエラー';
   }
-}
-
-// ============================================================
-// ユーティリティ
-// ============================================================
-
-function truncate(s: string, maxChars: number): string {
-  if (s.length <= maxChars) return s;
-  return `${s.slice(0, maxChars)}…`;
 }

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import AreaSelectorRow from '@/components/AreaSelectorRow';
 import ScheduleCalendar from '@/components/ScheduleCalendar';
 import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
@@ -142,27 +143,17 @@ function Header({
   onPressChange: () => void;
 }) {
   return (
-    <View className="px-4 pt-2 pb-4 gap-1">
-      <View className="flex-row justify-between items-center gap-2">
-        <View className="flex-row items-end gap-2 flex-1 shrink">
-          <Text className="text-xl text-ink-900 font-bold shrink" numberOfLines={1}>
-            {area ? area.name : '地区未設定'}
-          </Text>
-          <View className="rounded-full bg-brand-100 px-2 py-0.5 shrink-0">
-            <Text className="text-xs text-brand-600">ベータ版</Text>
-          </View>
+    <View className="px-4 pt-2 pb-4 gap-2">
+      {/* 1 行目: セクション名 + ベータ版 */}
+      <View className="flex-row items-end gap-2">
+        <Text className="text-xl text-ink-900 font-bold">収集日</Text>
+        <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-0.5">
+          <Text className="text-xs text-brand-600">ベータ版</Text>
         </View>
-        <Pressable
-          onPress={onPressChange}
-          accessibilityLabel="地区を変更する（設定画面を開く）"
-          accessibilityRole="button"
-          className="flex-row items-center gap-1 rounded-full bg-brand-100 px-3 py-1.5 shrink-0"
-        >
-          <Ionicons name="location" size={14} color="#166534" />
-          <Text className="text-sm text-brand-600">変更</Text>
-          <Ionicons name="chevron-forward" size={14} color="#166534" />
-        </Pressable>
       </View>
+      {/* 2 行目: 地区セレクタ（目立つ専用行） */}
+      <AreaSelectorRow area={area} onPress={onPressChange} />
+      {/* 3 行目: 収集パターン要約 */}
       {pattern && (
         <Text className="text-sm text-ink-500">{pattern.description}</Text>
       )}
