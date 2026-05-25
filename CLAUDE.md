@@ -61,10 +61,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── AreaSelectorRow.tsx     ← ヘッダー共通の「現在の地区」行（ホーム/収集日/施設で共用）
 │   ├── ScheduleCalendar.tsx    ← 収集日のカレンダー表示（月グリッド + 色ドット + 凡例）
 │   ├── LinkedText.tsx          ← テキスト中の電話番号/URL をタップ可能に（tel: / ブラウザ）
-│   └── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
+│   ├── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
+│   └── ScreenBackground.tsx    ← 画面共通の背景（薄青→白の縦グラデ + SafeAreaView ラッパー、全画面ルートで使用）
 ├── assets/                     ← 画像・フォント
 ├── scripts/                    ← Expoテンプレートのスクリプト
-├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/ink/cat カラー）
+├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/success/ink/cat カラー、シビック青基調）
 ├── global.css                  ← NativeWind の @tailwind directives
 ├── babel.config.js             ← babel-preset-expo + nativewind/babel
 ├── metro.config.js             ← withNativeWind ラップ
@@ -111,6 +112,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | GPS判定後に確認ダイアログ→設定永続化 | `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` |
 | 収集日のカレンダー月グリッドを作る | `lib/calendar-utils.ts` の `buildMonthGrid()` → `components/ScheduleCalendar.tsx` |
 | ヘッダーの「現在の地区」行 | `components/AreaSelectorRow.tsx`（ホーム/収集日/施設で共用） |
+| 画面の背景（グラデ）を変える | `components/ScreenBackground.tsx`（薄青→白の縦グラデ、`GRADIENT_COLORS` で調整。画面ルートで `SafeAreaView` の代わりに使う） |
 | テキスト中の電話/URL をタップ可能にする | `components/LinkedText.tsx` |
 | 法務文書（プライバシー/利用規約）を編集 | `lib/legal-documents.ts` + 同期して `docs/legal/*.md` も更新 |
 | Workerのプロンプトを調整する | `worker/docs/prompt-design.md` → `worker/src/prompt.ts` |
@@ -126,7 +128,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. **オフラインでも基本機能**: カメラ判定以外はオフラインで動く
 4. **ベータ表示**: データは未確定なので、各画面に「ベータ版」「公式情報を参照」のディスクレイマー
 
-## 進捗（2026-05-20 時点）
+## 進捗（2026-05-25 時点）
 
 **Phase 4 を 4/7 完了**。残りは 02 行政アピール資料 / 23 EAS Build / 24 ユーザーテストの 3 本。詳しい状態は `docs/00_INDEX.md` を参照。
 
@@ -185,12 +187,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### UI/UX ブラッシュアップ
 
-- **WCAG AA カラーパス**（0d8c53b）: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換
+- **WCAG AA カラーパス**（0d8c53b）: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換 ※ **配色はその後 d356ab8 でエコ緑→シビック青に刷新（最下部の項目参照）。本バレットの brand 緑値は歴史的経緯**
 - **文字サイズ底上げ**（0d8c53b）: disclaimer/警告/住所/施設情報など重要情報を text-xs→sm / sm→base に。ベータ版バッジは全画面統一（settings 含む）
 - **カメラ判定枠**（0d8c53b）: `app/camera.tsx` に中央の正方形枠（75%）+ 暗幕 + 角ブラケット + ヒント文。撮影時に枠サイズで中心クロップしてから Gemini 送信 → 枠外は判定対象外
 - **収集日カレンダー表示**（e235473）: 収集日画面に「リスト / カレンダー」トグル。`components/ScheduleCalendar.tsx` + `lib/calendar-utils.ts`（月グリッド + 色ドット + 凡例 + 日付タップ詳細）
 - **ヘッダー 3 画面統一**（17e8783）: ホーム/収集日/施設のヘッダーを「タイトル + ベータ版」+「現在の地区」専用行の 2 行構成に。`components/AreaSelectorRow.tsx` を共用
 - **ガイドブック要点の表面化**（ea21671）: ① `components/LinkedText.tsx` で result の指示文中の電話/URL をタップ可能化、② 施設に受入品目（`Facility.acceptedItems`）、③ `app/disaster-waste.tsx` で災害時のごみ・携帯トイレ案内（施設からpush）
+- **シビック配色 + 背景グラデ**（d356ab8）: エコ緑 → 行政シビックのネイビー＋青へ刷新（ui-ux-pro-max「Accessible & Ethical」、全色 WCAG AA 検証済み）。`tailwind.config.js` で brand を青系（CTA brand-500 `#0369A1` 5.9:1 / リンク brand-600 `#075985` 7.0:1 / 薄背景 brand-100 `#E0F2FE`）、ink をスレート＋ネイビー（本文 ink-900 `#0F172A` 16:1 / 補助 ink-500 `#475569` 7.5:1 / 枠 ink-200 `#E2E8F0`）に。旧 accent `#0EA5E9`（白背景 2.8:1 で AA 不通過）も `#0369A1` / 薄背景 `#E0F2FE` に修正。エコ緑 `#15803D` は success トークンとして限定温存。ハードコード hex も追従（`#166534`→`#075985` / `#6B7280`→`#475569` / `#1F2937`→`#0F172A`）
+- **背景グラデーション**（d356ab8）: `expo-linear-gradient` 導入 + `components/ScreenBackground.tsx`（薄青 `#EFF6FF` → 白 `#FFFFFF` の縦グラデ、ビューポート固定で中身がスクロール）。12 画面ルートを `<SafeAreaView className="flex-1 bg-bg">` → `<ScreenBackground edges={...}>` に置換。`bg-bg` トークンは純白 `#FFFFFF` に戻し、カード/検索/シート等の「面」用に維持。カメラ画面（`app/camera.tsx`）はカメラビューが覆うため対象外。カテゴリ識別色（`categories.json`）は別系統のため不変
 - 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン
 
 ### コードレビュー指摘の状態（vercel-react-best-practices）

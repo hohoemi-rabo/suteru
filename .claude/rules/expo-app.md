@@ -16,6 +16,7 @@
 - `date-fns` v4（収集日計算、`date-fns/locale/ja` で日本語フォーマット）
 - `expo-secure-store` / `expo-crypto` / `expo-application`（09 API でデバイスIDハッシュに使用予定）
 - `expo-haptics`（重要操作のフィードバック）
+- `expo-linear-gradient`（画面背景の縦グラデ、`components/ScreenBackground.tsx` で使用）
 - React Navigation（bottom-tabs）/ expo-image / expo-symbols 等
 
 依存追加時は `package.json` の Expo SDK バージョン（54）に対応するバージョンを `npx expo install` で入れる（`npm install` 直で入れない、純粋 JS パッケージのみ例外）。
