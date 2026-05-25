@@ -4,7 +4,7 @@ import { ja } from 'date-fns/locale';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
 import ScheduleCalendar from '@/components/ScheduleCalendar';
@@ -76,7 +76,7 @@ export default function ScheduleScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <ScrollView contentContainerClassName="pb-8">
         <Header area={area} pattern={pattern} onPressChange={handleOpenSettings} />
 
@@ -125,7 +125,7 @@ export default function ScheduleScreen() {
           <Footer onPressOfficial={handleOpenOfficial} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -211,7 +211,7 @@ function ToggleButton({
         active ? 'bg-bg' : ''
       }`}
     >
-      <Ionicons name={icon} size={16} color={active ? '#166534' : '#6B7280'} />
+      <Ionicons name={icon} size={16} color={active ? '#075985' : '#475569'} />
       <Text className={`text-base ${active ? 'text-brand-600 font-bold' : 'text-ink-500'}`}>
         {label}
       </Text>
@@ -437,7 +437,7 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );
@@ -462,7 +462,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
 import { useData } from '@/lib/data-loader';
@@ -34,7 +34,7 @@ export default function FacilitiesScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <ScrollView contentContainerClassName="pb-8">
         <Header area={area} onPressChange={handleOpenSettings} />
 
@@ -58,7 +58,7 @@ export default function FacilitiesScreen() {
           <Footer onPressOfficial={handleOpenOfficial} />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -83,7 +83,7 @@ function DisasterLink({ onPress }: { onPress: () => void }) {
           大規模災害時のごみ出し・携帯トイレの備え
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+      <Ionicons name="chevron-forward" size={20} color="#475569" />
     </Pressable>
   );
 }
@@ -133,10 +133,10 @@ function RecycleStationLink({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="リサイクルステーションの開催日を見る"
-      className="rounded-2xl bg-accent-500/10 border border-accent-500/30 p-4"
+      className="rounded-2xl bg-accent-50 border border-accent-600/30 p-4"
     >
       <View className="flex-row items-center gap-3">
-        <View className="w-11 h-11 rounded-full bg-accent-500 items-center justify-center">
+        <View className="w-11 h-11 rounded-full bg-accent-600 items-center justify-center">
           <Ionicons name="repeat" size={22} color="#FFFFFF" />
         </View>
         <View className="flex-1 gap-0.5">
@@ -156,7 +156,7 @@ function RecycleStationLink({
             ペットボトル・ガラスびん・空き缶
           </Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#6B7280" />
+        <Ionicons name="chevron-forward" size={20} color="#475569" />
       </View>
     </Pressable>
   );
@@ -231,18 +231,18 @@ function FacilityCard({ facility }: { facility: Facility }) {
         accessibilityLabel={`${facility.name}の住所を地図で開く`}
         className="flex-row items-start gap-2"
       >
-        <Ionicons name="location-outline" size={18} color="#6B7280" style={{ marginTop: 2 }} />
+        <Ionicons name="location-outline" size={18} color="#475569" style={{ marginTop: 2 }} />
         <Text className="flex-1 text-base text-ink-900 leading-relaxed">
           {facility.address}
         </Text>
-        <Ionicons name="open-outline" size={16} color="#166534" style={{ marginTop: 2 }} />
+        <Ionicons name="open-outline" size={16} color="#075985" style={{ marginTop: 2 }} />
       </Pressable>
 
       {(facility.openDays || facility.openHours) && (
         <View className="gap-1">
           {facility.openDays && (
             <View className="flex-row items-start gap-2">
-              <Ionicons name="calendar-outline" size={16} color="#6B7280" style={{ marginTop: 2 }} />
+              <Ionicons name="calendar-outline" size={16} color="#475569" style={{ marginTop: 2 }} />
               <Text className="flex-1 text-base text-ink-900 leading-relaxed">
                 {facility.openDays}
               </Text>
@@ -250,7 +250,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
           )}
           {facility.openHours && (
             <View className="flex-row items-center gap-2">
-              <Ionicons name="time-outline" size={16} color="#6B7280" />
+              <Ionicons name="time-outline" size={16} color="#475569" />
               <Text className="flex-1 text-base text-ink-900">{facility.openHours}</Text>
             </View>
           )}
@@ -259,7 +259,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
 
       {facility.fee && (
         <View className="flex-row items-center gap-2">
-          <Ionicons name="cash-outline" size={16} color="#6B7280" />
+          <Ionicons name="cash-outline" size={16} color="#475569" />
           <Text className="text-base text-ink-900">料金: {facility.fee}</Text>
         </View>
       )}
@@ -267,7 +267,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
       {facility.acceptedItems && facility.acceptedItems.length > 0 && (
         <View className="rounded-xl bg-ink-200/30 px-3 py-2 gap-1">
           <View className="flex-row items-center gap-2">
-            <Ionicons name="checkmark-circle-outline" size={16} color="#6B7280" />
+            <Ionicons name="checkmark-circle-outline" size={16} color="#475569" />
             <Text className="text-sm text-ink-500">受入品目</Text>
           </View>
           <Text className="text-base text-ink-900 leading-relaxed">
@@ -305,7 +305,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );

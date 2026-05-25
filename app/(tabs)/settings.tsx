@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import {
   useData,
@@ -135,7 +135,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <ScrollView contentContainerClassName="pb-8">
         <View className="px-6 pt-2 pb-4 flex-row items-end gap-2">
           <Text className="text-2xl text-ink-900 font-bold">設定</Text>
@@ -182,7 +182,7 @@ export default function SettingsScreen() {
           )}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -465,7 +465,7 @@ function LinkRow({
         <Text className="text-base text-ink-900">{label}</Text>
         {subtitle && <Text className="text-xs text-ink-500">{subtitle}</Text>}
       </View>
-      <Ionicons name={icon} size={18} color="#6B7280" />
+      <Ionicons name={icon} size={18} color="#475569" />
     </Pressable>
   );
 }

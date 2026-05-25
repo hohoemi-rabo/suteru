@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import { useData } from '@/lib/data-loader';
 import { useUserSettings } from '@/lib/user-settings';
@@ -19,7 +19,7 @@ export default function AreaSelectScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg">
+    <ScreenBackground edges={['top', 'bottom']}>
       <View className="px-6 pt-6 pb-2 gap-1">
         <Text className="text-sm text-ink-500">1 / 2</Text>
         <Text className="text-2xl text-ink-900 font-bold">お住まいの地区を選んでください</Text>
@@ -74,6 +74,6 @@ export default function AreaSelectScreen() {
           </Text>
         </Pressable>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import { requestPermission } from '@/lib/notifications';
 import { useUserSettings } from '@/lib/user-settings';
@@ -28,7 +28,7 @@ export default function NotificationsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg">
+    <ScreenBackground edges={['top', 'bottom']}>
       <View className="flex-1 px-6 pt-6 pb-8 justify-between">
         <View className="gap-1">
           <Text className="text-sm text-ink-500">2 / 2</Text>
@@ -37,7 +37,7 @@ export default function NotificationsScreen() {
 
         <View className="items-center gap-6 my-8">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="notifications" size={48} color="#166534" />
+            <Ionicons name="notifications" size={48} color="#075985" />
           </View>
           <View className="gap-3 px-4">
             <Text className="text-base text-ink-900 text-center leading-relaxed">
@@ -68,6 +68,6 @@ export default function NotificationsScreen() {
           </Pressable>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }

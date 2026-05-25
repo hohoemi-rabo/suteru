@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import { useData } from '@/lib/data-loader';
 import {
@@ -45,7 +45,7 @@ export default function RecycleStationsScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <Header onPressBack={() => router.back()} />
       <ScrollView contentContainerClassName="px-4 pb-8 gap-4">
         <InfoCard
@@ -80,7 +80,7 @@ export default function RecycleStationsScreen() {
           onPressOfficial={handleOpenOfficial}
         />
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -97,7 +97,7 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#1F2937" />
+        <Ionicons name="chevron-back" size={24} color="#0F172A" />
       </Pressable>
       <Text className="text-xl text-ink-900 font-bold flex-1" numberOfLines={1}>
         リサイクルステーション
@@ -125,9 +125,9 @@ function InfoCard({
   cancellationRule: string;
 }) {
   return (
-    <View className="rounded-2xl border border-accent-500/30 bg-accent-500/10 p-4 gap-3">
+    <View className="rounded-2xl border border-accent-600/30 bg-accent-50 p-4 gap-3">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="information-circle" size={20} color="#0EA5E9" />
+        <Ionicons name="information-circle" size={20} color="#0369A1" />
         <Text className="text-base text-ink-900 font-bold">市内どこでも利用できます</Text>
       </View>
       <Text className="text-sm text-ink-900 leading-relaxed">{description}</Text>
@@ -214,7 +214,7 @@ function GroupCard({
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#6B7280"
+          color="#475569"
         />
       </Pressable>
 
@@ -266,11 +266,11 @@ function LocationRow({
     >
       <Text className="text-sm text-ink-900 font-bold">{location.name}</Text>
       <View className="flex-row items-center gap-1">
-        <Ionicons name="location-outline" size={12} color="#6B7280" />
+        <Ionicons name="location-outline" size={12} color="#475569" />
         <Text className="flex-1 text-sm text-ink-500" numberOfLines={2}>
           {location.address}
         </Text>
-        <Ionicons name="open-outline" size={12} color="#166534" />
+        <Ionicons name="open-outline" size={12} color="#075985" />
       </View>
     </Pressable>
   );
@@ -296,7 +296,7 @@ function Footer({
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );

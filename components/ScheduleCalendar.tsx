@@ -51,7 +51,7 @@ export default function ScheduleCalendar({
           accessibilityLabel="前の月"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-back" size={22} color="#1F2937" />
+          <Ionicons name="chevron-back" size={22} color="#0F172A" />
         </Pressable>
         <Text className="text-lg text-ink-900 font-bold">{monthLabel}</Text>
         <Pressable
@@ -60,7 +60,7 @@ export default function ScheduleCalendar({
           accessibilityLabel="次の月"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-forward" size={22} color="#1F2937" />
+          <Ionicons name="chevron-forward" size={22} color="#0F172A" />
         </Pressable>
       </View>
 
@@ -70,7 +70,7 @@ export default function ScheduleCalendar({
           <View key={w} className="flex-1 items-center py-1">
             <Text
               className={`text-xs font-bold ${
-                i === 5 ? 'text-accent-500' : i === 6 ? 'text-warn-600' : 'text-ink-500'
+                i === 5 ? 'text-accent-600' : i === 6 ? 'text-warn-600' : 'text-ink-500'
               }`}
             >
               {w}
@@ -160,7 +160,7 @@ function DayCell({
           <View
             key={e.categoryId}
             className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: categoryColorMap[e.categoryId] ?? '#6B7280' }}
+            style={{ backgroundColor: categoryColorMap[e.categoryId] ?? '#475569' }}
           />
         ))}
       </View>
@@ -218,7 +218,7 @@ function CategoryRow({
     <View className="flex-row items-center gap-2">
       <View
         className="w-3 h-3 rounded-full shrink-0"
-        style={{ backgroundColor: categoryColorMap[entry.categoryId] ?? '#6B7280' }}
+        style={{ backgroundColor: categoryColorMap[entry.categoryId] ?? '#475569' }}
       />
       <Text className="text-base text-ink-900">{entry.categoryName}</Text>
     </View>
@@ -244,7 +244,7 @@ function Legend({
           <View key={id} className="flex-row items-center gap-1.5">
             <View
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: categoryColorMap[id] ?? '#6B7280' }}
+              style={{ backgroundColor: categoryColorMap[id] ?? '#475569' }}
             />
             <Text className="text-sm text-ink-900">{categoryLabelMap[id] ?? id}</Text>
           </View>

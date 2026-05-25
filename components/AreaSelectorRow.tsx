@@ -21,7 +21,7 @@ export default function AreaSelectorRow({
       accessibilityLabel={`現在の地区: ${area?.name ?? '未設定'}、タップで変更`}
       className="flex-row items-center gap-2 rounded-xl bg-brand-100 px-4 py-2.5"
     >
-      <Ionicons name="location" size={18} color="#166534" />
+      <Ionicons name="location" size={18} color="#075985" />
       <View className="flex-1 shrink">
         <Text className="text-xs text-brand-600">現在の地区</Text>
         <Text className="text-base text-ink-900 font-bold" numberOfLines={1}>
@@ -29,7 +29,7 @@ export default function AreaSelectorRow({
         </Text>
       </View>
       <Text className="text-sm text-brand-600 font-bold shrink-0">変更</Text>
-      <Ionicons name="chevron-forward" size={16} color="#166534" />
+      <Ionicons name="chevron-forward" size={16} color="#075985" />
     </Pressable>
   );
 }

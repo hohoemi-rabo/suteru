@@ -405,12 +405,12 @@ function PermissionDenied({
           accessibilityLabel="戻る"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-back" size={24} color="#1F2937" />
+          <Ionicons name="chevron-back" size={24} color="#0F172A" />
         </Pressable>
 
         <View className="items-center gap-6">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="camera" size={48} color="#166534" />
+            <Ionicons name="camera" size={48} color="#075985" />
           </View>
           <View className="gap-3">
             <Text className="text-2xl text-ink-900 font-bold text-center">

@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
@@ -44,7 +44,7 @@ export default function SearchScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <Header onPressBack={handleBack} />
       <View className="px-4 gap-4 flex-1">
         <SearchBar
@@ -73,7 +73,7 @@ export default function SearchScreen() {
           <Footer onPressOfficial={handleOpenOfficial} />
         </ScrollView>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -90,7 +90,7 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#1F2937" />
+        <Ionicons name="chevron-back" size={24} color="#0F172A" />
       </Pressable>
       <Text className="text-xl text-ink-900 font-bold flex-1">品目を探す</Text>
       <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
@@ -115,7 +115,7 @@ function SearchBar({
 }) {
   return (
     <View className="flex-row items-center gap-2 min-h-12 rounded-xl border border-ink-200 bg-bg px-4">
-      <Ionicons name="search" size={20} color="#6B7280" />
+      <Ionicons name="search" size={20} color="#475569" />
       <TextInput
         value={value}
         onChangeText={onChangeText}
@@ -169,7 +169,7 @@ function ResultList({
           >
             <View
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colorMap[hit.item.categoryId] ?? '#6B7280' }}
+              style={{ backgroundColor: colorMap[hit.item.categoryId] ?? '#475569' }}
             />
             <View className="flex-1 gap-0.5">
               <Text className="text-base text-ink-900">{hit.item.name}</Text>
@@ -178,7 +178,7 @@ function ResultList({
                 {hit.matchedField === 'alias' && '（別名で一致）'}
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={18} color="#6B7280" />
+            <Ionicons name="chevron-forward" size={18} color="#475569" />
           </Pressable>
         ))}
       </View>
@@ -217,7 +217,7 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );
@@ -239,7 +239,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );

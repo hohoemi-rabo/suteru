@@ -3,7 +3,7 @@ import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
 import {
@@ -52,7 +52,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <ScrollView contentContainerClassName="pb-6">
         <HomeHeader area={currentArea} onPressArea={handleAreaPress} />
         <View className="px-4 gap-6">
@@ -74,7 +74,7 @@ export default function HomeScreen() {
           />
         )}
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -106,7 +106,7 @@ function SearchBarStub({ onPress }: { onPress: () => void }) {
       accessibilityRole="button"
       className="flex-row items-center gap-2 min-h-12 rounded-xl border border-ink-200 bg-bg px-4"
     >
-      <Ionicons name="search" size={20} color="#6B7280" />
+      <Ionicons name="search" size={20} color="#475569" />
       <Text className="text-base text-ink-500 flex-1">
         品目名で探す（例: ペットボトル）
       </Text>
@@ -149,7 +149,7 @@ function FooterLinks({
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Ionicons name="open-outline" size={14} color="#075985" />
       </Pressable>
     </View>
   );

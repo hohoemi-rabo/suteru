@@ -1,15 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Pressable, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 export default function WelcomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-bg">
+    <ScreenBackground edges={['top', 'bottom']}>
       <View className="flex-1 px-6 pt-16 pb-8 items-center justify-between">
         <View className="items-center gap-6 mt-12">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="leaf" size={56} color="#166534" />
+            <Ionicons name="leaf" size={56} color="#075985" />
           </View>
           <View className="items-center gap-2">
             <Text className="text-3xl text-ink-900 font-bold">これどう捨てる？</Text>
@@ -34,6 +34,6 @@ export default function WelcomeScreen() {
           </Pressable>
         </View>
       </View>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }

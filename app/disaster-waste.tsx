@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import ScreenBackground from '@/components/ScreenBackground';
 
 /**
  * 災害時のごみ・携帯トイレに関する案内（飯田市ごみ出しガイドブック P36 由来）。
@@ -9,7 +9,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
  */
 export default function DisasterWasteScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-bg" edges={['top']}>
+    <ScreenBackground edges={['top']}>
       <Header onPressBack={() => router.back()} />
       <ScrollView contentContainerClassName="px-4 pb-8 gap-4">
         <IntroCard />
@@ -44,7 +44,7 @@ export default function DisasterWasteScreen() {
 
         <Footer />
       </ScrollView>
-    </SafeAreaView>
+    </ScreenBackground>
   );
 }
 
@@ -57,7 +57,7 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#1F2937" />
+        <Ionicons name="chevron-back" size={24} color="#0F172A" />
       </Pressable>
       <Text className="text-xl text-ink-900 font-bold flex-1" numberOfLines={1}>
         災害時のごみ
@@ -71,9 +71,9 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
 
 function IntroCard() {
   return (
-    <View className="rounded-2xl bg-accent-500/10 border border-accent-500/30 p-4 gap-2">
+    <View className="rounded-2xl bg-accent-50 border border-accent-600/30 p-4 gap-2">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="warning-outline" size={18} color="#0EA5E9" />
+        <Ionicons name="warning-outline" size={18} color="#0369A1" />
         <Text className="text-base text-ink-900 font-bold">災害が起きたときのごみ</Text>
       </View>
       <Text className="text-sm text-ink-900 leading-relaxed">
