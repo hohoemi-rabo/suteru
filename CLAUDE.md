@@ -65,7 +65,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── ScreenBackground.tsx    ← 画面共通の背景（薄青→白の縦グラデ + SafeAreaView ラッパー、全画面ルートで使用）
 ├── assets/                     ← 画像・フォント
 ├── scripts/                    ← Expoテンプレートのスクリプト
-├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/success/ink/cat カラー、シビック青基調）
+├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/success/ink/cat カラー＋boxShadow。brand=グリーン基調、地区カードのみ青 accent）
 ├── global.css                  ← NativeWind の @tailwind directives
 ├── babel.config.js             ← babel-preset-expo + nativewind/babel
 ├── metro.config.js             ← withNativeWind ラップ
@@ -128,7 +128,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. **オフラインでも基本機能**: カメラ判定以外はオフラインで動く
 4. **ベータ表示**: データは未確定なので、各画面に「ベータ版」「公式情報を参照」のディスクレイマー
 
-## 進捗（2026-05-25 時点）
+## 進捗（2026-06-02 時点）
 
 **Phase 4 を 4/7 完了**。残りは 02 行政アピール資料 / 23 EAS Build / 24 ユーザーテストの 3 本。詳しい状態は `docs/00_INDEX.md` を参照。
 
@@ -187,14 +187,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### UI/UX ブラッシュアップ
 
-- **WCAG AA カラーパス**（0d8c53b）: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換 ※ **配色はその後 d356ab8 でエコ緑→シビック青に刷新（最下部の項目参照）。本バレットの brand 緑値は歴史的経緯**
+- **WCAG AA カラーパス**（0d8c53b）: `tailwind.config.js` の brand-500 `#15803D` / brand-600 `#166534` / warn-600 `#991B1B` に変更（白文字・リンク文字が全て AA 通過）。ハードコード hex も全置換 ※ **一時 d356ab8 でシビック青へ刷新したが eb14e80 でグリーンに復帰（最下部の項目参照）。本バレットの brand 緑値が現行**
 - **文字サイズ底上げ**（0d8c53b）: disclaimer/警告/住所/施設情報など重要情報を text-xs→sm / sm→base に。ベータ版バッジは全画面統一（settings 含む）
 - **カメラ判定枠**（0d8c53b）: `app/camera.tsx` に中央の正方形枠（75%）+ 暗幕 + 角ブラケット + ヒント文。撮影時に枠サイズで中心クロップしてから Gemini 送信 → 枠外は判定対象外
 - **収集日カレンダー表示**（e235473）: 収集日画面に「リスト / カレンダー」トグル。`components/ScheduleCalendar.tsx` + `lib/calendar-utils.ts`（月グリッド + 色ドット + 凡例 + 日付タップ詳細）
 - **ヘッダー 3 画面統一**（17e8783）: ホーム/収集日/施設のヘッダーを「タイトル + ベータ版」+「現在の地区」専用行の 2 行構成に。`components/AreaSelectorRow.tsx` を共用
 - **ガイドブック要点の表面化**（ea21671）: ① `components/LinkedText.tsx` で result の指示文中の電話/URL をタップ可能化、② 施設に受入品目（`Facility.acceptedItems`）、③ `app/disaster-waste.tsx` で災害時のごみ・携帯トイレ案内（施設からpush）
-- **シビック配色 + 背景グラデ**（d356ab8）: エコ緑 → 行政シビックのネイビー＋青へ刷新（ui-ux-pro-max「Accessible & Ethical」、全色 WCAG AA 検証済み）。`tailwind.config.js` で brand を青系（CTA brand-500 `#0369A1` 5.9:1 / リンク brand-600 `#075985` 7.0:1 / 薄背景 brand-100 `#E0F2FE`）、ink をスレート＋ネイビー（本文 ink-900 `#0F172A` 16:1 / 補助 ink-500 `#475569` 7.5:1 / 枠 ink-200 `#E2E8F0`）に。旧 accent `#0EA5E9`（白背景 2.8:1 で AA 不通過）も `#0369A1` / 薄背景 `#E0F2FE` に修正。エコ緑 `#15803D` は success トークンとして限定温存。ハードコード hex も追従（`#166534`→`#075985` / `#6B7280`→`#475569` / `#1F2937`→`#0F172A`）
+- **シビック配色 + 背景グラデ**（d356ab8）〔※ 配色（brand 青化）は eb14e80 でグリーンに差し戻し済み。ink スレート系・背景グラデ・accent `#0369A1` 化はこのコミットのまま現行〕: エコ緑 → 行政シビックのネイビー＋青へ刷新（ui-ux-pro-max「Accessible & Ethical」、全色 WCAG AA 検証済み）。`tailwind.config.js` で brand を青系（CTA brand-500 `#0369A1` 5.9:1 / リンク brand-600 `#075985` 7.0:1 / 薄背景 brand-100 `#E0F2FE`）、ink をスレート＋ネイビー（本文 ink-900 `#0F172A` 16:1 / 補助 ink-500 `#475569` 7.5:1 / 枠 ink-200 `#E2E8F0`）に。旧 accent `#0EA5E9`（白背景 2.8:1 で AA 不通過）も `#0369A1` / 薄背景 `#E0F2FE` に修正。エコ緑 `#15803D` は success トークンとして限定温存。ハードコード hex も追従（`#166534`→`#075985` / `#6B7280`→`#475569` / `#1F2937`→`#0F172A`）
 - **背景グラデーション**（d356ab8）: `expo-linear-gradient` 導入 + `components/ScreenBackground.tsx`（薄青 `#EFF6FF` → 白 `#FFFFFF` の縦グラデ、ビューポート固定で中身がスクロール）。12 画面ルートを `<SafeAreaView className="flex-1 bg-bg">` → `<ScreenBackground edges={...}>` に置換。`bg-bg` トークンは純白 `#FFFFFF` に戻し、カード/検索/シート等の「面」用に維持。カメラ画面（`app/camera.tsx`）はカメラビューが覆うため対象外。カテゴリ識別色（`categories.json`）は別系統のため不変
+- **グリーン復帰 + ピル + シャドウ elevation（現行配色）**（eb14e80, 2026-06-02）: シビック青（d356ab8）から**メインをエコ緑に差し戻し**（brand-500 `#15803D` / brand-600 `#166534` / brand-100 `#DCFCE7`、全 AA）。**ただし「現在の地区」カード（`components/AreaSelectorRow.tsx`）のみ青を維持**（`accent-700` `#075985` 追加、まさゆきさん指定）。情報アクセント（情報カード / result の位置判定ボタン・次回開催カード / 施設の RS 動線 / カレンダー土曜ラベル）は**青 accent のまま**＝「緑メイン＋青アクセント」構成（元デザイン踏襲）。ink スレート系・背景グラデ・accent `#0369A1` 化は d356ab8 のまま維持。あわせて ui-ux-pro-max の Spotify 風概念を一部移植: 主要/アウトラインボタンをピル（`rounded-full`）、カメラヒーローを円形、カードを生グレー枠 → `shadow-card` / `shadow-elevated`（`tailwind.config.js` の boxShadow トークン、面は `bg-bg` 白）。⚠️ **動的 shadow 付与でネイティブクラッシュした経緯あり**（収集日トグル、77537c2 で修正）→ `.claude/rules/gotchas.md` の NativeWind 項参照
 - 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン
 
 ### コードレビュー指摘の状態（vercel-react-best-practices）
