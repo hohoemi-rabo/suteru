@@ -37,7 +37,7 @@ export default function NotificationsScreen() {
 
         <View className="items-center gap-6 my-8">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="notifications" size={48} color="#075985" />
+            <Ionicons name="notifications" size={48} color="#166534" />
           </View>
           <View className="gap-3 px-4">
             <Text className="text-base text-ink-900 text-center leading-relaxed">
@@ -53,7 +53,7 @@ export default function NotificationsScreen() {
           <Pressable
             onPress={handleEnable}
             disabled={isRequesting}
-            className="min-h-11 rounded-xl bg-brand-500 px-6 py-3 items-center justify-center"
+            className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
           >
             <Text className="text-lg text-white font-bold">
               {isRequesting ? '...' : '通知を有効にする'}
@@ -62,7 +62,7 @@ export default function NotificationsScreen() {
           <Pressable
             onPress={handleSkip}
             disabled={isRequesting}
-            className="min-h-11 rounded-xl border-2 border-ink-200 px-6 py-3 items-center justify-center"
+            className="min-h-11 rounded-full border-2 border-ink-200 px-6 py-3 items-center justify-center"
           >
             <Text className="text-lg text-ink-500">後で</Text>
           </Pressable>

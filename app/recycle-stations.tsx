@@ -186,7 +186,7 @@ function GroupCard({
   onToggle: () => void;
 }) {
   return (
-    <View className="rounded-2xl border border-ink-200 overflow-hidden">
+    <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
       <Pressable
         onPress={onToggle}
         accessibilityRole="button"
@@ -270,7 +270,7 @@ function LocationRow({
         <Text className="flex-1 text-sm text-ink-500" numberOfLines={2}>
           {location.address}
         </Text>
-        <Ionicons name="open-outline" size={12} color="#075985" />
+        <Ionicons name="open-outline" size={12} color="#166534" />
       </View>
     </Pressable>
   );
@@ -296,7 +296,7 @@ function Footer({
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
       <View className="flex-1 px-6 pt-16 pb-8 items-center justify-between">
         <View className="items-center gap-6 mt-12">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="leaf" size={56} color="#075985" />
+            <Ionicons name="leaf" size={56} color="#166534" />
           </View>
           <View className="items-center gap-2">
             <Text className="text-3xl text-ink-900 font-bold">これどう捨てる？</Text>
@@ -28,7 +28,7 @@ export default function WelcomeScreen() {
           </Text>
           <Pressable
             onPress={() => router.push('/(onboarding)/area-select')}
-            className="min-h-11 rounded-xl bg-brand-500 px-6 py-3 items-center justify-center"
+            className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
           >
             <Text className="text-lg text-white font-bold">はじめる</Text>
           </Pressable>

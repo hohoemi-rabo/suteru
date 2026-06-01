@@ -80,7 +80,7 @@ export default function ScheduleCalendar({
       </View>
 
       {/* 日付グリッド */}
-      <View className="rounded-2xl border border-ink-200 overflow-hidden">
+      <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {weeks.map((week, wi) => (
           <View key={wi} className={`flex-row ${wi > 0 ? 'border-t border-ink-200' : ''}`}>
             {week.map((day) => (
@@ -180,8 +180,10 @@ function SelectedDayDetail({
   categoryColorMap: Record<CollectionCategoryId, string>;
 }) {
   if (!day) {
+    // key を分け、影あり/なしの分岐で同じ View インスタンスが再利用されないようにする
+    // （初回後に shadow が動的付与されると css-interop の animated 昇格警告でクラッシュするため）
     return (
-      <View className="rounded-2xl bg-ink-200/30 px-4 py-3">
+      <View key="empty" className="rounded-2xl bg-ink-200/30 px-4 py-3">
         <Text className="text-sm text-ink-500">
           日付をタップすると、その日の収集が見られます。
         </Text>
@@ -192,7 +194,7 @@ function SelectedDayDetail({
   const dateLabel = format(day.date, 'M月d日（E）', { locale: ja });
 
   return (
-    <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+    <View key="detail" className="rounded-2xl bg-bg shadow-card p-4 gap-2">
       <Text className="text-base text-ink-900 font-bold">{dateLabel}</Text>
       {day.entries.length === 0 ? (
         <Text className="text-sm text-ink-500">この日の収集はありません。</Text>

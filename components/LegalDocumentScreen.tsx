@@ -134,7 +134,7 @@ function RevisionHistoryBlock({ history }: { history: LegalRevision[] }) {
   return (
     <View className="gap-2">
       <Text className="text-lg text-ink-900 font-bold">改定履歴</Text>
-      <View className="rounded-xl border border-ink-200 overflow-hidden">
+      <View className="rounded-xl bg-bg shadow-card overflow-hidden">
         {history.map((rev, idx) => (
           <View
             key={`${rev.date}-${idx}`}
@@ -172,9 +172,9 @@ function ContactBlock({ email }: { email: string }) {
         accessibilityLabel={`${email} にメールを送る`}
         className="flex-row items-center gap-2"
       >
-        <Ionicons name="mail-outline" size={18} color="#075985" />
+        <Ionicons name="mail-outline" size={18} color="#166534" />
         <Text className="flex-1 text-base text-brand-600 underline">{email}</Text>
-        <Ionicons name="open-outline" size={16} color="#075985" />
+        <Ionicons name="open-outline" size={16} color="#166534" />
       </Pressable>
     </View>
   );

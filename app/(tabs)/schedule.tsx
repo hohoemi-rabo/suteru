@@ -211,7 +211,7 @@ function ToggleButton({
         active ? 'bg-bg' : ''
       }`}
     >
-      <Ionicons name={icon} size={16} color={active ? '#075985' : '#475569'} />
+      <Ionicons name={icon} size={16} color={active ? '#166534' : '#475569'} />
       <Text className={`text-base ${active ? 'text-brand-600 font-bold' : 'text-ink-500'}`}>
         {label}
       </Text>
@@ -270,7 +270,7 @@ function CategoryCards({
   return (
     <View className="gap-2">
       <Text className="text-base text-ink-900 font-bold">カテゴリ別 次回収集日</Text>
-      <View className="rounded-2xl border border-ink-200 overflow-hidden">
+      <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {list.map((nc, idx) => (
           <View
             key={nc.categoryId}
@@ -351,7 +351,7 @@ function WeekSection({
       {days.length === 0 ? (
         <Text className="text-sm text-ink-500 px-1">予定なし</Text>
       ) : (
-        <View className="rounded-xl border border-ink-200 overflow-hidden">
+        <View className="rounded-xl bg-bg shadow-card overflow-hidden">
           {days.map((day, idx) => (
             <View
               key={day.date.toISOString()}
@@ -394,7 +394,7 @@ function NotificationsRow({
   onToggle: (value: boolean) => void;
 }) {
   return (
-    <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+    <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
       <View className="flex-row items-center justify-between gap-3">
         <View className="flex-1 gap-0.5">
           <Text className="text-base text-ink-900 font-bold">
@@ -437,7 +437,7 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
@@ -462,7 +462,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

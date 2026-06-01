@@ -266,7 +266,7 @@ function NotificationSection({
     <View className="gap-3">
       <SectionTitle>通知</SectionTitle>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <View className="flex-row items-center justify-between gap-3">
           <View className="flex-1 gap-0.5">
             <Text className="text-base text-ink-900 font-bold">
@@ -286,7 +286,7 @@ function NotificationSection({
         </View>
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
         <Text className="text-base text-ink-900 font-bold">通知時刻</Text>
         <View className={`flex-row gap-2 ${enabled ? '' : 'opacity-50'}`}>
           {NOTIFICATION_TIME_PRESETS.map((preset) => {
@@ -342,7 +342,7 @@ function DataUpdateSection({
   return (
     <View className="gap-3">
       <SectionTitle>データ</SectionTitle>
-      <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
         <View className="gap-0.5">
           <Text className="text-base text-ink-900">
             データバージョン: {version}
@@ -354,7 +354,7 @@ function DataUpdateSection({
           disabled={isChecking}
           accessibilityRole="button"
           accessibilityLabel="データ更新を確認"
-          className={`min-h-11 rounded-xl px-4 py-2 items-center justify-center ${
+          className={`min-h-11 rounded-full px-4 py-2 items-center justify-center ${
             isChecking ? 'bg-ink-200' : 'bg-brand-500'
           }`}
         >
@@ -391,7 +391,7 @@ function AppInfoSection({
   return (
     <View className="gap-3">
       <SectionTitle>アプリ情報</SectionTitle>
-      <View className="rounded-2xl border border-ink-200 overflow-hidden">
+      <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         <InfoRow label="アプリバージョン" value={appVersion} />
         <LinkRow
           label="飯田市公式サイト"
@@ -488,7 +488,7 @@ function DeveloperSection({
         onPress={onReset}
         accessibilityRole="button"
         accessibilityLabel="設定をリセット"
-        className="min-h-11 rounded-xl border-2 border-warn-600 px-4 py-2 items-center justify-center"
+        className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
       >
         <Text className="text-base text-warn-600">
           設定をリセット（オンボーディング再表示）
@@ -498,7 +498,7 @@ function DeveloperSection({
         onPress={onClearCache}
         accessibilityRole="button"
         accessibilityLabel="データキャッシュをクリア"
-        className="min-h-11 rounded-xl border-2 border-warn-600 px-4 py-2 items-center justify-center"
+        className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
       >
         <Text className="text-base text-warn-600">
           データキャッシュをクリア（再起動で反映）

@@ -121,7 +121,7 @@ function CameraHeroButton({ onPress }: { onPress: () => void }) {
         onPress={onPress}
         accessibilityLabel="写真で調べる"
         accessibilityRole="button"
-        className="w-[70%] aspect-square rounded-3xl bg-brand-500 items-center justify-center"
+        className="w-[70%] aspect-square rounded-full bg-brand-500 shadow-elevated items-center justify-center"
       >
         <Ionicons name="camera" size={72} color="white" />
         <Text className="mt-4 text-2xl text-white font-bold">写真でしらべる</Text>
@@ -149,7 +149,7 @@ function FooterLinks({
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
@@ -236,7 +236,7 @@ function DevDiagnostics({
         </Text>
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">データローダー</Text>
         <Text className="text-base text-ink-900">version: {data.meta.version}</Text>
         <Text className="text-base text-ink-900">source: {data.source}</Text>
@@ -250,7 +250,7 @@ function DevDiagnostics({
         </Text>
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">UserSettings</Text>
         <Text className="text-base text-ink-900">areaId: {settings.areaId ?? '未設定'}</Text>
         <Text className="text-base text-ink-900">
@@ -260,7 +260,7 @@ function DevDiagnostics({
         <Text className="text-base text-ink-900">hydrated: {isHydrated ? 'yes' : 'no'}</Text>
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">
           次回収集日（地区: {displayAreaId ?? '—'}
           {settings.areaId === null && ' / フォールバック'}）
@@ -278,12 +278,12 @@ function DevDiagnostics({
         )}
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">地区判定（GPS）</Text>
         <Pressable
           onPress={handleDetect}
           disabled={detection.status === 'loading'}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">
             {detection.status === 'loading' ? '判定中…' : '現在地で判定'}
@@ -292,7 +292,7 @@ function DevDiagnostics({
         {detection.status === 'done' && <DetectionResultView result={detection.result} />}
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">Worker 疎通確認</Text>
         <Text className="text-xs text-ink-500">
           URL: {getConfiguredApiUrl() ?? '未設定（EXPO_PUBLIC_API_URL）'}
@@ -302,7 +302,7 @@ function DevDiagnostics({
             void handlePingApi();
           }}
           disabled={pingState.status === 'loading'}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">
             {pingState.status === 'loading' ? '送信中…' : '1×1 PNG を /api/identify に投げる'}
@@ -311,7 +311,7 @@ function DevDiagnostics({
         {pingState.status === 'done' && <PingResultView result={pingState.result} />}
       </View>
 
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">通知スケジュール</Text>
         <Text className="text-base text-ink-900">
           予約済み: {scheduledCount === null ? '—' : `${scheduledCount} 件`}
@@ -320,7 +320,7 @@ function DevDiagnostics({
           onPress={() => {
             void refreshScheduledCount();
           }}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">再読込</Text>
         </Pressable>
@@ -330,7 +330,7 @@ function DevDiagnostics({
         <Text className="text-sm text-warn-600">設定リセット</Text>
         <Pressable
           onPress={onReset}
-          className="min-h-11 rounded-xl border-2 border-warn-600 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-warn-600">
             設定をリセット（オンボーディング再表示）

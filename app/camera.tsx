@@ -410,7 +410,7 @@ function PermissionDenied({
 
         <View className="items-center gap-6">
           <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="camera" size={48} color="#075985" />
+            <Ionicons name="camera" size={48} color="#166534" />
           </View>
           <View className="gap-3">
             <Text className="text-2xl text-ink-900 font-bold text-center">
@@ -427,21 +427,21 @@ function PermissionDenied({
           {canAskAgain ? (
             <Pressable
               onPress={onRequest}
-              className="min-h-11 rounded-xl bg-brand-500 px-6 py-3 items-center justify-center"
+              className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
             >
               <Text className="text-lg text-white font-bold">カメラを許可する</Text>
             </Pressable>
           ) : (
             <Pressable
               onPress={onSettings}
-              className="min-h-11 rounded-xl bg-brand-500 px-6 py-3 items-center justify-center"
+              className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
             >
               <Text className="text-lg text-white font-bold">設定アプリを開く</Text>
             </Pressable>
           )}
           <Pressable
             onPress={onBack}
-            className="min-h-11 rounded-xl border-2 border-ink-200 px-6 py-3 items-center justify-center"
+            className="min-h-11 rounded-full border-2 border-ink-200 px-6 py-3 items-center justify-center"
           >
             <Text className="text-lg text-ink-500">戻る</Text>
           </Pressable>
@@ -528,13 +528,13 @@ function UnknownNameContent({
       <View className="gap-2">
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">文字検索を試す</Text>
         </Pressable>
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-xl border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-ink-500">もう一度撮る</Text>
         </Pressable>
@@ -562,13 +562,13 @@ function NotIdentifiableContent({
       <View className="gap-2">
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">もう一度撮る</Text>
         </Pressable>
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-xl border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-ink-500">文字検索を試す</Text>
         </Pressable>
@@ -596,13 +596,13 @@ function ErrorContent({
       <View className="gap-2">
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">もう一度撮る</Text>
         </Pressable>
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-xl border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-ink-500">文字検索を試す</Text>
         </Pressable>

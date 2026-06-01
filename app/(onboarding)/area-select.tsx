@@ -65,7 +65,7 @@ export default function AreaSelectScreen() {
         <Pressable
           onPress={handleNext}
           disabled={!selectedId}
-          className={`min-h-11 rounded-xl px-6 py-3 items-center justify-center ${
+          className={`min-h-11 rounded-full px-6 py-3 items-center justify-center ${
             selectedId ? 'bg-brand-500' : 'bg-ink-200'
           }`}
         >

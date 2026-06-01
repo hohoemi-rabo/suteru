@@ -135,7 +135,7 @@ export default function ResultScreen() {
           onPress={handleHome}
           accessibilityRole="button"
           accessibilityLabel="ホームに戻る"
-          className="min-h-11 rounded-xl bg-brand-500 px-6 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
         >
           <Text className="text-lg text-white font-bold">ホームに戻る</Text>
         </Pressable>
@@ -186,7 +186,7 @@ function ItemDetailCard({
   categoryName: string;
 }) {
   return (
-    <View className="rounded-2xl border border-ink-200 p-5 gap-3">
+    <View className="rounded-2xl bg-bg shadow-card p-5 gap-3">
       <View className="self-start rounded-full px-3 py-1.5" style={{ backgroundColor: color }}>
         <Text className="text-sm text-white font-bold">{categoryName}</Text>
       </View>
@@ -225,7 +225,7 @@ function CollectionSection({
 }) {
   return (
     <View className="gap-3">
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">次回収集日</Text>
         {nextDate ? (
           <Text className="text-2xl text-ink-900 font-bold">
@@ -247,7 +247,7 @@ function CollectionSection({
           disabled={isDetecting}
           accessibilityRole="button"
           accessibilityLabel="現在地から地区を判定して設定を更新"
-          className={`min-h-11 rounded-xl px-4 py-3 items-center justify-center ${
+          className={`min-h-11 rounded-full px-4 py-3 items-center justify-center ${
             isDetecting ? 'bg-ink-200' : 'bg-accent-600'
           }`}
         >
@@ -261,7 +261,7 @@ function CollectionSection({
           className="flex-row items-center gap-1 self-end"
         >
           <Text className="text-sm text-brand-600 underline">地区を変更（設定へ）</Text>
-          <Ionicons name="chevron-forward" size={14} color="#075985" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       </View>
     </View>
@@ -287,7 +287,7 @@ function SpecialHandlingSection({
   // 万一カテゴリ定義が見つからない場合のフォールバック
   if (!category) {
     return (
-      <View className="rounded-2xl border border-ink-200 p-4 gap-2">
+      <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <Text className="text-sm text-ink-500">出し方</Text>
         <Text className="text-base text-ink-900">この品目の詳細は準備中です。</Text>
       </View>
@@ -329,7 +329,7 @@ function BottlePetSection({
   onPressDetails: () => void;
 }) {
   return (
-    <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+    <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
       <View className="gap-1">
         <Text className="text-sm text-ink-500">出し方</Text>
         <Text className="text-base text-ink-900 font-bold">
@@ -373,7 +373,7 @@ function BottlePetSection({
         onPress={onPressDetails}
         accessibilityRole="link"
         accessibilityLabel="リサイクルステーションの詳細を見る"
-        className="min-h-11 rounded-xl bg-accent-600 px-4 py-3 flex-row items-center justify-center gap-2"
+        className="min-h-11 rounded-full bg-accent-600 px-4 py-3 flex-row items-center justify-center gap-2"
       >
         <Text className="text-base text-white font-bold">
           リサイクルステーションを見る
@@ -394,7 +394,7 @@ function CategoryRuleSection({
   onPressFacilities: (() => void) | null;
 }) {
   return (
-    <View className="rounded-2xl border border-ink-200 p-4 gap-3">
+    <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
       <View className="gap-1">
         <Text className="text-sm text-ink-500">出し方</Text>
         <Text className="text-base text-ink-900 font-bold">{category.name}</Text>
@@ -431,7 +431,7 @@ function CategoryRuleSection({
           className="flex-row items-center gap-1 self-end"
         >
           <Text className="text-sm text-brand-600 underline">施設一覧を見る</Text>
-          <Ionicons name="chevron-forward" size={14} color="#075985" />
+          <Ionicons name="chevron-forward" size={14} color="#166534" />
         </Pressable>
       )}
     </View>
@@ -507,7 +507,7 @@ function NotInDictionary({
         </View>
         <Pressable
           onPress={onSearch}
-          className="min-h-11 rounded-xl bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">文字検索を試す</Text>
         </Pressable>
@@ -517,11 +517,11 @@ function NotInDictionary({
           className="flex-row items-center gap-1 self-center"
         >
           <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-          <Ionicons name="open-outline" size={14} color="#075985" />
+          <Ionicons name="open-outline" size={14} color="#166534" />
         </Pressable>
         <Pressable
           onPress={onHome}
-          className="min-h-11 rounded-xl border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-ink-500">ホームに戻る</Text>
         </Pressable>
@@ -550,7 +550,7 @@ function Footer({
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );

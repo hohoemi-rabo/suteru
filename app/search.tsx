@@ -158,7 +158,7 @@ function ResultList({
   return (
     <View className="gap-2">
       <Text className="text-sm text-ink-500 px-1">{hits.length} 件</Text>
-      <View className="rounded-2xl border border-ink-200 overflow-hidden">
+      <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {hits.map((hit, idx) => (
           <Pressable
             key={hit.item.name}
@@ -203,7 +203,7 @@ function EmptyHint() {
 
 function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
-    <View className="rounded-2xl border border-ink-200 p-5 gap-3">
+    <View className="rounded-2xl bg-bg shadow-card p-5 gap-3">
       <Text className="text-base text-ink-900 font-bold">
         該当する品目が見つかりません
       </Text>
@@ -217,7 +217,7 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1 self-start"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
@@ -239,7 +239,7 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         className="flex-row items-center gap-1"
       >
         <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#075985" />
+        <Ionicons name="open-outline" size={14} color="#166534" />
       </Pressable>
     </View>
   );
