@@ -28,6 +28,7 @@
 - **`expo-notifications` の Expo Go 警告**: SDK 53+ から Expo Go では remote push が削除され、`import * as Notifications from 'expo-notifications'` で警告ログが出る（実害なし）。`lib/notifications.ts` の `requestPermission()` / `getPermissionStatus()` が `Constants.appOwnership === 'expo'` ガードで API 呼び出しをスキップする（許可済み扱いで通す）。本番ビルド（23 EAS）で警告は消える
 - **通知の実動作確認は Dev Build / 本番ビルドで**: Expo Go では `scheduleNotificationAsync` を呼んでも警告のみで実通知は届かない。`lib/notifications.ts` の `getScheduledCount()` で何件登録されたかは確認可能。実動作確認は `npx expo run:android` で dev build をビルドするか、`eas build --profile development` を使う
 - **`lib/storage.ts` 経由のみ**: AsyncStorage に直接 import せず、必ず `getCached` / `setCached` 経由
+- **⚠️ NativeWind: `shadow-*`（boxShadow）を初回レンダー後に動的付与しない**: `shadow-card` 等を `active ? 'bg-bg shadow-card' : ''` のように**条件付きで既存コンポーネントに付ける/外す**と、css-interop(native) が「animated 昇格が必要」と判定し DEV 限定の `printUpgradeWarning` を発火 → その警告のプロップ文字列化が navigation context の throw するゲッター（`getKey`/`setKey`）に触れ、**`Couldn't find a navigation context` という誤解を招くクラッシュ**になる（実際は navigation 無関係、native のみ・web は無事、本番ビルドは警告ガードで無害）。**対策**: shadow は常時付与（初回マウントから存在）にする。状態で出し分けたい場合は影あり/なしの分岐に別 `key` を付けて毎回マウントし直す。2026-06 にカレンダートグルで発生（`components/ScheduleCalendar.tsx` / `app/(tabs)/schedule.tsx`）。同じ罠は transition/animation/CSS変数/コンテナクエリ系クラスの動的付与でも起きる
 
 ## ディレクトリ運用
 
