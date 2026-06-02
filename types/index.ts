@@ -50,6 +50,8 @@ export interface Meta {
   lastUpdated: string;
   dataSource: string;
   disclaimer: string;
+  /** ホーム画面用の短いベータ告知（disclaimer は result/施設用の詳細版） */
+  betaNotice: string;
   officialUrl: string;
 }
 

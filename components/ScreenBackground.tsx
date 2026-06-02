@@ -14,13 +14,16 @@ const GRADIENT_COLORS = ['#EFF6FF', '#FFFFFF'] as const;
 export default function ScreenBackground({
   children,
   edges = ['top'],
+  colors = GRADIENT_COLORS,
 }: {
   children: ReactNode;
   edges?: readonly Edge[];
+  /** 上→下の縦グラデ色（2 色以上）。未指定なら薄青→白。ホームは緑系を渡す */
+  colors?: readonly [string, string, ...string[]];
 }) {
   return (
     <LinearGradient
-      colors={GRADIENT_COLORS}
+      colors={colors}
       start={{ x: 0, y: 0 }}
       end={{ x: 0, y: 1 }}
       style={{ flex: 1 }}>
