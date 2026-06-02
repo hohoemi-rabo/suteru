@@ -9,6 +9,10 @@ dist/
 web-build/
 expo-env.d.ts
 
+# 法務文書 GitHub Pages のビルド出力 / 隔離ツールの lock
+_site/
+scripts/legal-site/package-lock.json
+
 # Native
 .kotlin/
 *.orig.*

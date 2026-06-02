@@ -1,0 +1,13 @@
+{
+  "name": "suteru-legal-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "docs/legal/*.md を HTML 化して GitHub Pages へ公開するための隔離ビルド（アプリ本体の依存とは分離）",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.0"
+  }
+}

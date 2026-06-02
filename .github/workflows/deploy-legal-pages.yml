@@ -1,0 +1,51 @@
+name: Deploy legal pages
+
+# docs/legal/*.md を HTML 化して GitHub Pages に公開する。
+# プライバシーポリシー/利用規約の公開 URL（Google Play 申請用）を生成。
+# 事前にリポジトリ Settings → Pages → Source を "GitHub Actions" にしておくこと。
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/legal/**'
+      - 'scripts/legal-site/**'
+      - '.github/workflows/deploy-legal-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Build legal site
+        run: |
+          cd scripts/legal-site
+          npm install --no-audit --no-fund
+          node build.mjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
