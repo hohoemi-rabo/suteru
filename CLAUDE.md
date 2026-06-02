@@ -66,14 +66,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
 │   └── ScreenBackground.tsx    ← 画面共通の背景縦グラデ（`colors` プロップで色指定可。ホーム/タブは緑、他ルートは薄青→白）+ SafeAreaView ラッパー
 ├── assets/                     ← 画像・フォント
-├── scripts/                    ← Expoテンプレートのスクリプト
+├── scripts/                    ← reset-project ＋ legal-site/（docs/legal を HTML 化して GitHub Pages 公開）
 ├── tailwind.config.js          ← NativeWind v4 設定（constants/Colors.ts と同期した green/blue/page/body/muted/hint/line/danger ＋ boxShadow。旧 brand/accent/ink/warn は移行中で残置）
 ├── global.css                  ← NativeWind の @tailwind directives
 ├── babel.config.js             ← babel-preset-expo + nativewind/babel
 ├── metro.config.js             ← withNativeWind ラップ
 ├── nativewind-env.d.ts         ← NativeWind 型サポート
 ├── package.json
-├── app.json                    ← reactCompiler/typedRoutes 有効、各種 plugins 設定済み
+├── app.json                    ← reactCompiler/typedRoutes 有効、plugins 設定済み（expo-camera は recordAudioAndroidPermission:false＝マイク不要）、eas projectId/owner（eas init 済）
+├── eas.json                    ← EAS Build 3 プロファイル（development/preview=dev Worker・APK / production=prod Worker・AAB、appVersionSource remote で versionCode 自動）
+├── .github/workflows/          ← deploy-legal-pages.yml（docs/legal を GitHub Pages へ公開）
 ├── tsconfig.json               ← パスエイリアス: "@/*" → "./*"、worker/ 除外
 │
 ├── data/                       ← バンドル用 JSON（品目辞書は公式さんあ〜る、収集日系は PDF）
@@ -82,7 +84,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── areas/                  ← areas.json（MVP 対象 10 区: No.01/09/10/15/32/33/34/35/36/37）
 │   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
-├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開用、lib/legal-documents.ts と同期）
+├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開、lib/legal-documents.ts と同期）
+├── docs/pitch/                 ← 行政アピール/相談用 資料ドラフト（overview.md 等、docs/02）
 │
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様
@@ -134,7 +137,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 進捗（2026-06-02 時点）
 
-**Phase 4 を 4/7 完了**。残りは 02 行政アピール資料 / 23 EAS Build / 24 ユーザーテストの 3 本。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 4 を 4/7 完了 ＋ 23 のコア実装・実機検証済み**。残りは 02 行政アピール資料 / 23 のストア公開手順（外部）/ 24 ユーザーテスト。詳しい状態は `docs/00_INDEX.md` を参照。
 
 ### 完了済みチケット（21 本）
 
@@ -149,15 +152,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **02** | 行政アピール資料 | 飯田市環境課向け 1 ページ資料、コード変更なし |
-| **23** | EAS Build / Play 配布 | preview APK、`docs/legal/*.md` を GitHub Pages 等で公開し URL 化、データセーフティフォーム |
-| **24** | ユーザーテスト | ほほ笑みラボ生徒約 20 名、23 で APK 配布後に着手 |
+| **02** | 行政アピール資料 | `docs/pitch/overview.md` に1枚ドラフト作成済み（商工会議所→環境課の橋渡し＋補助金相談の入口）。スライド/Q&A/想定費用は続き |
+| **23** | EAS Build / Play 配布 | **コード/設定完了・実機検証済み**（`eas.json`・法務 Pages・eas init）。残りは外部手順（GitHub Pages 有効化・Google Play 申請・署名鍵バックアップ）→ ランブックは `docs/23_eas_build.md` |
+| **24** | ユーザーテスト | ほほ笑みラボ生徒。23 で preview APK 配布が可能になったので着手可 |
 
 ### 実機検証済み（2026-05-17）
 
 - カメラ撮影 → Worker → Gemini → 品目判定 → /result 表示の一連がフロー動作
 - Worker ログに画像データが残らないこと（プライバシー設計の実証）
 - 電池→「乾燥剤」と Gemini が見間違うケース 1 件（データは両品目とも正常、AI ハルシネーション）。MVP 許容範囲として 24 番チケット観察項目に記録済み
+
+### EAS Build / 配布（2026-06-02 実機検証）
+
+- **`eas.json` 作成**: 3 プロファイル。`appVersionSource: remote`（versionCode 自動採番）、`env.EXPO_PUBLIC_API_URL` をプロファイル別に設定（development/preview=dev Worker・APK、production=prod Worker・AAB）。`channel`/OTA は不使用（`expo-updates` 無し）
+- **`babel-plugin-react-compiler` を明示依存化**（reactCompiler experiment のクラウドビルド保険。過去 babel-preset-expo の transitive 未hoist でビルド失敗した前例対策）
+- **`eas init` 実施**: Expo プロジェクト `@hohoemirabo/suteru`（`extra.eas.projectId` を app.json に自動追記、`owner: hohoemirabo`）。**managed のまま**（android/ios フォルダ無し）
+- ⚠ **`eas init` が `android.permissions` に `RECORD_AUDIO`(マイク) を追記** → 静止画のみ＆プライバシー方針のため除去（明示権限から削除＋`expo-camera` の `recordAudioAndroidPermission: false`）。結果権限 = CAMERA + ACCESS_COARSE/FINE_LOCATION のみ
+- **preview APK をクラウドビルド → 実機インストール → カメラAI（dev Worker→Gemini）動作確認済み**。スタンドアロンなので通知も実動作
+- **法務文書 GitHub Pages**: `scripts/legal-site/`（marked で md→HTML）＋ `.github/workflows/deploy-legal-pages.yml`。公開 URL `https://hohoemi-rabo.github.io/suteru/privacy-policy.html`（Play 申請用）。**Pages 有効化（Settings→Pages→GitHub Actions、リポジトリ Public 必須）はユーザー操作**
+- 残り外部手順: GitHub Pages 有効化 / Google Play（$25・掲載・データセーフティ・クローズドテスト）/ 署名鍵バックアップ（`eas credentials`）。詳細ランブックは `docs/23_eas_build.md`
 
 ### Worker デプロイ状態
 

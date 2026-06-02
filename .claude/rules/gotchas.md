@@ -30,6 +30,14 @@
 - **`lib/storage.ts` 経由のみ**: AsyncStorage に直接 import せず、必ず `getCached` / `setCached` 経由
 - **⚠️ NativeWind: `shadow-*`（boxShadow）を初回レンダー後に動的付与しない**: `shadow-card` 等を `active ? 'bg-bg shadow-card' : ''` のように**条件付きで既存コンポーネントに付ける/外す**と、css-interop(native) が「animated 昇格が必要」と判定し DEV 限定の `printUpgradeWarning` を発火 → その警告のプロップ文字列化が navigation context の throw するゲッター（`getKey`/`setKey`）に触れ、**`Couldn't find a navigation context` という誤解を招くクラッシュ**になる（実際は navigation 無関係、native のみ・web は無事、本番ビルドは警告ガードで無害）。**対策**: shadow は常時付与（初回マウントから存在）にする。状態で出し分けたい場合は影あり/なしの分岐に別 `key` を付けて毎回マウントし直す。2026-06 にカレンダートグルで発生（`components/ScheduleCalendar.tsx` / `app/(tabs)/schedule.tsx`）。同じ罠は transition/animation/CSS変数/コンテナクエリ系クラスの動的付与でも起きる
 
+## EAS Build
+
+- **⚠️ `eas init` が `app.json` に `RECORD_AUDIO`(マイク) 権限を勝手に足す**: `android.permissions` に CAMERA/RECORD_AUDIO/ACCESS_*_LOCATION を materialize する。本アプリは**静止画のみ＆プライバシー最優先**なのでマイクは不要。**対策**: `expo-camera` プラグインに `recordAudioAndroidPermission: false` を設定（プラグインが再付与しないように）＋ `android.permissions` から RECORD_AUDIO を削除。`eas init` 後は app.json の差分（projectId/owner は残す、RECORD_AUDIO は消す）を必ず確認。2026-06 発生
+- **EAS Build は `.env.local` を読まない**: `EXPO_PUBLIC_*` はビルド時にバンドルへインラインされ、その値は `eas.json` の各プロファイル `env` から来る（`.env.local` はローカル `expo start` 専用）。Worker の dev/prod は preview/production プロファイルで固定。ビルド後の APK の向き先は変えられない＝プロファイルを変えて再ビルド
+- **新規ファイルはコミットしてから `eas build`**: クラウドビルドは git で project を拾うため、未コミットの `eas.json` 等は反映されないことがある。事前に `npx expo-doctor`
+- **`appVersionSource: remote`**: versionCode は EAS サーバ管理＝`app.json` に `versionCode` を書かない（書くと無視＋警告）。`autoIncrement` で自動採番
+- **署名鍵(Keystore)**: 初回 `eas build` で生成→ EAS サーバ保管（`*.jks` は gitignore）。**紛失すると Play 更新不可**。`eas credentials` でバックアップ
+
 ## ディレクトリ運用
 
 - `lib/` / `types/` / `app/(onboarding)/` は実装時に作成（先回り作成しない方針は守られた）

@@ -84,17 +84,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 - 機密値（Gemini APIキー等）はクライアントに置かず、Worker 側の Secret として管理する（このプロジェクトの基本設計）
 - `.env` / `.env.local` などはプロジェクトルートに置き、Expo CLI が自動で読み込む
 
-## EAS Build プロファイル設計（APK 配布開始時の指針）
+## EAS Build（`eas.json` 実装済み）
 
-`eas.json` にプロファイルを定義する想定（現状未セットアップ）:
+`eas.json` に 3 プロファイル実装済み（2026-06-02、`eas init` で `@hohoemirabo/suteru` 紐付け済み）。詳細ランブックは `docs/23_eas_build.md`。
 
-| プロファイル | 用途 | distribution | 設定 |
-|---|---|---|---|
-| `development` | 開発ビルド | `internal` | デバッグビルド、開発 Worker を指す |
-| `preview` | ほほ笑みラボ生徒テスト用 APK | `internal` | リリースビルド、開発 Worker |
-| `production` | ストア配布用 | `store` | リリースビルド、本番 Worker |
+| プロファイル | 用途 | distribution | buildType | Worker |
+|---|---|---|---|---|
+| `development` | dev client（オンデバイスデバッグ） | `internal` | apk | dev |
+| `preview` | ほほ笑みラボ生徒テスト用 APK | `internal` | apk | dev |
+| `production` | ストア配布用 | store（既定） | app-bundle(AAB) | prod |
 
-各プロファイルの `env.EXPO_PUBLIC_API_URL` で、Worker の dev/prod を切り替える設計にする。
+- **Worker の切替は各プロファイルの `env.EXPO_PUBLIC_API_URL`**（preview=dev / production=prod）。`EXPO_PUBLIC_*` は**ビルド時にバンドルへインライン**されるため、ビルド後の APK の向き先は変えられない＝プロファイルを変えて再ビルド
+- **EAS Build は `.env.local` を読まない**（ローカル `expo start` 専用）。env はプロファイル定義が正
+- `appVersionSource: remote` で **versionCode は EAS サーバ管理＋自動採番**（`app.json` に `versionCode` を書かない）。`channel`/OTA 不使用なので `expo-updates` 不要
+- ⚠ **権限**: 静止画のみなので **マイク(RECORD_AUDIO)は付けない**。`expo-camera` プラグインに `recordAudioAndroidPermission: false`、`android.permissions` も CAMERA + ACCESS_COARSE/FINE_LOCATION のみ（`eas init` が RECORD_AUDIO を勝手に足すので注意）
+- **ビルドは `git` で拾う**ので、新規ファイル（`eas.json` 等）は**コミットしてから** `eas build`。事前に `npx expo-doctor` 推奨
 
 ## lib/ の構成（既に確立）
 
@@ -153,4 +157,4 @@ npm run lint                # ESLint（expo lint）
 npm run reset-project       # 雛形にリセット（scripts/reset-project.js）
 ```
 
-EAS Build（APK配布）は未セットアップ。導入時は `npx eas-cli init` → `eas.json` の作成から。
+EAS Build は **セットアップ済み**（`eas.json` ＋ `eas init` 完了）。ビルド例: `npx eas-cli@latest build --profile preview --platform android`（ログイン要、初回は Keystore 生成）。詳細は `docs/23_eas_build.md` のランブック。
