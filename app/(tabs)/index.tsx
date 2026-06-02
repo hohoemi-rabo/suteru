@@ -6,6 +6,8 @@ import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
+import BetaBadge from '@/components/BetaBadge';
+import { FontSize, Palette } from '@/constants/Colors';
 import {
   getConfiguredApiUrl,
   identifyItem,
@@ -52,14 +54,14 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScreenBackground edges={['top']}>
+    <ScreenBackground edges={['top']} colors={[Palette.green[100], Palette.bg.surface]}>
       <ScrollView contentContainerClassName="pb-6">
         <HomeHeader area={currentArea} onPressArea={handleAreaPress} />
         <View className="px-4 gap-6">
           <SearchBarStub onPress={handleSearchPress} />
           <CameraHeroButton onPress={handleCameraPress} />
           <FooterLinks
-            disclaimer={data.meta.disclaimer}
+            notice={data.meta.betaNotice}
             onPressOfficial={handleOpenOfficial}
           />
         </View>
@@ -84,13 +86,13 @@ export default function HomeScreen() {
 
 function HomeHeader({ area, onPressArea }: { area: Area | null; onPressArea: () => void }) {
   return (
-    <View className="px-4 pt-2 pb-4 gap-2">
+    <View className="px-4 pt-2 pb-4 gap-3">
       {/* 1 行目: アプリ名 + ベータ版 */}
-      <View className="flex-row items-end gap-2">
-        <Text className="text-xl text-ink-900 font-bold">これどう捨てる？</Text>
-        <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-0.5">
-          <Text className="text-xs text-brand-600">ベータ版</Text>
-        </View>
+      <View className="flex-row items-center gap-2">
+        <Text className="text-green-900 font-bold" style={{ fontSize: FontSize.title }}>
+          これどう捨てる？
+        </Text>
+        <BetaBadge />
       </View>
       {/* 2 行目: 地区セレクタ（目立つ専用行） */}
       <AreaSelectorRow area={area} onPress={onPressArea} />
@@ -104,10 +106,10 @@ function SearchBarStub({ onPress }: { onPress: () => void }) {
       onPress={onPress}
       accessibilityLabel="品目を文字で検索"
       accessibilityRole="button"
-      className="flex-row items-center gap-2 min-h-12 rounded-xl border border-ink-200 bg-bg px-4"
+      className="flex-row items-center gap-2 min-h-12 rounded-full border border-line bg-bg px-5"
     >
-      <Ionicons name="search" size={20} color="#475569" />
-      <Text className="text-base text-ink-500 flex-1">
+      <Ionicons name="search" size={20} color={Palette.text.tertiary} />
+      <Text className="flex-1 text-hint" style={{ fontSize: FontSize.body }}>
         品目名で探す（例: ペットボトル）
       </Text>
     </Pressable>
@@ -116,40 +118,56 @@ function SearchBarStub({ onPress }: { onPress: () => void }) {
 
 function CameraHeroButton({ onPress }: { onPress: () => void }) {
   return (
-    <View className="items-center my-4">
+    <View className="items-center my-2 gap-3">
       <Pressable
         onPress={onPress}
         accessibilityLabel="写真で調べる"
         accessibilityRole="button"
-        className="w-[70%] aspect-square rounded-full bg-brand-500 shadow-elevated items-center justify-center"
+        className="rounded-full bg-green-400 items-center justify-center"
+        style={{ width: 188, height: 188 }}
       >
-        <Ionicons name="camera" size={72} color="white" />
-        <Text className="mt-4 text-2xl text-white font-bold">写真でしらべる</Text>
-        <Text className="mt-1 text-sm text-white opacity-90">
-          ごみを撮るだけで分別が分かる
+        <Ionicons name="camera" size={60} color="white" />
+        <Text className="mt-2 text-white font-bold" style={{ fontSize: 20 }}>
+          写真でしらべる
         </Text>
       </Pressable>
+      <Text className="text-green-600 font-medium" style={{ fontSize: FontSize.body }}>
+        ごみを撮るだけで分別が分かる
+      </Text>
     </View>
   );
 }
 
 function FooterLinks({
-  disclaimer,
+  notice,
   onPressOfficial,
 }: {
-  disclaimer: string;
+  notice: string;
   onPressOfficial: () => void;
 }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">{disclaimer}</Text>
+    <View className="rounded-2xl bg-bg border border-line px-4 py-3 gap-1.5">
+      <View className="flex-row gap-2">
+        <Ionicons
+          name="information-circle-outline"
+          size={16}
+          color={Palette.text.tertiary}
+          style={{ marginTop: 1 }}
+        />
+        <Text className="flex-1 text-muted leading-relaxed" style={{ fontSize: FontSize.small }}>
+          {notice}
+        </Text>
+      </View>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
-        className="flex-row items-center gap-1"
+        accessibilityLabel="飯田市公式サイトで確認"
+        className="flex-row items-center gap-0.5 self-start pl-6"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-blue-600 underline" style={{ fontSize: FontSize.small }}>
+          公式サイトで確認
+        </Text>
+        <Ionicons name="chevron-forward" size={13} color={Palette.blue[600]} />
       </Pressable>
     </View>
   );

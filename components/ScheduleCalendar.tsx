@@ -4,6 +4,7 @@ import { ja } from 'date-fns/locale';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
 
+import { Palette } from '@/constants/Colors';
 import {
   buildMonthGrid,
   chunkIntoWeeks,
@@ -51,16 +52,16 @@ export default function ScheduleCalendar({
           accessibilityLabel="前の月"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-back" size={22} color="#0F172A" />
+          <Ionicons name="chevron-back" size={22} color={Palette.text.primary} />
         </Pressable>
-        <Text className="text-lg text-ink-900 font-bold">{monthLabel}</Text>
+        <Text className="text-lg text-body font-bold">{monthLabel}</Text>
         <Pressable
           onPress={goNextMonth}
           accessibilityRole="button"
           accessibilityLabel="次の月"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-forward" size={22} color="#0F172A" />
+          <Ionicons name="chevron-forward" size={22} color={Palette.text.primary} />
         </Pressable>
       </View>
 
@@ -70,7 +71,7 @@ export default function ScheduleCalendar({
           <View key={w} className="flex-1 items-center py-1">
             <Text
               className={`text-xs font-bold ${
-                i === 5 ? 'text-accent-600' : i === 6 ? 'text-warn-600' : 'text-ink-500'
+                i === 5 ? 'text-blue-600' : i === 6 ? 'text-danger' : 'text-muted'
               }`}
             >
               {w}
@@ -82,7 +83,7 @@ export default function ScheduleCalendar({
       {/* 日付グリッド */}
       <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {weeks.map((week, wi) => (
-          <View key={wi} className={`flex-row ${wi > 0 ? 'border-t border-ink-200' : ''}`}>
+          <View key={wi} className={`flex-row ${wi > 0 ? 'border-t border-line' : ''}`}>
             {week.map((day) => (
               <DayCell
                 key={toIsoDate(day.date)}
@@ -136,18 +137,18 @@ function DayCell({
           : '、収集なし'
       }`}
       className={`flex-1 min-h-14 items-center pt-1.5 pb-1 ${
-        isSelected ? 'bg-brand-100' : ''
+        isSelected ? 'bg-green-100' : ''
       } ${day.inCurrentMonth ? '' : 'opacity-35'}`}
     >
       {/* 日付（今日は塗り円） */}
       <View
         className={`w-7 h-7 items-center justify-center rounded-full ${
-          todayCell ? 'bg-brand-500' : ''
+          todayCell ? 'bg-green-400' : ''
         }`}
       >
         <Text
           className={`text-sm ${
-            todayCell ? 'text-white font-bold' : 'text-ink-900'
+            todayCell ? 'text-white font-bold' : 'text-body'
           }`}
         >
           {day.date.getDate()}
@@ -160,7 +161,7 @@ function DayCell({
           <View
             key={e.categoryId}
             className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: categoryColorMap[e.categoryId] ?? '#475569' }}
+            style={{ backgroundColor: categoryColorMap[e.categoryId] ?? Palette.text.secondary }}
           />
         ))}
       </View>
@@ -183,8 +184,8 @@ function SelectedDayDetail({
     // key を分け、影あり/なしの分岐で同じ View インスタンスが再利用されないようにする
     // （初回後に shadow が動的付与されると css-interop の animated 昇格警告でクラッシュするため）
     return (
-      <View key="empty" className="rounded-2xl bg-ink-200/30 px-4 py-3">
-        <Text className="text-sm text-ink-500">
+      <View key="empty" className="rounded-2xl bg-bg border border-line px-4 py-3">
+        <Text className="text-sm text-muted">
           日付をタップすると、その日の収集が見られます。
         </Text>
       </View>
@@ -195,9 +196,9 @@ function SelectedDayDetail({
 
   return (
     <View key="detail" className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-      <Text className="text-base text-ink-900 font-bold">{dateLabel}</Text>
+      <Text className="text-base text-body font-bold">{dateLabel}</Text>
       {day.entries.length === 0 ? (
-        <Text className="text-sm text-ink-500">この日の収集はありません。</Text>
+        <Text className="text-sm text-muted">この日の収集はありません。</Text>
       ) : (
         <View className="gap-1.5">
           {day.entries.map((e) => (
@@ -220,9 +221,9 @@ function CategoryRow({
     <View className="flex-row items-center gap-2">
       <View
         className="w-3 h-3 rounded-full shrink-0"
-        style={{ backgroundColor: categoryColorMap[entry.categoryId] ?? '#475569' }}
+        style={{ backgroundColor: categoryColorMap[entry.categoryId] ?? Palette.text.secondary }}
       />
-      <Text className="text-base text-ink-900">{entry.categoryName}</Text>
+      <Text className="text-base text-body">{entry.categoryName}</Text>
     </View>
   );
 }
@@ -239,16 +240,18 @@ function Legend({
   categoryColorMap: Record<CollectionCategoryId, string>;
 }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-xs text-ink-500">凡例</Text>
-      <View className="flex-row flex-wrap gap-x-4 gap-y-1.5">
+    <View className="rounded-2xl bg-bg shadow-card px-4 py-3 gap-2">
+      <Text className="text-xs text-muted">凡例</Text>
+      <View className="flex-row flex-wrap justify-between gap-y-2">
         {COLLECTION_CATEGORIES.map((id) => (
-          <View key={id} className="flex-row items-center gap-1.5">
+          <View key={id} className="flex-row items-center gap-1.5 w-[48%]">
             <View
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: categoryColorMap[id] ?? '#475569' }}
+              className="w-3 h-3 rounded-full shrink-0"
+              style={{ backgroundColor: categoryColorMap[id] ?? Palette.text.secondary }}
             />
-            <Text className="text-sm text-ink-900">{categoryLabelMap[id] ?? id}</Text>
+            <Text className="text-sm text-body shrink" numberOfLines={1}>
+              {categoryLabelMap[id] ?? id}
+            </Text>
           </View>
         ))}
       </View>

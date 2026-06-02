@@ -4,6 +4,8 @@ import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
+import BetaBadge from '@/components/BetaBadge';
+import { FontSize, Palette } from '@/constants/Colors';
 import { useData } from '@/lib/data-loader';
 import {
   getUpcomingStationDates,
@@ -34,7 +36,7 @@ export default function FacilitiesScreen() {
   };
 
   return (
-    <ScreenBackground edges={['top']}>
+    <ScreenBackground edges={['top']} colors={[Palette.green[100], Palette.bg.surface]}>
       <ScrollView contentContainerClassName="pb-8">
         <Header area={area} onPressChange={handleOpenSettings} />
 
@@ -74,16 +76,16 @@ function DisasterLink({ onPress }: { onPress: () => void }) {
       accessibilityLabel="災害時のごみについて見る"
       className="rounded-2xl bg-bg shadow-card p-4 flex-row items-center gap-3"
     >
-      <View className="w-11 h-11 rounded-full bg-warn-100 items-center justify-center">
-        <Ionicons name="warning-outline" size={22} color="#991B1B" />
+      <View className="w-11 h-11 rounded-full bg-danger-bg items-center justify-center">
+        <Ionicons name="warning-outline" size={22} color={Palette.danger.text} />
       </View>
       <View className="flex-1 gap-0.5">
-        <Text className="text-base text-ink-900 font-bold">災害時のごみ</Text>
-        <Text className="text-sm text-ink-500">
+        <Text className="text-base text-body font-bold">災害時のごみ</Text>
+        <Text className="text-sm text-muted">
           大規模災害時のごみ出し・携帯トイレの備え
         </Text>
       </View>
-      <Ionicons name="chevron-forward" size={20} color="#475569" />
+      <Ionicons name="chevron-forward" size={20} color={Palette.text.secondary} />
     </Pressable>
   );
 }
@@ -100,17 +102,17 @@ function Header({
   onPressChange: () => void;
 }) {
   return (
-    <View className="px-4 pt-2 pb-4 gap-1">
+    <View className="px-4 pt-2 pb-4 gap-2">
       {/* 1 行目: タイトル + ベータ版 */}
-      <View className="flex-row items-end gap-2">
-        <Text className="text-xl text-ink-900 font-bold">施設・業者</Text>
-        <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-0.5">
-          <Text className="text-xs text-brand-600">ベータ版</Text>
-        </View>
+      <View className="flex-row items-center gap-2">
+        <Text className="text-green-900 font-bold" style={{ fontSize: FontSize.title }}>
+          施設・業者
+        </Text>
+        <BetaBadge />
       </View>
       {/* 2 行目: 地区セレクタ（目立つ専用行） */}
       <AreaSelectorRow area={area} onPress={onPressChange} />
-      <Text className="text-sm text-ink-500">
+      <Text className="text-muted" style={{ fontSize: FontSize.small }}>
         ごみの持ち込み先・引取業者の一覧
       </Text>
     </View>
@@ -133,30 +135,30 @@ function RecycleStationLink({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel="リサイクルステーションの開催日を見る"
-      className="rounded-2xl bg-accent-50 border border-accent-600/30 p-4"
+      className="rounded-2xl bg-blue-50 border border-blue-600/30 p-4"
     >
       <View className="flex-row items-center gap-3">
-        <View className="w-11 h-11 rounded-full bg-accent-600 items-center justify-center">
-          <Ionicons name="repeat" size={22} color="#FFFFFF" />
+        <View className="w-11 h-11 rounded-full bg-blue-600 items-center justify-center">
+          <Ionicons name="repeat" size={22} color={Palette.bg.surface} />
         </View>
         <View className="flex-1 gap-0.5">
-          <Text className="text-base text-ink-900 font-bold">
+          <Text className="text-base text-body font-bold">
             リサイクルステーション
           </Text>
           {next ? (
-            <Text className="text-sm text-ink-900">
+            <Text className="text-sm text-body">
               次回: {formatNextCollection(next.date)}（{next.group.label} グループ）
             </Text>
           ) : (
-            <Text className="text-sm text-ink-500">
+            <Text className="text-sm text-muted">
               今年度の開催スケジュールを確認
             </Text>
           )}
-          <Text className="text-sm text-ink-500">
+          <Text className="text-sm text-muted">
             ペットボトル・ガラスびん・空き缶
           </Text>
         </View>
-        <Ionicons name="chevron-forward" size={20} color="#475569" />
+        <Ionicons name="chevron-forward" size={20} color={Palette.text.secondary} />
       </View>
     </Pressable>
   );
@@ -178,9 +180,11 @@ function FacilitySection({
   if (facilities.length === 0) return null;
   return (
     <View className="gap-2">
-      <Text className="text-base text-ink-900 font-bold">{title}</Text>
+      <Text className="text-green-900 font-bold" style={{ fontSize: FontSize.subtitle }}>
+        {title}
+      </Text>
       {description && (
-        <Text className="text-sm text-ink-500">{description}</Text>
+        <Text className="text-sm text-muted">{description}</Text>
       )}
       <View className="gap-2">
         {facilities.map((facility) => (
@@ -221,8 +225,10 @@ function FacilityCard({ facility }: { facility: Facility }) {
   return (
     <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
       <View className="gap-1">
-        <Text className="text-base text-ink-900 font-bold">{facility.name}</Text>
-        <Text className="text-sm text-ink-500">{facility.purpose}</Text>
+        <Text className="text-body font-bold" style={{ fontSize: FontSize.subtitle }}>
+          {facility.name}
+        </Text>
+        <Text className="text-sm text-muted">{facility.purpose}</Text>
       </View>
 
       <Pressable
@@ -231,27 +237,27 @@ function FacilityCard({ facility }: { facility: Facility }) {
         accessibilityLabel={`${facility.name}の住所を地図で開く`}
         className="flex-row items-start gap-2"
       >
-        <Ionicons name="location-outline" size={18} color="#475569" style={{ marginTop: 2 }} />
-        <Text className="flex-1 text-base text-ink-900 leading-relaxed">
+        <Ionicons name="location-outline" size={18} color={Palette.text.secondary} style={{ marginTop: 2 }} />
+        <Text className="flex-1 text-base text-body leading-relaxed">
           {facility.address}
         </Text>
-        <Ionicons name="open-outline" size={16} color="#166534" style={{ marginTop: 2 }} />
+        <Ionicons name="open-outline" size={16} color={Palette.blue[600]} style={{ marginTop: 2 }} />
       </Pressable>
 
       {(facility.openDays || facility.openHours) && (
         <View className="gap-1">
           {facility.openDays && (
             <View className="flex-row items-start gap-2">
-              <Ionicons name="calendar-outline" size={16} color="#475569" style={{ marginTop: 2 }} />
-              <Text className="flex-1 text-base text-ink-900 leading-relaxed">
+              <Ionicons name="calendar-outline" size={16} color={Palette.text.secondary} style={{ marginTop: 2 }} />
+              <Text className="flex-1 text-base text-body leading-relaxed">
                 {facility.openDays}
               </Text>
             </View>
           )}
           {facility.openHours && (
             <View className="flex-row items-center gap-2">
-              <Ionicons name="time-outline" size={16} color="#475569" />
-              <Text className="flex-1 text-base text-ink-900">{facility.openHours}</Text>
+              <Ionicons name="time-outline" size={16} color={Palette.text.secondary} />
+              <Text className="flex-1 text-base text-body">{facility.openHours}</Text>
             </View>
           )}
         </View>
@@ -259,18 +265,18 @@ function FacilityCard({ facility }: { facility: Facility }) {
 
       {facility.fee && (
         <View className="flex-row items-center gap-2">
-          <Ionicons name="cash-outline" size={16} color="#475569" />
-          <Text className="text-base text-ink-900">料金: {facility.fee}</Text>
+          <Ionicons name="cash-outline" size={16} color={Palette.text.secondary} />
+          <Text className="text-base text-body">料金: {facility.fee}</Text>
         </View>
       )}
 
       {facility.acceptedItems && facility.acceptedItems.length > 0 && (
-        <View className="rounded-xl bg-ink-200/30 px-3 py-2 gap-1">
+        <View className="rounded-xl bg-green-50 px-3 py-2 gap-1">
           <View className="flex-row items-center gap-2">
-            <Ionicons name="checkmark-circle-outline" size={16} color="#475569" />
-            <Text className="text-sm text-ink-500">受入品目</Text>
+            <Ionicons name="checkmark-circle-outline" size={16} color={Palette.text.secondary} />
+            <Text className="text-sm text-muted">受入品目</Text>
           </View>
-          <Text className="text-base text-ink-900 leading-relaxed">
+          <Text className="text-base text-body leading-relaxed">
             {facility.acceptedItems.join('・')}
           </Text>
         </View>
@@ -280,9 +286,9 @@ function FacilityCard({ facility }: { facility: Facility }) {
         onPress={handleCall}
         accessibilityRole="button"
         accessibilityLabel={`${facility.name}に電話する`}
-        className="min-h-11 rounded-full bg-brand-500 px-4 py-2 flex-row items-center justify-center gap-2"
+        className="min-h-11 rounded-full bg-green-400 px-4 py-2 flex-row items-center justify-center gap-2"
       >
-        <Ionicons name="call" size={18} color="#FFFFFF" />
+        <Ionicons name="call" size={18} color={Palette.bg.surface} />
         <Text className="text-base text-white font-bold">{facility.phone}</Text>
       </Pressable>
     </View>
@@ -295,17 +301,17 @@ function FacilityCard({ facility }: { facility: Facility }) {
 
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">
+    <View className="rounded-2xl bg-bg border border-line px-4 py-3 gap-2">
+      <Text className="text-sm text-muted leading-relaxed">
         施設の営業時間や受入条件は変更される場合があります。事前に電話でご確認ください。
       </Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
-        className="flex-row items-center gap-1"
+        className="flex-row items-center gap-0.5 self-start"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-blue-600 underline">公式サイトで確認</Text>
+        <Ionicons name="chevron-forward" size={13} color={Palette.blue[600]} />
       </Pressable>
     </View>
   );

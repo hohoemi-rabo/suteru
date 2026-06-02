@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Redirect, Tabs } from 'expo-router';
+import { StyleSheet } from 'react-native';
 
+import { FontSize, Palette } from '@/constants/Colors';
 import { useUserSettings } from '@/lib/user-settings';
 
 export default function TabLayout() {
@@ -16,8 +18,14 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#166534',
-        tabBarInactiveTintColor: '#475569',
+        tabBarActiveTintColor: Palette.green[400],
+        tabBarInactiveTintColor: Palette.text.tertiary,
+        tabBarLabelStyle: { fontSize: FontSize.caption },
+        tabBarStyle: {
+          backgroundColor: Palette.bg.surface,
+          borderTopColor: Palette.border.light,
+          borderTopWidth: StyleSheet.hairlineWidth,
+        },
       }}>
       <Tabs.Screen
         name="index"

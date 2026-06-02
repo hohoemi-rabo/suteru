@@ -7,7 +7,9 @@ import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react
 import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
+import BetaBadge from '@/components/BetaBadge';
 import ScheduleCalendar from '@/components/ScheduleCalendar';
+import { FontSize, Palette } from '@/constants/Colors';
 import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import { requestPermission } from '@/lib/notifications';
@@ -76,7 +78,7 @@ export default function ScheduleScreen() {
   };
 
   return (
-    <ScreenBackground edges={['top']}>
+    <ScreenBackground edges={['top']} colors={[Palette.green[100], Palette.bg.surface]}>
       <ScrollView contentContainerClassName="pb-8">
         <Header area={area} pattern={pattern} onPressChange={handleOpenSettings} />
 
@@ -143,19 +145,21 @@ function Header({
   onPressChange: () => void;
 }) {
   return (
-    <View className="px-4 pt-2 pb-4 gap-2">
+    <View className="px-4 pt-2 pb-4 gap-3">
       {/* 1 行目: セクション名 + ベータ版 */}
-      <View className="flex-row items-end gap-2">
-        <Text className="text-xl text-ink-900 font-bold">収集日</Text>
-        <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-0.5">
-          <Text className="text-xs text-brand-600">ベータ版</Text>
-        </View>
+      <View className="flex-row items-center gap-2">
+        <Text className="text-green-900 font-bold" style={{ fontSize: FontSize.title }}>
+          収集日
+        </Text>
+        <BetaBadge />
       </View>
       {/* 2 行目: 地区セレクタ（目立つ専用行） */}
       <AreaSelectorRow area={area} onPress={onPressChange} />
       {/* 3 行目: 収集パターン要約 */}
       {pattern && (
-        <Text className="text-sm text-ink-500">{pattern.description}</Text>
+        <Text className="text-muted" style={{ fontSize: FontSize.small }}>
+          {pattern.description}
+        </Text>
       )}
     </View>
   );
@@ -173,7 +177,7 @@ function ViewToggle({
   onChange: (m: 'list' | 'calendar') => void;
 }) {
   return (
-    <View className="flex-row rounded-full bg-ink-200/50 p-1">
+    <View className="flex-row rounded-full bg-green-50 p-1">
       <ToggleButton
         label="リスト"
         icon="list"
@@ -211,8 +215,12 @@ function ToggleButton({
         active ? 'bg-bg' : ''
       }`}
     >
-      <Ionicons name={icon} size={16} color={active ? '#166534' : '#475569'} />
-      <Text className={`text-base ${active ? 'text-brand-600 font-bold' : 'text-ink-500'}`}>
+      <Ionicons
+        name={icon}
+        size={16}
+        color={active ? Palette.green[400] : Palette.text.secondary}
+      />
+      <Text className={`text-base ${active ? 'text-green-400 font-bold' : 'text-muted'}`}>
         {label}
       </Text>
     </Pressable>
@@ -237,17 +245,25 @@ function NextHighlight({
   const color = categoryColorMap[next.categoryId];
 
   return (
-    <View className="rounded-2xl bg-brand-100 p-5 gap-2">
-      <Text className="text-sm text-brand-600 font-bold">次の収集</Text>
-      <Text className="text-3xl text-ink-900 font-bold">
+    <View
+      className="rounded-2xl shadow-elevated p-5 gap-2.5"
+      style={{ backgroundColor: color }}
+    >
+      <View className="flex-row items-center gap-1.5">
+        <Ionicons name="calendar" size={15} color={Palette.bg.surface} />
+        <Text className="text-white font-bold" style={{ fontSize: FontSize.small }}>
+          次の収集
+        </Text>
+      </View>
+      <Text className="text-white font-bold" style={{ fontSize: FontSize.hero }}>
         {formatNextCollection(next.date)}
       </Text>
-      <View className="flex-row items-center gap-2">
+      <View className="self-start flex-row items-center gap-1.5 rounded-full bg-bg px-3 py-1">
         <View
-          className="w-3 h-3 rounded-full"
+          className="w-2.5 h-2.5 rounded-full"
           style={{ backgroundColor: color }}
         />
-        <Text className="text-base text-ink-900">{next.categoryName}</Text>
+        <Text className="text-sm text-body font-medium">{next.categoryName}</Text>
       </View>
     </View>
   );
@@ -269,23 +285,23 @@ function CategoryCards({
   const list = getAllNextCollections(pattern, categoryLabelMap);
   return (
     <View className="gap-2">
-      <Text className="text-base text-ink-900 font-bold">カテゴリ別 次回収集日</Text>
+      <Text className="text-base text-body font-bold">カテゴリ別 次回収集日</Text>
       <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {list.map((nc, idx) => (
           <View
             key={nc.categoryId}
-            className={`flex-row items-center justify-between gap-3 px-4 py-3 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
+            className={`flex-row items-center justify-between gap-3 px-4 py-3 ${idx > 0 ? 'border-t border-line' : ''}`}
           >
             <View className="flex-row items-center gap-3 flex-1 shrink">
               <View
                 className="w-3 h-3 rounded-full shrink-0"
                 style={{ backgroundColor: categoryColorMap[nc.categoryId] }}
               />
-              <Text className="text-base text-ink-900 shrink" numberOfLines={1}>
+              <Text className="text-base text-body shrink" numberOfLines={2}>
                 {nc.categoryName}
               </Text>
             </View>
-            <Text className="text-base text-ink-900 font-medium shrink-0">
+            <Text className="text-base text-body font-medium shrink-0">
               {formatNextCollection(nc.date)}
             </Text>
           </View>
@@ -314,7 +330,7 @@ function UpcomingList({
 
   return (
     <View className="gap-3">
-      <Text className="text-base text-ink-900 font-bold">今後の予定（4 週間）</Text>
+      <Text className="text-base text-body font-bold">今後の予定（4 週間）</Text>
       <View className="gap-4">
         {weeks.map((week) => (
           <WeekSection
@@ -345,19 +361,19 @@ function WeekSection({
   return (
     <View className="gap-2">
       <View className="flex-row items-baseline justify-between">
-        <Text className="text-base text-ink-900 font-bold">{label}</Text>
-        <Text className="text-xs text-ink-500">{range}</Text>
+        <Text className="text-base text-body font-bold">{label}</Text>
+        <Text className="text-xs text-muted">{range}</Text>
       </View>
       {days.length === 0 ? (
-        <Text className="text-sm text-ink-500 px-1">予定なし</Text>
+        <Text className="text-sm text-muted px-1">予定なし</Text>
       ) : (
         <View className="rounded-xl bg-bg shadow-card overflow-hidden">
           {days.map((day, idx) => (
             <View
               key={day.date.toISOString()}
-              className={`px-4 py-3 gap-1 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
+              className={`px-4 py-3 gap-1 ${idx > 0 ? 'border-t border-line' : ''}`}
             >
-              <Text className="text-sm text-ink-500">{formatDayHeader(day.date)}</Text>
+              <Text className="text-sm text-muted">{formatDayHeader(day.date)}</Text>
               <View className="flex-row flex-wrap gap-x-3 gap-y-1">
                 {day.entries.map((entry) => (
                   <View
@@ -368,7 +384,7 @@ function WeekSection({
                       className="w-2.5 h-2.5 rounded-full"
                       style={{ backgroundColor: categoryColorMap[entry.categoryId] }}
                     />
-                    <Text className="text-base text-ink-900">{entry.categoryName}</Text>
+                    <Text className="text-base text-body">{entry.categoryName}</Text>
                   </View>
                 ))}
               </View>
@@ -397,10 +413,10 @@ function NotificationsRow({
     <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
       <View className="flex-row items-center justify-between gap-3">
         <View className="flex-1 gap-0.5">
-          <Text className="text-base text-ink-900 font-bold">
+          <Text className="text-base text-body font-bold">
             明日のごみ出しを通知する
           </Text>
-          <Text className="text-sm text-ink-500">
+          <Text className="text-sm text-muted">
             前日 {time} に「明日は○○の日です」とお知らせします
           </Text>
         </View>
@@ -420,14 +436,14 @@ function NotificationsRow({
 
 function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
-    <View className="rounded-2xl bg-warn-100 p-5 gap-3">
+    <View className="rounded-2xl bg-danger-bg p-5 gap-3">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="alert-circle" size={20} color="#991B1B" />
-        <Text className="text-base text-warn-600 font-bold">
+        <Ionicons name="alert-circle" size={20} color={Palette.danger.text} />
+        <Text className="text-base text-danger font-bold">
           このエリアの収集パターンは準備中です
         </Text>
       </View>
-      <Text className="text-sm text-ink-900 leading-relaxed">
+      <Text className="text-sm text-body leading-relaxed">
         収集日データの確認が完了していないため、表示できません。
         お手元の収集カレンダーまたは飯田市公式サイトをご確認ください。
       </Text>
@@ -436,8 +452,8 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
         accessibilityRole="link"
         className="flex-row items-center gap-1 self-start"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-blue-600 underline">飯田市公式サイトを開く</Text>
+        <Ionicons name="open-outline" size={14} color={Palette.blue[600]} />
       </Pressable>
     </View>
   );
@@ -449,20 +465,17 @@ function TbdFallback({ onPressOfficial }: { onPressOfficial: () => void }) {
 
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">
-        データは令和 8 年度ベース・ベータ版です。
-      </Text>
-      <Text className="text-sm text-ink-500 leading-relaxed">
-        祝日休止は反映されていません。お住まいの地区の案内も合わせてご確認ください。
+    <View className="rounded-2xl bg-bg border border-line px-4 py-3 gap-2">
+      <Text className="text-sm text-muted leading-relaxed">
+        データは令和 8 年度ベース・ベータ版です。祝日休止は未反映のため、お住まいの地区の案内も合わせてご確認ください。
       </Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
-        className="flex-row items-center gap-1"
+        className="flex-row items-center gap-0.5 self-start"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-blue-600 underline">公式サイトで確認</Text>
+        <Ionicons name="chevron-forward" size={13} color={Palette.blue[600]} />
       </Pressable>
     </View>
   );

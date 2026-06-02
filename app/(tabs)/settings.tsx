@@ -4,6 +4,8 @@ import { useRouter } from 'expo-router';
 import { Alert, Linking, Pressable, ScrollView, Switch, Text, View } from 'react-native';
 import ScreenBackground from '@/components/ScreenBackground';
 
+import BetaBadge from '@/components/BetaBadge';
+import { FontSize, Palette } from '@/constants/Colors';
 import {
   useData,
   useDataUpdater,
@@ -135,13 +137,13 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ScreenBackground edges={['top']}>
+    <ScreenBackground edges={['top']} colors={[Palette.green[100], Palette.bg.surface]}>
       <ScrollView contentContainerClassName="pb-8">
-        <View className="px-6 pt-2 pb-4 flex-row items-end gap-2">
-          <Text className="text-2xl text-ink-900 font-bold">設定</Text>
-          <View className="rounded-full bg-brand-100 px-2 py-0.5 mb-1">
-            <Text className="text-xs text-brand-600">ベータ版</Text>
-          </View>
+        <View className="px-6 pt-2 pb-4 flex-row items-center gap-2">
+          <Text className="text-green-900 font-bold" style={{ fontSize: FontSize.title }}>
+            設定
+          </Text>
+          <BetaBadge />
         </View>
 
         <View className="px-4 gap-6">
@@ -204,7 +206,7 @@ function AreaSection({
   return (
     <View className="gap-3">
       <SectionTitle>地区</SectionTitle>
-      <Text className="text-sm text-ink-500 px-1">
+      <Text className="text-sm text-muted px-1">
         現在の地区: {currentArea ? `${currentArea.name}（No.${currentArea.no}）` : '未設定'}
       </Text>
 
@@ -219,28 +221,34 @@ function AreaSection({
               accessibilityState={{ selected: isCurrent }}
               accessibilityLabel={`No.${area.no} ${area.name}${isCurrent ? '（現在の地区）' : ''}`}
               className={`min-h-11 rounded-xl border-2 p-4 flex-row items-center gap-3 ${
-                isCurrent ? 'border-brand-500 bg-brand-100' : 'border-ink-200 bg-bg'
+                isCurrent ? 'border-green-400 bg-green-50' : 'border-line bg-bg'
               }`}
             >
               <View
                 className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
-                  isCurrent ? 'border-brand-600 bg-brand-600' : 'border-ink-200'
+                  isCurrent ? 'border-green-400 bg-green-400' : 'border-line'
                 }`}
               >
                 {isCurrent && <Ionicons name="checkmark" size={16} color="white" />}
               </View>
               <View className="flex-1 gap-1">
-                <Text className="text-sm text-ink-500">No.{area.no}</Text>
-                <Text className="text-base text-ink-900">{area.name}</Text>
+                <Text className="text-sm text-muted">No.{area.no}</Text>
+                <Text className="text-base text-body">{area.name}</Text>
               </View>
             </Pressable>
           );
         })}
       </View>
 
-      <View className="rounded-xl bg-warn-100 px-4 py-3">
-        <Text className="text-sm text-warn-600">
-          ※ 上記以外のエリアは近日対応予定です。
+      <View className="rounded-xl bg-blue-50 px-4 py-3 flex-row items-start gap-2">
+        <Ionicons
+          name="information-circle-outline"
+          size={16}
+          color={Palette.blue[600]}
+          style={{ marginTop: 1 }}
+        />
+        <Text className="flex-1 text-sm text-blue-600">
+          上記以外のエリアは近日対応予定です。
         </Text>
       </View>
     </View>
@@ -269,10 +277,10 @@ function NotificationSection({
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
         <View className="flex-row items-center justify-between gap-3">
           <View className="flex-1 gap-0.5">
-            <Text className="text-base text-ink-900 font-bold">
+            <Text className="text-base text-body font-bold">
               明日のごみ出しを通知する
             </Text>
-            <Text className="text-sm text-ink-500">
+            <Text className="text-sm text-muted">
               前日 {time} に「明日は○○の日です」とお知らせします
             </Text>
           </View>
@@ -287,7 +295,7 @@ function NotificationSection({
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
-        <Text className="text-base text-ink-900 font-bold">通知時刻</Text>
+        <Text className="text-base text-body font-bold">通知時刻</Text>
         <View className={`flex-row gap-2 ${enabled ? '' : 'opacity-50'}`}>
           {NOTIFICATION_TIME_PRESETS.map((preset) => {
             const isSelected = preset === time;
@@ -300,12 +308,12 @@ function NotificationSection({
                 accessibilityState={{ selected: isSelected, disabled: !enabled }}
                 accessibilityLabel={`通知時刻 ${preset}`}
                 className={`flex-1 min-h-11 rounded-xl border-2 items-center justify-center ${
-                  isSelected ? 'border-brand-500 bg-brand-100' : 'border-ink-200 bg-bg'
+                  isSelected ? 'border-green-400 bg-green-50' : 'border-line bg-bg'
                 }`}
               >
                 <Text
                   className={`text-base ${
-                    isSelected ? 'text-brand-600 font-bold' : 'text-ink-900'
+                    isSelected ? 'text-green-400 font-bold' : 'text-body'
                   }`}
                 >
                   {preset}
@@ -315,7 +323,7 @@ function NotificationSection({
           })}
         </View>
         {!enabled && (
-          <Text className="text-sm text-ink-500">
+          <Text className="text-sm text-muted">
             通知を ON にすると時刻を選べます。
           </Text>
         )}
@@ -344,10 +352,10 @@ function DataUpdateSection({
       <SectionTitle>データ</SectionTitle>
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
         <View className="gap-0.5">
-          <Text className="text-base text-ink-900">
+          <Text className="text-base text-body">
             データバージョン: {version}
           </Text>
-          <Text className="text-xs text-ink-500">最終更新: {lastUpdated}</Text>
+          <Text className="text-xs text-muted">最終更新: {lastUpdated}</Text>
         </View>
         <Pressable
           onPress={onCheck}
@@ -355,12 +363,12 @@ function DataUpdateSection({
           accessibilityRole="button"
           accessibilityLabel="データ更新を確認"
           className={`min-h-11 rounded-full px-4 py-2 items-center justify-center ${
-            isChecking ? 'bg-ink-200' : 'bg-brand-500'
+            isChecking ? 'bg-ink-200' : 'bg-green-400'
           }`}
         >
           <Text
             className={`text-base font-bold ${
-              isChecking ? 'text-ink-500' : 'text-white'
+              isChecking ? 'text-muted' : 'text-white'
             }`}
           >
             {isChecking ? '確認中…' : 'データ更新を確認'}
@@ -430,11 +438,11 @@ function InfoRow({
   return (
     <View
       className={`flex-row items-center justify-between px-4 py-3 ${
-        borderTop ? 'border-t border-ink-200' : ''
+        borderTop ? 'border-t border-line' : ''
       }`}
     >
-      <Text className="text-base text-ink-900">{label}</Text>
-      <Text className="text-base text-ink-500">{value}</Text>
+      <Text className="text-base text-body">{label}</Text>
+      <Text className="text-base text-muted">{value}</Text>
     </View>
   );
 }
@@ -458,14 +466,14 @@ function LinkRow({
       accessibilityRole="link"
       accessibilityLabel={label}
       className={`flex-row items-center gap-3 px-4 py-3 ${
-        borderTop ? 'border-t border-ink-200' : ''
+        borderTop ? 'border-t border-line' : ''
       }`}
     >
       <View className="flex-1 gap-0.5">
-        <Text className="text-base text-ink-900">{label}</Text>
-        {subtitle && <Text className="text-xs text-ink-500">{subtitle}</Text>}
+        <Text className="text-base text-body">{label}</Text>
+        {subtitle && <Text className="text-xs text-muted">{subtitle}</Text>}
       </View>
-      <Ionicons name={icon} size={18} color="#475569" />
+      <Ionicons name={icon} size={18} color={Palette.text.secondary} />
     </Pressable>
   );
 }
@@ -514,6 +522,8 @@ function DeveloperSection({
 
 function SectionTitle({ children }: { children: string }) {
   return (
-    <Text className="text-base text-ink-900 font-bold px-1">{children}</Text>
+    <Text className="text-green-900 font-bold px-1" style={{ fontSize: FontSize.subtitle }}>
+      {children}
+    </Text>
   );
 }
