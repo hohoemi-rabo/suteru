@@ -27,9 +27,13 @@
 - コンパイラが解析できない書き方は避ける: 条件分岐内のフック呼び出し、描画中の ref ミューテーション、など
 - 不安定さに遭遇した場合は、`babel.config.js` の `babel-preset-expo` に `react-compiler.sources` を渡して対象ディレクトリを段階的に絞れる（緊急時のフォールバック手段）
 
-## NativeWind v4
+## NativeWind v4 / デザイントークン
 
-- `tailwind.config.js` の `theme.extend.colors` に **カスタムカラー** を定義済み（`brand`, `accent`, `warn`, `success`, `ink`, `bg`, `cat`）。色は文字列リテラルではなく Tailwind class で参照（`bg-brand-500`, `text-ink-900` 等）
+- **デザイントークンの正本は `constants/Colors.ts`**（`Palette` 緑/青/中立、`Radius`/`Spacing`/`FontSize`）。色・余白・文字サイズはハードコードせずここを参照する
+  - **className を使う箇所**は `tailwind.config.js` の同期トークン（`bg-green-400`, `text-blue-600`, `text-body`, `border-line` 等）。**色プロップに直接渡す箇所**（タブバー `tabBarActiveTintColor`、`Ionicons` の `color`、`LinearGradient` の `colors`）は `Palette.green[400]` のように直接参照
+  - 色値は `constants/Colors.ts` と `tailwind.config.js` の2箇所に同期コメント付きでミラー（値を変える時は両方）
+  - 現行の主役は **green[400] `#1D9E75`**。旧 `brand`/`accent`/`ink`/`warn` トークンは移行期間として残置中（全面確認後に削除）
+- `tailwind.config.js` の `theme.extend.colors` に **カスタムカラー** を定義済み（新: `green`/`blue`/`page`/`body`/`muted`/`hint`/`line`/`danger`、旧: `brand`/`accent`/`warn`/`success`/`ink`/`bg`/`cat`）。色は文字列リテラルではなく Tailwind class で参照（`bg-green-400`, `text-body` 等）
 - カテゴリ8色（実際は13値）の Tailwind キーは `cat.burnable`, `cat.plastic` 等。`data/common/categories.json` の `color` フィールドと同期している
 - 詳細は `docs/03_design_system.md` の「決定事項」セクション参照
 - `babel.config.js` で `jsxImportSource: 'nativewind'` を設定済み

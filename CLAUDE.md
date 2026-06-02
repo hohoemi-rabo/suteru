@@ -57,15 +57,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── legal-documents.ts      ← プライバシーポリシー / 利用規約の本文（LegalDocument 型）
 │   └── api.ts                  ← Worker /api/identify クライアント（10秒タイムアウト、デバイスIDハッシュ送信）
 ├── types/index.ts              ← 全 JSON / API / UserSettings の型定義
+├── constants/Colors.ts         ← デザイントークン正本（Palette 緑/青/中立・Radius・Spacing・FontSize）。色プロップ直指定はここ、className は tailwind 同期トークン
 ├── components/                 ← 再利用コンポーネント
-│   ├── AreaSelectorRow.tsx     ← ヘッダー共通の「現在の地区」行（ホーム/収集日/施設で共用）
-│   ├── ScheduleCalendar.tsx    ← 収集日のカレンダー表示（月グリッド + 色ドット + 凡例）
+│   ├── AreaSelectorRow.tsx     ← ヘッダー共通の「現在の地区」行（ホーム/収集日/施設で共用、青系）
+│   ├── BetaBadge.tsx           ← 各画面タイトル右の「ベータ版」緑ピルバッジ（共通）
+│   ├── ScheduleCalendar.tsx    ← 収集日のカレンダー表示（月グリッド + 色ドット + 凡例カード）
 │   ├── LinkedText.tsx          ← テキスト中の電話番号/URL をタップ可能に（tel: / ブラウザ）
 │   ├── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
-│   └── ScreenBackground.tsx    ← 画面共通の背景（薄青→白の縦グラデ + SafeAreaView ラッパー、全画面ルートで使用）
+│   └── ScreenBackground.tsx    ← 画面共通の背景縦グラデ（`colors` プロップで色指定可。ホーム/タブは緑、他ルートは薄青→白）+ SafeAreaView ラッパー
 ├── assets/                     ← 画像・フォント
 ├── scripts/                    ← Expoテンプレートのスクリプト
-├── tailwind.config.js          ← NativeWind v4 設定（brand/accent/warn/success/ink/cat カラー＋boxShadow。brand=グリーン基調、地区カードのみ青 accent）
+├── tailwind.config.js          ← NativeWind v4 設定（constants/Colors.ts と同期した green/blue/page/body/muted/hint/line/danger ＋ boxShadow。旧 brand/accent/ink/warn は移行中で残置）
 ├── global.css                  ← NativeWind の @tailwind directives
 ├── babel.config.js             ← babel-preset-expo + nativewind/babel
 ├── metro.config.js             ← withNativeWind ラップ
@@ -112,7 +114,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | GPS判定後に確認ダイアログ→設定永続化 | `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` |
 | 収集日のカレンダー月グリッドを作る | `lib/calendar-utils.ts` の `buildMonthGrid()` → `components/ScheduleCalendar.tsx` |
 | ヘッダーの「現在の地区」行 | `components/AreaSelectorRow.tsx`（ホーム/収集日/施設で共用） |
-| 画面の背景（グラデ）を変える | `components/ScreenBackground.tsx`（薄青→白の縦グラデ、`GRADIENT_COLORS` で調整。画面ルートで `SafeAreaView` の代わりに使う） |
+| 色・余白・角丸・文字サイズのトークン | `constants/Colors.ts`（`Palette`/`Radius`/`Spacing`/`FontSize`）。className は `tailwind.config.js` の同期トークン |
+| ベータ版バッジを置く | `components/BetaBadge.tsx`（各画面タイトルの右隣） |
+| 画面の背景（グラデ）を変える | `components/ScreenBackground.tsx`（`colors` プロップで上→下の色を指定。ホーム/タブは緑グラデ。画面ルートで `SafeAreaView` の代わりに使う） |
 | テキスト中の電話/URL をタップ可能にする | `components/LinkedText.tsx` |
 | 法務文書（プライバシー/利用規約）を編集 | `lib/legal-documents.ts` + 同期して `docs/legal/*.md` も更新 |
 | Workerのプロンプトを調整する | `worker/docs/prompt-design.md` → `worker/src/prompt.ts` |
@@ -196,7 +200,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **シビック配色 + 背景グラデ**（d356ab8）〔※ 配色（brand 青化）は eb14e80 でグリーンに差し戻し済み。ink スレート系・背景グラデ・accent `#0369A1` 化はこのコミットのまま現行〕: エコ緑 → 行政シビックのネイビー＋青へ刷新（ui-ux-pro-max「Accessible & Ethical」、全色 WCAG AA 検証済み）。`tailwind.config.js` で brand を青系（CTA brand-500 `#0369A1` 5.9:1 / リンク brand-600 `#075985` 7.0:1 / 薄背景 brand-100 `#E0F2FE`）、ink をスレート＋ネイビー（本文 ink-900 `#0F172A` 16:1 / 補助 ink-500 `#475569` 7.5:1 / 枠 ink-200 `#E2E8F0`）に。旧 accent `#0EA5E9`（白背景 2.8:1 で AA 不通過）も `#0369A1` / 薄背景 `#E0F2FE` に修正。エコ緑 `#15803D` は success トークンとして限定温存。ハードコード hex も追従（`#166534`→`#075985` / `#6B7280`→`#475569` / `#1F2937`→`#0F172A`）
 - **背景グラデーション**（d356ab8）: `expo-linear-gradient` 導入 + `components/ScreenBackground.tsx`（薄青 `#EFF6FF` → 白 `#FFFFFF` の縦グラデ、ビューポート固定で中身がスクロール）。12 画面ルートを `<SafeAreaView className="flex-1 bg-bg">` → `<ScreenBackground edges={...}>` に置換。`bg-bg` トークンは純白 `#FFFFFF` に戻し、カード/検索/シート等の「面」用に維持。カメラ画面（`app/camera.tsx`）はカメラビューが覆うため対象外。カテゴリ識別色（`categories.json`）は別系統のため不変
 - **グリーン復帰 + ピル + シャドウ elevation（現行配色）**（eb14e80, 2026-06-02）: シビック青（d356ab8）から**メインをエコ緑に差し戻し**（brand-500 `#15803D` / brand-600 `#166534` / brand-100 `#DCFCE7`、全 AA）。**ただし「現在の地区」カード（`components/AreaSelectorRow.tsx`）のみ青を維持**（`accent-700` `#075985` 追加、まさゆきさん指定）。情報アクセント（情報カード / result の位置判定ボタン・次回開催カード / 施設の RS 動線 / カレンダー土曜ラベル）は**青 accent のまま**＝「緑メイン＋青アクセント」構成（元デザイン踏襲）。ink スレート系・背景グラデ・accent `#0369A1` 化は d356ab8 のまま維持。あわせて ui-ux-pro-max の Spotify 風概念を一部移植: 主要/アウトラインボタンをピル（`rounded-full`）、カメラヒーローを円形、カードを生グレー枠 → `shadow-card` / `shadow-elevated`（`tailwind.config.js` の boxShadow トークン、面は `bg-bg` 白）。⚠️ **動的 shadow 付与でネイティブクラッシュした経緯あり**（収集日トグル、77537c2 で修正）→ `.claude/rules/gotchas.md` の NativeWind 項参照
-- 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン
+- **デザイントークン体系 + 明るくポップな再デザイン（現行・タブ4画面）**（d03a4bf, 2026-06-02）: `design/UI-IMPROVEMENT.md` + `design/Colors.ts` を正本に、`constants/Colors.ts` を**デザイントークンの正本**として新設（`Palette`＝緑/青/中立、`Radius`/`Spacing`/`FontSize`）。色プロップ直指定（タブバー・アイコン・グラデ）は `Palette` を、className は `tailwind.config.js` に**同期した新トークン**（`green`/`blue`/`page`/`body`/`muted`/`hint`/`line`/`danger`）を参照（Approach A: NativeWind 維持＋tailwind 同期）。**主役の緑は green[400] `#1D9E75`**（カメラボタン・アクティブタブ・主要ボタン）、地区/リンク/情報は青系、見出しは green[900]。タブバー/ホーム/収集日/施設/設定を再構成（緑グラデ背景、ピル検索バー、フラット円形カメラボタン、`components/BetaBadge.tsx` 共通バッジ、収集日「次の収集」は**カテゴリ色ヒーローカード**＝白文字＋白タグ、凡例カード化、施設の白カード＋緑ピル電話ボタン、設定の緑選択チップ＋青「お知らせ」）。`__DEV__` の診断/開発者セクションは未変更。⚠️ **green[400] `#1D9E75` は白/小文字で 3.4:1（小文字 AA 4.5 未満）**＝ポップさ優先で許容（まさゆきさん判断）。大きい文字・アイコンは AA 域。※ **旧 brand/accent/ink/warn トークン（下記グリーン復帰の項）は移行期間として残置**。全面確認後に削除予定
+- 方針: シニア専用ではなく「誰でも使いやすい」ユニバーサルデザイン（ターゲットは若年層・新住民寄り、捨て方が分からない人が主）
 
 ### コードレビュー指摘の状態（vercel-react-best-practices）
 
