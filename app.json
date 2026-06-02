@@ -21,7 +21,12 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
@@ -41,7 +46,8 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "ごみの写真を撮ってAIが品目を判定するためにカメラを使用します。画像はサーバーに保存されません。"
+          "cameraPermission": "ごみの写真を撮ってAIが品目を判定するためにカメラを使用します。画像はサーバーに保存されません。",
+          "recordAudioAndroidPermission": false
         }
       ],
       [
@@ -57,6 +63,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b6b9d0f5-b659-4cb2-b9b3-fb3977293fc3"
+      }
+    },
+    "owner": "hohoemirabo"
   }
 }
