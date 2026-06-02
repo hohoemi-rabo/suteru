@@ -248,60 +248,60 @@ function DevDiagnostics({
 
   return (
     <View className="px-4 mt-8 gap-4">
-      <View className="rounded-xl bg-warn-100 px-3 py-2">
-        <Text className="text-sm text-warn-600">
+      <View className="rounded-xl bg-danger-bg px-3 py-2">
+        <Text className="text-sm text-danger">
           以下は開発ビルドのみ表示される診断パネルです
         </Text>
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">データローダー</Text>
-        <Text className="text-base text-ink-900">version: {data.meta.version}</Text>
-        <Text className="text-base text-ink-900">source: {data.source}</Text>
-        <Text className="text-base text-ink-900">地区数: {data.areas.areas.length}</Text>
-        <Text className="text-base text-ink-900">
+        <Text className="text-sm text-muted">データローダー</Text>
+        <Text className="text-base text-body">version: {data.meta.version}</Text>
+        <Text className="text-base text-body">source: {data.source}</Text>
+        <Text className="text-base text-body">地区数: {data.areas.areas.length}</Text>
+        <Text className="text-base text-body">
           カテゴリ数: {data.categories.categories.length}
         </Text>
-        <Text className="text-base text-ink-900">品目数: {data.items.items.length}</Text>
-        <Text className="text-base text-ink-900">
+        <Text className="text-base text-body">品目数: {data.items.items.length}</Text>
+        <Text className="text-base text-body">
           収集パターン数: {Object.keys(data.patterns.patterns).length}
         </Text>
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">UserSettings</Text>
-        <Text className="text-base text-ink-900">areaId: {settings.areaId ?? '未設定'}</Text>
-        <Text className="text-base text-ink-900">
+        <Text className="text-sm text-muted">UserSettings</Text>
+        <Text className="text-base text-body">areaId: {settings.areaId ?? '未設定'}</Text>
+        <Text className="text-base text-body">
           通知: {settings.notificationsEnabled ? 'ON' : 'OFF'}
         </Text>
-        <Text className="text-base text-ink-900">通知時刻: {settings.notificationTime}</Text>
-        <Text className="text-base text-ink-900">hydrated: {isHydrated ? 'yes' : 'no'}</Text>
+        <Text className="text-base text-body">通知時刻: {settings.notificationTime}</Text>
+        <Text className="text-base text-body">hydrated: {isHydrated ? 'yes' : 'no'}</Text>
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">
+        <Text className="text-sm text-muted">
           次回収集日（地区: {displayAreaId ?? '—'}
           {settings.areaId === null && ' / フォールバック'}）
         </Text>
-        {displayArea && <Text className="text-xs text-ink-500">{displayArea.name}</Text>}
+        {displayArea && <Text className="text-xs text-muted">{displayArea.name}</Text>}
         {pattern ? (
           nextCollections.map((nc) => (
             <View key={nc.categoryId} className="flex-row justify-between">
-              <Text className="text-base text-ink-900">{nc.categoryName}</Text>
-              <Text className="text-base text-ink-900">{formatNextCollection(nc.date)}</Text>
+              <Text className="text-base text-body">{nc.categoryName}</Text>
+              <Text className="text-base text-body">{formatNextCollection(nc.date)}</Text>
             </View>
           ))
         ) : (
-          <Text className="text-base text-warn-600">パターン未確定</Text>
+          <Text className="text-base text-danger">パターン未確定</Text>
         )}
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">地区判定（GPS）</Text>
+        <Text className="text-sm text-muted">地区判定（GPS）</Text>
         <Pressable
           onPress={handleDetect}
           disabled={detection.status === 'loading'}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">
             {detection.status === 'loading' ? '判定中…' : '現在地で判定'}
@@ -311,8 +311,8 @@ function DevDiagnostics({
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">Worker 疎通確認</Text>
-        <Text className="text-xs text-ink-500">
+        <Text className="text-sm text-muted">Worker 疎通確認</Text>
+        <Text className="text-xs text-muted">
           URL: {getConfiguredApiUrl() ?? '未設定（EXPO_PUBLIC_API_URL）'}
         </Text>
         <Pressable
@@ -320,7 +320,7 @@ function DevDiagnostics({
             void handlePingApi();
           }}
           disabled={pingState.status === 'loading'}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">
             {pingState.status === 'loading' ? '送信中…' : '1×1 PNG を /api/identify に投げる'}
@@ -330,27 +330,27 @@ function DevDiagnostics({
       </View>
 
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">通知スケジュール</Text>
-        <Text className="text-base text-ink-900">
+        <Text className="text-sm text-muted">通知スケジュール</Text>
+        <Text className="text-base text-body">
           予約済み: {scheduledCount === null ? '—' : `${scheduledCount} 件`}
         </Text>
         <Pressable
           onPress={() => {
             void refreshScheduledCount();
           }}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-2 items-center justify-center"
         >
           <Text className="text-base text-white">再読込</Text>
         </Pressable>
       </View>
 
-      <View className="rounded-2xl border border-warn-600 p-4 gap-2">
-        <Text className="text-sm text-warn-600">設定リセット</Text>
+      <View className="rounded-2xl border border-danger p-4 gap-2">
+        <Text className="text-sm text-danger">設定リセット</Text>
         <Pressable
           onPress={onReset}
-          className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-danger px-4 py-2 items-center justify-center"
         >
-          <Text className="text-base text-warn-600">
+          <Text className="text-base text-danger">
             設定をリセット（オンボーディング再表示）
           </Text>
         </Pressable>
@@ -362,27 +362,27 @@ function DevDiagnostics({
 function PingResultView({ result }: { result: IdentifyResult }) {
   if (!result.ok) {
     return (
-      <Text className="text-base text-warn-600">
+      <Text className="text-base text-danger">
         ERR {result.errorCode}: {result.userMessage}
       </Text>
     );
   }
   if (result.identifiedName === null) {
     return (
-      <Text className="text-base text-ink-900">
+      <Text className="text-base text-body">
         OK: null（{result.reason}）
       </Text>
     );
   }
   return (
-    <Text className="text-base text-ink-900">OK: {result.identifiedName}</Text>
+    <Text className="text-base text-body">OK: {result.identifiedName}</Text>
   );
 }
 
 function DetectionResultView({ result }: { result: DetectionResult }) {
   if (!result.ok) {
     return (
-      <Text className="text-base text-warn-600">
+      <Text className="text-base text-danger">
         エラー: {detectionErrorLabel(result.error)}
       </Text>
     );
@@ -390,8 +390,8 @@ function DetectionResultView({ result }: { result: DetectionResult }) {
   if (result.area === null) {
     return (
       <View className="gap-1">
-        <Text className="text-base text-warn-600">対応エリア外</Text>
-        <Text className="text-sm text-ink-500">
+        <Text className="text-base text-danger">対応エリア外</Text>
+        <Text className="text-sm text-muted">
           最寄り地区まで {result.nearestDistanceKm.toFixed(2)} km
         </Text>
       </View>
@@ -399,10 +399,10 @@ function DetectionResultView({ result }: { result: DetectionResult }) {
   }
   return (
     <View className="gap-1">
-      <Text className="text-base text-ink-900">
+      <Text className="text-base text-body">
         {result.area.name}（{result.area.id}）
       </Text>
-      <Text className="text-sm text-ink-500">距離: {result.distanceKm.toFixed(2)} km</Text>
+      <Text className="text-sm text-muted">距離: {result.distanceKm.toFixed(2)} km</Text>
     </View>
   );
 }

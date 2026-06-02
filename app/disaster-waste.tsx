@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import ScreenBackground from '@/components/ScreenBackground';
+import { Palette } from '@/constants/Colors';
 
 /**
  * 災害時のごみ・携帯トイレに関する案内（飯田市ごみ出しガイドブック P36 由来）。
@@ -57,13 +58,13 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#0F172A" />
+        <Ionicons name="chevron-back" size={24} color={Palette.text.primary} />
       </Pressable>
-      <Text className="text-xl text-ink-900 font-bold flex-1" numberOfLines={1}>
+      <Text className="text-xl text-body font-bold flex-1" numberOfLines={1}>
         災害時のごみ
       </Text>
-      <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
-        <Text className="text-xs text-brand-600">ベータ版</Text>
+      <View className="rounded-full bg-green-100 px-2 py-0.5 mr-2">
+        <Text className="text-xs text-green-600">ベータ版</Text>
       </View>
     </View>
   );
@@ -71,12 +72,12 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
 
 function IntroCard() {
   return (
-    <View className="rounded-2xl bg-accent-50 border border-accent-600/30 p-4 gap-2">
+    <View className="rounded-2xl bg-blue-50 border border-blue-600/30 p-4 gap-2">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="warning-outline" size={18} color="#0369A1" />
-        <Text className="text-base text-ink-900 font-bold">災害が起きたときのごみ</Text>
+        <Ionicons name="warning-outline" size={18} color={Palette.blue[600]} />
+        <Text className="text-base text-body font-bold">災害が起きたときのごみ</Text>
       </View>
-      <Text className="text-sm text-ink-900 leading-relaxed">
+      <Text className="text-sm text-body leading-relaxed">
         飯田市は災害廃棄物処理計画を策定しています。いざというときに慌てないよう、平常時から確認しておきましょう。
       </Text>
     </View>
@@ -94,11 +95,11 @@ function Section({
 }) {
   return (
     <View className="gap-2">
-      <Text className="text-lg text-ink-900 font-bold">
+      <Text className="text-lg text-body font-bold">
         {index}. {heading}
       </Text>
       {body.map((p, i) => (
-        <Text key={i} className="text-base text-ink-900 leading-relaxed">
+        <Text key={i} className="text-base text-body leading-relaxed">
           {p}
         </Text>
       ))}
@@ -108,8 +109,8 @@ function Section({
 
 function Footer() {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3">
-      <Text className="text-sm text-ink-500 leading-relaxed">
+    <View className="rounded-2xl bg-line px-4 py-3">
+      <Text className="text-sm text-muted leading-relaxed">
         出典: 飯田市ごみ出しガイドブック。災害時は最新の市からの情報を必ずご確認ください。
       </Text>
     </View>

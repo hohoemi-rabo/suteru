@@ -21,9 +21,9 @@ export default function AreaSelectScreen() {
   return (
     <ScreenBackground edges={['top', 'bottom']}>
       <View className="px-6 pt-6 pb-2 gap-1">
-        <Text className="text-sm text-ink-500">1 / 2</Text>
-        <Text className="text-2xl text-ink-900 font-bold">お住まいの地区を選んでください</Text>
-        <Text className="text-sm text-ink-500">
+        <Text className="text-sm text-muted">1 / 2</Text>
+        <Text className="text-2xl text-body font-bold">お住まいの地区を選んでください</Text>
+        <Text className="text-sm text-muted">
           選んだ地区の収集日とルールが表示されます。後から変更できます。
         </Text>
       </View>
@@ -36,40 +36,40 @@ export default function AreaSelectScreen() {
               key={area.id}
               onPress={() => setSelectedId(area.id)}
               className={`min-h-11 rounded-xl border-2 p-4 flex-row items-center gap-3 ${
-                isSelected ? 'border-brand-500 bg-brand-100' : 'border-ink-200 bg-bg'
+                isSelected ? 'border-green-400 bg-green-100' : 'border-line bg-bg'
               }`}
             >
               <View
                 className={`w-6 h-6 rounded-full border-2 items-center justify-center ${
-                  isSelected ? 'border-brand-600 bg-brand-600' : 'border-ink-200'
+                  isSelected ? 'border-green-600 bg-green-600' : 'border-line'
                 }`}
               >
                 {isSelected && <Ionicons name="checkmark" size={16} color="white" />}
               </View>
               <View className="flex-1 gap-1">
-                <Text className="text-sm text-ink-500">No.{area.no}</Text>
-                <Text className="text-base text-ink-900">{area.name}</Text>
+                <Text className="text-sm text-muted">No.{area.no}</Text>
+                <Text className="text-base text-body">{area.name}</Text>
               </View>
             </Pressable>
           );
         })}
 
-        <View className="mt-2 rounded-xl bg-warn-100 px-4 py-3">
-          <Text className="text-sm text-warn-600">
+        <View className="mt-2 rounded-xl bg-danger-bg px-4 py-3">
+          <Text className="text-sm text-danger">
             ※ 上記以外のエリアは近日対応予定です。
           </Text>
         </View>
       </ScrollView>
 
-      <View className="px-6 pb-6 pt-2 border-t border-ink-200">
+      <View className="px-6 pb-6 pt-2 border-t border-line">
         <Pressable
           onPress={handleNext}
           disabled={!selectedId}
           className={`min-h-11 rounded-full px-6 py-3 items-center justify-center ${
-            selectedId ? 'bg-brand-500' : 'bg-ink-200'
+            selectedId ? 'bg-green-400' : 'bg-line'
           }`}
         >
-          <Text className={`text-lg font-bold ${selectedId ? 'text-white' : 'text-ink-500'}`}>
+          <Text className={`text-lg font-bold ${selectedId ? 'text-white' : 'text-muted'}`}>
             次へ
           </Text>
         </Pressable>

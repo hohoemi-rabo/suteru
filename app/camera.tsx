@@ -15,6 +15,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Palette } from '@/constants/Colors';
 
 import { identifyItem, type IdentifyResult } from '@/lib/api';
 import { useData } from '@/lib/data-loader';
@@ -405,18 +406,18 @@ function PermissionDenied({
           accessibilityLabel="戻る"
           className="w-11 h-11 items-center justify-center rounded-full"
         >
-          <Ionicons name="chevron-back" size={24} color="#0F172A" />
+          <Ionicons name="chevron-back" size={24} color={Palette.text.primary} />
         </Pressable>
 
         <View className="items-center gap-6">
-          <View className="w-24 h-24 rounded-full bg-brand-100 items-center justify-center">
-            <Ionicons name="camera" size={48} color="#166534" />
+          <View className="w-24 h-24 rounded-full bg-green-100 items-center justify-center">
+            <Ionicons name="camera" size={48} color={Palette.green[600]} />
           </View>
           <View className="gap-3">
-            <Text className="text-2xl text-ink-900 font-bold text-center">
+            <Text className="text-2xl text-body font-bold text-center">
               カメラの許可が必要です
             </Text>
-            <Text className="text-base text-ink-900 leading-relaxed text-center">
+            <Text className="text-base text-body leading-relaxed text-center">
               写真を撮るだけで分別が分かるよう、カメラを使います。
               画像はサーバーにもこの端末にも保存されません。
             </Text>
@@ -427,23 +428,23 @@ function PermissionDenied({
           {canAskAgain ? (
             <Pressable
               onPress={onRequest}
-              className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
+              className="min-h-11 rounded-full bg-green-400 px-6 py-3 items-center justify-center"
             >
               <Text className="text-lg text-white font-bold">カメラを許可する</Text>
             </Pressable>
           ) : (
             <Pressable
               onPress={onSettings}
-              className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
+              className="min-h-11 rounded-full bg-green-400 px-6 py-3 items-center justify-center"
             >
               <Text className="text-lg text-white font-bold">設定アプリを開く</Text>
             </Pressable>
           )}
           <Pressable
             onPress={onBack}
-            className="min-h-11 rounded-full border-2 border-ink-200 px-6 py-3 items-center justify-center"
+            className="min-h-11 rounded-full border-2 border-line px-6 py-3 items-center justify-center"
           >
-            <Text className="text-lg text-ink-500">戻る</Text>
+            <Text className="text-lg text-muted">戻る</Text>
           </Pressable>
         </View>
       </View>
@@ -481,7 +482,7 @@ function ResultSheet({
           className="rounded-t-3xl bg-bg p-6 gap-4"
           onStartShouldSetResponder={() => true}
         >
-          <View className="self-center w-12 h-1 rounded-full bg-ink-200" />
+          <View className="self-center w-12 h-1 rounded-full bg-line" />
 
           {outcome?.kind === 'unknown_name' && (
             <UnknownNameContent
@@ -517,26 +518,26 @@ function UnknownNameContent({
 }) {
   return (
     <>
-      <View className="self-start rounded-full bg-ink-200 px-3 py-1.5">
-        <Text className="text-sm text-ink-500 font-bold">辞書外</Text>
+      <View className="self-start rounded-full bg-line px-3 py-1.5">
+        <Text className="text-sm text-muted font-bold">辞書外</Text>
       </View>
-      <Text className="text-2xl text-ink-900 font-bold">「{rawName}」は辞書にありません</Text>
-      <Text className="text-base text-ink-900 leading-relaxed">
+      <Text className="text-2xl text-body font-bold">「{rawName}」は辞書にありません</Text>
+      <Text className="text-base text-body leading-relaxed">
         AIは「{rawName}」と判定しましたが、飯田市のルール辞書にこの品目がまだ収録されていません。
         別の言い方で文字検索を試すか、公式情報でご確認ください。
       </Text>
       <View className="gap-2">
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">文字検索を試す</Text>
         </Pressable>
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-line px-4 py-3 items-center justify-center"
         >
-          <Text className="text-base text-ink-500">もう一度撮る</Text>
+          <Text className="text-base text-muted">もう一度撮る</Text>
         </Pressable>
       </View>
     </>
@@ -552,25 +553,25 @@ function NotIdentifiableContent({
 }) {
   return (
     <>
-      <View className="self-start rounded-full bg-warn-100 px-3 py-1.5">
-        <Text className="text-sm text-warn-600 font-bold">判定できませんでした</Text>
+      <View className="self-start rounded-full bg-danger-bg px-3 py-1.5">
+        <Text className="text-sm text-danger font-bold">判定できませんでした</Text>
       </View>
-      <Text className="text-2xl text-ink-900 font-bold">うまく判定できませんでした</Text>
-      <Text className="text-base text-ink-900 leading-relaxed">
+      <Text className="text-2xl text-body font-bold">うまく判定できませんでした</Text>
+      <Text className="text-base text-body leading-relaxed">
         明るい場所で品目を画面中央に大きく写すと判定しやすくなります。
       </Text>
       <View className="gap-2">
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">もう一度撮る</Text>
         </Pressable>
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-line px-4 py-3 items-center justify-center"
         >
-          <Text className="text-base text-ink-500">文字検索を試す</Text>
+          <Text className="text-base text-muted">文字検索を試す</Text>
         </Pressable>
       </View>
     </>
@@ -588,23 +589,23 @@ function ErrorContent({
 }) {
   return (
     <>
-      <View className="self-start rounded-full bg-warn-100 px-3 py-1.5">
-        <Text className="text-sm text-warn-600 font-bold">エラー</Text>
+      <View className="self-start rounded-full bg-danger-bg px-3 py-1.5">
+        <Text className="text-sm text-danger font-bold">エラー</Text>
       </View>
-      <Text className="text-2xl text-ink-900 font-bold">判定できませんでした</Text>
-      <Text className="text-base text-ink-900 leading-relaxed">{message}</Text>
+      <Text className="text-2xl text-body font-bold">判定できませんでした</Text>
+      <Text className="text-base text-body leading-relaxed">{message}</Text>
       <View className="gap-2">
         <Pressable
           onPress={onClose}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">もう一度撮る</Text>
         </Pressable>
         <Pressable
           onPress={onGoToSearch}
-          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-line px-4 py-3 items-center justify-center"
         >
-          <Text className="text-base text-ink-500">文字検索を試す</Text>
+          <Text className="text-base text-muted">文字検索を試す</Text>
         </Pressable>
       </View>
     </>

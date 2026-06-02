@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import ScreenBackground from '@/components/ScreenBackground';
+import { Palette } from '@/constants/Colors';
 
 import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
@@ -90,11 +91,11 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#0F172A" />
+        <Ionicons name="chevron-back" size={24} color={Palette.text.primary} />
       </Pressable>
-      <Text className="text-xl text-ink-900 font-bold flex-1">品目を探す</Text>
-      <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
-        <Text className="text-xs text-brand-600">ベータ版</Text>
+      <Text className="text-xl text-body font-bold flex-1">品目を探す</Text>
+      <View className="rounded-full bg-green-100 px-2 py-0.5 mr-2">
+        <Text className="text-xs text-green-600">ベータ版</Text>
       </View>
     </View>
   );
@@ -114,17 +115,17 @@ function SearchBar({
   onClear: () => void;
 }) {
   return (
-    <View className="flex-row items-center gap-2 min-h-12 rounded-xl border border-ink-200 bg-bg px-4">
-      <Ionicons name="search" size={20} color="#475569" />
+    <View className="flex-row items-center gap-2 min-h-12 rounded-xl border border-line bg-bg px-4">
+      <Ionicons name="search" size={20} color={Palette.text.secondary} />
       <TextInput
         value={value}
         onChangeText={onChangeText}
         placeholder="品目名で探す（例: ペットボトル）"
-        placeholderTextColor="#9CA3AF"
+        placeholderTextColor={Palette.text.tertiary}
         autoFocus
         returnKeyType="search"
         accessibilityLabel="品目名検索"
-        className="flex-1 text-base text-ink-900 py-3"
+        className="flex-1 text-base text-body py-3"
       />
       {value.length > 0 && (
         <Pressable
@@ -133,7 +134,7 @@ function SearchBar({
           accessibilityLabel="入力をクリア"
           className="w-8 h-8 items-center justify-center rounded-full"
         >
-          <Ionicons name="close-circle" size={20} color="#9CA3AF" />
+          <Ionicons name="close-circle" size={20} color={Palette.text.tertiary} />
         </Pressable>
       )}
     </View>
@@ -157,7 +158,7 @@ function ResultList({
 }) {
   return (
     <View className="gap-2">
-      <Text className="text-sm text-ink-500 px-1">{hits.length} 件</Text>
+      <Text className="text-sm text-muted px-1">{hits.length} 件</Text>
       <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
         {hits.map((hit, idx) => (
           <Pressable
@@ -165,20 +166,20 @@ function ResultList({
             onPress={() => onPressItem(hit.item)}
             accessibilityRole="button"
             accessibilityLabel={`${hit.item.name}、${nameMap[hit.item.categoryId] ?? ''}`}
-            className={`flex-row items-center gap-3 px-4 py-3 ${idx > 0 ? 'border-t border-ink-200' : ''}`}
+            className={`flex-row items-center gap-3 px-4 py-3 ${idx > 0 ? 'border-t border-line' : ''}`}
           >
             <View
               className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: colorMap[hit.item.categoryId] ?? '#475569' }}
+              style={{ backgroundColor: colorMap[hit.item.categoryId] ?? Palette.text.secondary }}
             />
             <View className="flex-1 gap-0.5">
-              <Text className="text-base text-ink-900">{hit.item.name}</Text>
-              <Text className="text-sm text-ink-500">
+              <Text className="text-base text-body">{hit.item.name}</Text>
+              <Text className="text-sm text-muted">
                 {nameMap[hit.item.categoryId] ?? hit.item.categoryId}
                 {hit.matchedField === 'alias' && '（別名で一致）'}
               </Text>
             </View>
-            <Ionicons name="chevron-forward" size={18} color="#475569" />
+            <Ionicons name="chevron-forward" size={18} color={Palette.text.secondary} />
           </Pressable>
         ))}
       </View>
@@ -192,9 +193,9 @@ function ResultList({
 
 function EmptyHint() {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-6 gap-2">
-      <Text className="text-base text-ink-900">品目名や別名で探せます。</Text>
-      <Text className="text-sm text-ink-500">
+    <View className="rounded-2xl bg-line px-4 py-6 gap-2">
+      <Text className="text-base text-body">品目名や別名で探せます。</Text>
+      <Text className="text-sm text-muted">
         例: ペットボトル / おむつ / 電池 / 蛍光灯
       </Text>
     </View>
@@ -204,10 +205,10 @@ function EmptyHint() {
 function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
     <View className="rounded-2xl bg-bg shadow-card p-5 gap-3">
-      <Text className="text-base text-ink-900 font-bold">
+      <Text className="text-base text-body font-bold">
         該当する品目が見つかりません
       </Text>
-      <Text className="text-sm text-ink-500 leading-relaxed">
+      <Text className="text-sm text-muted leading-relaxed">
         別の言い方でお試しください。
         どうしても分からない場合は飯田市公式サイトをご確認ください。
       </Text>
@@ -216,8 +217,8 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
         accessibilityRole="link"
         className="flex-row items-center gap-1 self-start"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-green-600 underline">飯田市公式サイトを開く</Text>
+        <Ionicons name="open-outline" size={14} color={Palette.green[600]} />
       </Pressable>
     </View>
   );
@@ -229,8 +230,8 @@ function NoResults({ onPressOfficial }: { onPressOfficial: () => void }) {
 
 function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">
+    <View className="rounded-2xl bg-line px-4 py-3 gap-2">
+      <Text className="text-sm text-muted leading-relaxed">
         辞書はベータ版です。最新の正式情報は飯田市公式サイトをご確認ください。
       </Text>
       <Pressable
@@ -238,8 +239,8 @@ function Footer({ onPressOfficial }: { onPressOfficial: () => void }) {
         accessibilityRole="link"
         className="flex-row items-center gap-1"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-green-600 underline">飯田市公式サイトを開く</Text>
+        <Ionicons name="open-outline" size={14} color={Palette.green[600]} />
       </Pressable>
     </View>
   );

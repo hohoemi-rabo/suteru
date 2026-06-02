@@ -363,7 +363,7 @@ function DataUpdateSection({
           accessibilityRole="button"
           accessibilityLabel="データ更新を確認"
           className={`min-h-11 rounded-full px-4 py-2 items-center justify-center ${
-            isChecking ? 'bg-ink-200' : 'bg-green-400'
+            isChecking ? 'bg-line' : 'bg-green-400'
           }`}
         >
           <Text
@@ -490,15 +490,15 @@ function DeveloperSection({
   onClearCache: () => void;
 }) {
   return (
-    <View className="rounded-2xl border-2 border-warn-600 p-4 gap-3">
-      <Text className="text-sm text-warn-600 font-bold">開発者</Text>
+    <View className="rounded-2xl border-2 border-danger p-4 gap-3">
+      <Text className="text-sm text-danger font-bold">開発者</Text>
       <Pressable
         onPress={onReset}
         accessibilityRole="button"
         accessibilityLabel="設定をリセット"
-        className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
+        className="min-h-11 rounded-full border-2 border-danger px-4 py-2 items-center justify-center"
       >
-        <Text className="text-base text-warn-600">
+        <Text className="text-base text-danger">
           設定をリセット（オンボーディング再表示）
         </Text>
       </Pressable>
@@ -506,9 +506,9 @@ function DeveloperSection({
         onPress={onClearCache}
         accessibilityRole="button"
         accessibilityLabel="データキャッシュをクリア"
-        className="min-h-11 rounded-full border-2 border-warn-600 px-4 py-2 items-center justify-center"
+        className="min-h-11 rounded-full border-2 border-danger px-4 py-2 items-center justify-center"
       >
-        <Text className="text-base text-warn-600">
+        <Text className="text-base text-danger">
           データキャッシュをクリア（再起動で反映）
         </Text>
       </Pressable>

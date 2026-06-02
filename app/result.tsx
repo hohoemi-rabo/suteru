@@ -3,6 +3,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import ScreenBackground from '@/components/ScreenBackground';
+import { Palette } from '@/constants/Colors';
 
 import LinkedText from '@/components/LinkedText';
 import { detectArea } from '@/lib/area-detector';
@@ -110,7 +111,7 @@ export default function ResultScreen() {
       <ScrollView contentContainerClassName="px-4 pb-8 gap-4">
         <ItemDetailCard
           item={item}
-          color={colorMap[item.categoryId] ?? '#475569'}
+          color={colorMap[item.categoryId] ?? Palette.text.secondary}
           categoryName={nameMap[item.categoryId] ?? item.categoryId}
         />
 
@@ -135,7 +136,7 @@ export default function ResultScreen() {
           onPress={handleHome}
           accessibilityRole="button"
           accessibilityLabel="ホームに戻る"
-          className="min-h-11 rounded-full bg-brand-500 px-6 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-6 py-3 items-center justify-center"
         >
           <Text className="text-lg text-white font-bold">ホームに戻る</Text>
         </Pressable>
@@ -162,11 +163,11 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#0F172A" />
+        <Ionicons name="chevron-back" size={24} color={Palette.text.primary} />
       </Pressable>
-      <Text className="text-xl text-ink-900 font-bold flex-1">品目の詳細</Text>
-      <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
-        <Text className="text-xs text-brand-600">ベータ版</Text>
+      <Text className="text-xl text-body font-bold flex-1">品目の詳細</Text>
+      <View className="rounded-full bg-green-100 px-2 py-0.5 mr-2">
+        <Text className="text-xs text-green-600">ベータ版</Text>
       </View>
     </View>
   );
@@ -190,15 +191,15 @@ function ItemDetailCard({
       <View className="self-start rounded-full px-3 py-1.5" style={{ backgroundColor: color }}>
         <Text className="text-sm text-white font-bold">{categoryName}</Text>
       </View>
-      <Text className="text-2xl text-ink-900 font-bold">{item.name}</Text>
+      <Text className="text-2xl text-body font-bold">{item.name}</Text>
       <LinkedText
         text={item.instruction}
-        className="text-base text-ink-900 leading-relaxed"
+        className="text-base text-body leading-relaxed"
       />
       {item.warnings.length > 0 && (
-        <View className="rounded-xl bg-warn-100 p-3 gap-1">
+        <View className="rounded-xl bg-danger-bg p-3 gap-1">
           {item.warnings.map((w) => (
-            <Text key={w} className="text-base text-warn-600">⚠ {w}</Text>
+            <Text key={w} className="text-base text-danger">⚠ {w}</Text>
           ))}
         </View>
       )}
@@ -226,17 +227,17 @@ function CollectionSection({
   return (
     <View className="gap-3">
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">次回収集日</Text>
+        <Text className="text-sm text-muted">次回収集日</Text>
         {nextDate ? (
-          <Text className="text-2xl text-ink-900 font-bold">
+          <Text className="text-2xl text-body font-bold">
             {formatNextCollection(nextDate)}
           </Text>
         ) : (
-          <Text className="text-base text-warn-600">
+          <Text className="text-base text-danger">
             このエリアの収集パターンは準備中です。
           </Text>
         )}
-        <Text className="text-sm text-ink-500">
+        <Text className="text-sm text-muted">
           地区: {area?.name ?? '未設定'}
         </Text>
       </View>
@@ -248,10 +249,10 @@ function CollectionSection({
           accessibilityRole="button"
           accessibilityLabel="現在地から地区を判定して設定を更新"
           className={`min-h-11 rounded-full px-4 py-3 items-center justify-center ${
-            isDetecting ? 'bg-ink-200' : 'bg-accent-600'
+            isDetecting ? 'bg-line' : 'bg-blue-600'
           }`}
         >
-          <Text className={`text-base font-bold ${isDetecting ? 'text-ink-500' : 'text-white'}`}>
+          <Text className={`text-base font-bold ${isDetecting ? 'text-muted' : 'text-white'}`}>
             {isDetecting ? '現在地を取得中…' : '現在地から地区を設定'}
           </Text>
         </Pressable>
@@ -260,8 +261,8 @@ function CollectionSection({
           accessibilityRole="link"
           className="flex-row items-center gap-1 self-end"
         >
-          <Text className="text-sm text-brand-600 underline">地区を変更（設定へ）</Text>
-          <Ionicons name="chevron-forward" size={14} color="#166534" />
+          <Text className="text-sm text-green-600 underline">地区を変更（設定へ）</Text>
+          <Ionicons name="chevron-forward" size={14} color={Palette.green[600]} />
         </Pressable>
       </View>
     </View>
@@ -288,8 +289,8 @@ function SpecialHandlingSection({
   if (!category) {
     return (
       <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
-        <Text className="text-sm text-ink-500">出し方</Text>
-        <Text className="text-base text-ink-900">この品目の詳細は準備中です。</Text>
+        <Text className="text-sm text-muted">出し方</Text>
+        <Text className="text-base text-body">この品目の詳細は準備中です。</Text>
       </View>
     );
   }
@@ -331,29 +332,29 @@ function BottlePetSection({
   return (
     <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
       <View className="gap-1">
-        <Text className="text-sm text-ink-500">出し方</Text>
-        <Text className="text-base text-ink-900 font-bold">
+        <Text className="text-sm text-muted">出し方</Text>
+        <Text className="text-base text-body font-bold">
           リサイクルステーションへ
         </Text>
       </View>
 
-      <Text className="text-sm text-ink-900 leading-relaxed">
+      <Text className="text-sm text-body leading-relaxed">
         {category.description}
       </Text>
 
       {next ? (
-        <View className="rounded-xl bg-accent-50 px-3 py-3 gap-1">
-          <Text className="text-sm text-ink-500">次の開催</Text>
-          <Text className="text-lg text-ink-900 font-bold">
+        <View className="rounded-xl bg-blue-50 px-3 py-3 gap-1">
+          <Text className="text-sm text-muted">次の開催</Text>
+          <Text className="text-lg text-body font-bold">
             {formatNextCollection(next.date)}
           </Text>
-          <Text className="text-sm text-ink-900">
+          <Text className="text-sm text-body">
             {next.group.label} グループ（{next.group.schedulePattern}）
           </Text>
         </View>
       ) : (
-        <View className="rounded-xl bg-warn-100 px-3 py-3">
-          <Text className="text-sm text-warn-600">
+        <View className="rounded-xl bg-danger-bg px-3 py-3">
+          <Text className="text-sm text-danger">
             今年度の開催はすべて終了しました。
           </Text>
         </View>
@@ -362,7 +363,7 @@ function BottlePetSection({
       {category.notes.length > 0 && (
         <View className="gap-1">
           {category.notes.map((note) => (
-            <Text key={note} className="text-sm text-ink-500 leading-relaxed">
+            <Text key={note} className="text-sm text-muted leading-relaxed">
               ・{note}
             </Text>
           ))}
@@ -373,7 +374,7 @@ function BottlePetSection({
         onPress={onPressDetails}
         accessibilityRole="link"
         accessibilityLabel="リサイクルステーションの詳細を見る"
-        className="min-h-11 rounded-full bg-accent-600 px-4 py-3 flex-row items-center justify-center gap-2"
+        className="min-h-11 rounded-full bg-blue-600 px-4 py-3 flex-row items-center justify-center gap-2"
       >
         <Text className="text-base text-white font-bold">
           リサイクルステーションを見る
@@ -396,18 +397,18 @@ function CategoryRuleSection({
   return (
     <View className="rounded-2xl bg-bg shadow-card p-4 gap-3">
       <View className="gap-1">
-        <Text className="text-sm text-ink-500">出し方</Text>
-        <Text className="text-base text-ink-900 font-bold">{category.name}</Text>
+        <Text className="text-sm text-muted">出し方</Text>
+        <Text className="text-base text-body font-bold">{category.name}</Text>
       </View>
 
-      <Text className="text-sm text-ink-900 leading-relaxed">
+      <Text className="text-sm text-body leading-relaxed">
         {category.description}
       </Text>
 
       {category.notes.length > 0 && (
         <View className="gap-1">
           {category.notes.map((note) => (
-            <Text key={note} className="text-sm text-ink-900 leading-relaxed">
+            <Text key={note} className="text-sm text-body leading-relaxed">
               ・{note}
             </Text>
           ))}
@@ -415,8 +416,8 @@ function CategoryRuleSection({
       )}
 
       {facilities.length > 0 && (
-        <View className="rounded-xl bg-ink-200/30 px-3 py-3 gap-2">
-          <Text className="text-sm text-ink-500">関連する連絡先</Text>
+        <View className="rounded-xl bg-line px-3 py-3 gap-2">
+          <Text className="text-sm text-muted">関連する連絡先</Text>
           {facilities.map((f) => (
             <FacilityQuickRow key={f.id} name={f.name} phone={f.phone} />
           ))}
@@ -430,8 +431,8 @@ function CategoryRuleSection({
           accessibilityLabel="施設一覧を見る"
           className="flex-row items-center gap-1 self-end"
         >
-          <Text className="text-sm text-brand-600 underline">施設一覧を見る</Text>
-          <Ionicons name="chevron-forward" size={14} color="#166534" />
+          <Text className="text-sm text-green-600 underline">施設一覧を見る</Text>
+          <Ionicons name="chevron-forward" size={14} color={Palette.green[600]} />
         </Pressable>
       )}
     </View>
@@ -450,14 +451,14 @@ function FacilityQuickRow({ name, phone }: { name: string; phone: string }) {
 
   return (
     <View className="flex-row items-center justify-between gap-2">
-      <Text className="flex-1 text-sm text-ink-900" numberOfLines={1}>
+      <Text className="flex-1 text-sm text-body" numberOfLines={1}>
         {name}
       </Text>
       <Pressable
         onPress={handleCall}
         accessibilityRole="button"
         accessibilityLabel={`${name}に電話する`}
-        className="flex-row items-center gap-1 rounded-full bg-brand-500 px-3 py-1.5"
+        className="flex-row items-center gap-1 rounded-full bg-green-400 px-3 py-1.5"
       >
         <Ionicons name="call" size={12} color="#FFFFFF" />
         <Text className="text-sm text-white font-bold">{phone}</Text>
@@ -496,18 +497,18 @@ function NotInDictionary({
     <ScreenBackground edges={['top']}>
       <Header onPressBack={onBack} />
       <ScrollView contentContainerClassName="px-4 pb-8 gap-4">
-        <View className="rounded-2xl bg-warn-100 p-5 gap-3">
-          <Text className="text-xl text-warn-600 font-bold">
+        <View className="rounded-2xl bg-danger-bg p-5 gap-3">
+          <Text className="text-xl text-danger font-bold">
             「{rawName || '指定なし'}」は辞書にありません
           </Text>
-          <Text className="text-sm text-ink-900 leading-relaxed">
+          <Text className="text-sm text-body leading-relaxed">
             この品目はまだ辞書に収録されていません。
             別の言い方で文字検索を試すか、公式情報でご確認ください。
           </Text>
         </View>
         <Pressable
           onPress={onSearch}
-          className="min-h-11 rounded-full bg-brand-500 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"
         >
           <Text className="text-base text-white font-bold">文字検索を試す</Text>
         </Pressable>
@@ -516,14 +517,14 @@ function NotInDictionary({
           accessibilityRole="link"
           className="flex-row items-center gap-1 self-center"
         >
-          <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-          <Ionicons name="open-outline" size={14} color="#166534" />
+          <Text className="text-sm text-green-600 underline">飯田市公式サイトを開く</Text>
+          <Ionicons name="open-outline" size={14} color={Palette.green[600]} />
         </Pressable>
         <Pressable
           onPress={onHome}
-          className="min-h-11 rounded-full border-2 border-ink-200 px-4 py-3 items-center justify-center"
+          className="min-h-11 rounded-full border-2 border-line px-4 py-3 items-center justify-center"
         >
-          <Text className="text-base text-ink-500">ホームに戻る</Text>
+          <Text className="text-base text-muted">ホームに戻る</Text>
         </Pressable>
       </ScrollView>
     </ScreenBackground>
@@ -542,15 +543,15 @@ function Footer({
   onPressOfficial: () => void;
 }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">{disclaimer}</Text>
+    <View className="rounded-2xl bg-line px-4 py-3 gap-2">
+      <Text className="text-sm text-muted leading-relaxed">{disclaimer}</Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
         className="flex-row items-center gap-1"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-green-600 underline">飯田市公式サイトを開く</Text>
+        <Ionicons name="open-outline" size={14} color={Palette.green[600]} />
       </Pressable>
     </View>
   );

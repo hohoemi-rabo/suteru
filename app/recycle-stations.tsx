@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native';
 import ScreenBackground from '@/components/ScreenBackground';
+import { Palette } from '@/constants/Colors';
 
 import { useData } from '@/lib/data-loader';
 import {
@@ -58,8 +59,8 @@ export default function RecycleStationsScreen() {
         {next && <NextOverallCard next={next} />}
 
         <View className="gap-3">
-          <Text className="text-base text-ink-900 font-bold">グループ一覧（ア〜ク）</Text>
-          <Text className="text-sm text-ink-500">
+          <Text className="text-base text-body font-bold">グループ一覧（ア〜ク）</Text>
+          <Text className="text-sm text-muted">
             次回開催日が近い順に表示しています。市内どこのステーションも利用できます。
           </Text>
           <View className="gap-2">
@@ -97,13 +98,13 @@ function Header({ onPressBack }: { onPressBack: () => void }) {
         accessibilityLabel="戻る"
         className="w-11 h-11 items-center justify-center rounded-full"
       >
-        <Ionicons name="chevron-back" size={24} color="#0F172A" />
+        <Ionicons name="chevron-back" size={24} color={Palette.text.primary} />
       </Pressable>
-      <Text className="text-xl text-ink-900 font-bold flex-1" numberOfLines={1}>
+      <Text className="text-xl text-body font-bold flex-1" numberOfLines={1}>
         リサイクルステーション
       </Text>
-      <View className="rounded-full bg-brand-100 px-2 py-0.5 mr-2">
-        <Text className="text-xs text-brand-600">ベータ版</Text>
+      <View className="rounded-full bg-green-100 px-2 py-0.5 mr-2">
+        <Text className="text-xs text-green-600">ベータ版</Text>
       </View>
     </View>
   );
@@ -125,26 +126,26 @@ function InfoCard({
   cancellationRule: string;
 }) {
   return (
-    <View className="rounded-2xl border border-accent-600/30 bg-accent-50 p-4 gap-3">
+    <View className="rounded-2xl border border-blue-600/30 bg-blue-50 p-4 gap-3">
       <View className="flex-row items-center gap-2">
-        <Ionicons name="information-circle" size={20} color="#0369A1" />
-        <Text className="text-base text-ink-900 font-bold">市内どこでも利用できます</Text>
+        <Ionicons name="information-circle" size={20} color={Palette.blue[600]} />
+        <Text className="text-base text-body font-bold">市内どこでも利用できます</Text>
       </View>
-      <Text className="text-sm text-ink-900 leading-relaxed">{description}</Text>
+      <Text className="text-sm text-body leading-relaxed">{description}</Text>
 
       <View className="gap-1">
-        <Text className="text-sm text-ink-500">開催時間</Text>
-        <Text className="text-base text-ink-900">{openTime}</Text>
+        <Text className="text-sm text-muted">開催時間</Text>
+        <Text className="text-base text-body">{openTime}</Text>
       </View>
 
       <View className="gap-1">
-        <Text className="text-sm text-ink-500">出せるもの</Text>
-        <Text className="text-base text-ink-900">{items.join('・')}</Text>
+        <Text className="text-sm text-muted">出せるもの</Text>
+        <Text className="text-base text-body">{items.join('・')}</Text>
       </View>
 
-      <View className="rounded-xl bg-warn-100 px-3 py-2 flex-row items-start gap-2">
-        <Ionicons name="warning" size={14} color="#991B1B" style={{ marginTop: 2 }} />
-        <Text className="flex-1 text-sm text-warn-600 leading-relaxed">
+      <View className="rounded-xl bg-danger-bg px-3 py-2 flex-row items-start gap-2">
+        <Ionicons name="warning" size={14} color={Palette.danger.text} style={{ marginTop: 2 }} />
+        <Text className="flex-1 text-sm text-danger leading-relaxed">
           {cancellationRule}
         </Text>
       </View>
@@ -158,12 +159,12 @@ function InfoCard({
 
 function NextOverallCard({ next }: { next: NextStationDate }) {
   return (
-    <View className="rounded-2xl bg-brand-100 p-5 gap-2">
-      <Text className="text-sm text-brand-600 font-bold">次の開催</Text>
-      <Text className="text-3xl text-ink-900 font-bold">
+    <View className="rounded-2xl bg-green-100 p-5 gap-2">
+      <Text className="text-sm text-green-600 font-bold">次の開催</Text>
+      <Text className="text-3xl text-body font-bold">
         {formatNextCollection(next.date)}
       </Text>
-      <Text className="text-base text-ink-900">
+      <Text className="text-base text-body">
         {next.group.label} グループ（{next.group.schedulePattern}）
       </Text>
     </View>
@@ -195,26 +196,26 @@ function GroupCard({
         }`}
         className="px-4 py-3 flex-row items-center gap-3"
       >
-        <View className="w-10 h-10 rounded-full bg-brand-500 items-center justify-center">
+        <View className="w-10 h-10 rounded-full bg-green-400 items-center justify-center">
           <Text className="text-lg text-white font-bold">{group.label}</Text>
         </View>
         <View className="flex-1 gap-0.5">
-          <Text className="text-base text-ink-900 font-bold">
+          <Text className="text-base text-body font-bold">
             {group.schedulePattern}
           </Text>
           {next ? (
-            <Text className="text-sm text-ink-900">
+            <Text className="text-sm text-body">
               次回: {formatNextCollection(next.date)}
             </Text>
           ) : (
-            <Text className="text-sm text-ink-500">今年度の開催は終了</Text>
+            <Text className="text-sm text-muted">今年度の開催は終了</Text>
           )}
-          <Text className="text-xs text-ink-500">{group.locations.length} 拠点</Text>
+          <Text className="text-xs text-muted">{group.locations.length} 拠点</Text>
         </View>
         <Ionicons
           name={isExpanded ? 'chevron-up' : 'chevron-down'}
           size={20}
-          color="#475569"
+          color={Palette.text.secondary}
         />
       </Pressable>
 
@@ -225,7 +226,7 @@ function GroupCard({
 
 function LocationList({ locations }: { locations: RecycleStationLocation[] }) {
   return (
-    <View className="border-t border-ink-200 bg-bg">
+    <View className="border-t border-line bg-bg">
       {locations.map((loc, idx) => (
         <LocationRow
           key={`${loc.name}-${idx}`}
@@ -262,15 +263,15 @@ function LocationRow({
       onPress={handleOpenMap}
       accessibilityRole="link"
       accessibilityLabel={`${location.name}を地図で開く`}
-      className={`px-4 py-3 gap-1 ${isFirst ? '' : 'border-t border-ink-200'}`}
+      className={`px-4 py-3 gap-1 ${isFirst ? '' : 'border-t border-line'}`}
     >
-      <Text className="text-sm text-ink-900 font-bold">{location.name}</Text>
+      <Text className="text-sm text-body font-bold">{location.name}</Text>
       <View className="flex-row items-center gap-1">
-        <Ionicons name="location-outline" size={12} color="#475569" />
-        <Text className="flex-1 text-sm text-ink-500" numberOfLines={2}>
+        <Ionicons name="location-outline" size={12} color={Palette.text.secondary} />
+        <Text className="flex-1 text-sm text-muted" numberOfLines={2}>
           {location.address}
         </Text>
-        <Ionicons name="open-outline" size={12} color="#166534" />
+        <Ionicons name="open-outline" size={12} color={Palette.green[600]} />
       </View>
     </Pressable>
   );
@@ -288,15 +289,15 @@ function Footer({
   onPressOfficial: () => void;
 }) {
   return (
-    <View className="rounded-2xl bg-ink-200/30 px-4 py-3 gap-2">
-      <Text className="text-sm text-ink-500 leading-relaxed">{disclaimer}</Text>
+    <View className="rounded-2xl bg-line px-4 py-3 gap-2">
+      <Text className="text-sm text-muted leading-relaxed">{disclaimer}</Text>
       <Pressable
         onPress={onPressOfficial}
         accessibilityRole="link"
         className="flex-row items-center gap-1"
       >
-        <Text className="text-sm text-brand-600 underline">飯田市公式サイトを開く</Text>
-        <Ionicons name="open-outline" size={14} color="#166534" />
+        <Text className="text-sm text-green-600 underline">飯田市公式サイトを開く</Text>
+        <Ionicons name="open-outline" size={14} color={Palette.green[600]} />
       </Pressable>
     </View>
   );

@@ -86,7 +86,7 @@ export default function LinkedText({
               onPress={() => void openTel(seg.value)}
               accessibilityRole="link"
               accessibilityLabel={`${seg.value} に電話する`}
-              className="text-brand-600 font-bold underline"
+              className="text-green-600 font-bold underline"
             >
               {seg.value}
             </Text>
@@ -98,7 +98,7 @@ export default function LinkedText({
               key={i}
               onPress={() => void openUrl(seg.value)}
               accessibilityRole="link"
-              className="text-brand-600 underline"
+              className="text-green-600 underline"
             >
               リンクを開く
             </Text>
