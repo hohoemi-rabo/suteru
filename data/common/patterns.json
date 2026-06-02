@@ -1,9 +1,106 @@
 {
   "$schema_comment": "飯田市のごみ収集パターン定義。各地区は areas.json から patternId でこのいずれかを参照する。命名規則: pattern_<燃やす曜日略号>_<プラ曜日>_<埋立特定>[_<金属紙>] — 金属紙が埋立特定と同じ日なら省略。例: pattern_mt_fri_n13fri = 燃やす月木/プラ金/埋立特定金属紙すべて第1・3金。pattern_mt_mon_n13tue_n24mon = 燃やす月木/プラ月/埋立特定第1・3火/金属紙第2・4月。",
-  "version": "1.0.0",
-  "lastUpdated": "2026-05-17",
-  "sourceDocument": "飯田市分別収集計画表 令和8年度 家庭用ごみ・リサイクルカレンダー（No.01, 15, 32, 33, 34, 35, 36, 37 の各PDFから抽出・PDF原本と照合済み）",
+  "version": "1.1.0",
+  "lastUpdated": "2026-06-02",
+  "sourceDocument": "飯田市分別収集計画表 令和8年度 家庭用ごみ・リサイクルカレンダー（No.01, 09, 10, 15, 32, 33, 34, 35, 36, 37 の各PDFから抽出・PDF原本と照合済み）",
   "patterns": {
+    "pattern_mwf_thu_n13thu": {
+      "description": "燃やすごみ月水金 / プラ資源木 / 埋立特定金属紙すべて第1・3木",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "wed",
+          "fri"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "thu"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      }
+    },
+    "pattern_mt_thu_n13thu": {
+      "description": "燃やすごみ月木 / プラ資源木 / 埋立特定金属紙すべて第1・3木",
+      "burnable": {
+        "type": "weekly",
+        "days": [
+          "mon",
+          "thu"
+        ]
+      },
+      "plastic_resource": {
+        "type": "weekly",
+        "days": [
+          "thu"
+        ]
+      },
+      "landfill": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "hazardous": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "metal_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      },
+      "paper_resource": {
+        "type": "nth_day",
+        "nth": [
+          1,
+          3
+        ],
+        "day": "thu"
+      }
+    },
     "pattern_mt_fri_n13fri": {
       "description": "燃やすごみ月木 / プラ資源金 / 埋立特定金属紙すべて第1・3金",
       "burnable": {

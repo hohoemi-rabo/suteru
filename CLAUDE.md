@@ -11,7 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **ターゲット**: 飯田市在住者全般（シニア・新住民・若年層問わず）
 - **目的**: 「ゴミの捨て方が分からない」を写真一枚で解決し、市役所の問い合わせ業務軽減にも寄与
-- **フェーズ1スコープ**: Android、日本語、8地区対応、認証なし、画像保存なし
+- **フェーズ1スコープ**: Android、日本語、10地区対応、認証なし、画像保存なし
 
 詳しい仕様は `REQUIREMENTS.md` に記載。
 
@@ -79,7 +79,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── data/                       ← バンドル用 JSON（品目辞書は公式さんあ〜る、収集日系は PDF）
 │   ├── common/                 ← meta / categories / items / patterns / basic-rules /
 │   │                              special-disposal / facilities / recycle-stations
-│   ├── areas/                  ← areas.json（MVP 対象 8 区: No.01/15/32/33/34/35/36/37）
+│   ├── areas/                  ← areas.json（MVP 対象 10 区: No.01/09/10/15/32/33/34/35/36/37）
 │   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
 ├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開用、lib/legal-documents.ts と同期）
@@ -176,10 +176,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - 別名（aliases）は公式の `data-keyword` から抽出（検索品質維持）。5品目は公式に別名データが無く空
   - 生データ・変換中間ファイルは `data/_sources/sanaru-bunbetsu.json` / `items-converted.json`（gitignore）
 - **カテゴリが 13 → 11 に**（categories.json version 1.1.0）: `plastic_product`（公式はプラを資源(プラ)1本化）と `oversized`（公式は大型品も素材別分類）を削除。`types/index.ts` の CategoryId も 11 値
-- **収集日・施設・リサイクルステーションは引き続き令和8年度 PDF ベース**（8区: No.01/15/32-37）
-  - facilities 6 施設 / recycle-stations 8 グループ × 119 拠点 / special-disposal 7 エントリ / patterns 8 種 / basic-rules
-- **MVP 対象 8 区**: No.01 / 15 / 32 / 33 / 34 / 35 / 36 / 37（01 市街中心、15 座光寺、32〜35 下黒田周辺、36 丹保・北条・飯沼南、37 南条・別府上・別府下）
-- **patterns.json**: 8 区中 6 区で「埋立 と 金属/紙 が別曜日」。命名規則 `pattern_<燃やす>_<プラ>_<埋立特定>[_<金属紙>]`
+- **収集日・施設・リサイクルステーションは引き続き令和8年度 PDF ベース**（10区: No.01/09/10/15/32-37）
+  - facilities 6 施設 / recycle-stations 8 グループ × 119 拠点 / special-disposal 7 エントリ / patterns 10 種 / basic-rules
+- **MVP 対象 10 区**: No.01 / 09 / 10 / 15 / 32 / 33 / 34 / 35 / 36 / 37（01 市街中心、09・10 飯田市街中心部・橋南、15 座光寺、32〜35 下黒田周辺、36 丹保・北条・飯沼南、37 南条・別府上・別府下）
+  - No.09/10 を追加（2026-06-02、公式PDF area09/area10 から抽出）: No.09 燃やす月水金 / No.10 燃やす月木、両区ともプラ毎週木・埋立特定金属紙すべて第1・3木（`pattern_mwf_thu_n13thu` / `pattern_mt_thu_n13thu`）
+- **patterns.json**: 10 区中 6 区で「埋立 と 金属/紙 が別曜日」（No.09/10 は埋立特定金属紙すべて同日＝第1・3木）。命名規則 `pattern_<燃やす>_<プラ>_<埋立特定>[_<金属紙>]`
 - **No.37 の存在**: REQUIREMENTS.md §2.3 は「No.36 まで」だが実態は No.37 まで（要修正）
 - **注意: PDF とさんあ〜るで分類体系が一部異なる**（プラの分け方など）。品目辞書はさんあ〜る、収集パターンは PDF が正本
 
