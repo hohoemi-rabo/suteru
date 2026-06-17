@@ -1,0 +1,113 @@
+<!doctype html>
+<!--
+商工会議所 配布用 1枚（印刷向け）。
+使い方: このファイルをブラウザで開く → 印刷 → 「PDFに保存」。A4 縦・余白「既定」で1枚に収まる想定。
+内容は docs/pitch/overview.md と同じ。数字・連絡先は実情に合わせて編集可。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>これどう捨てる？（仮称）｜事業概要</title>
+<style>
+  @page { size: A4 portrait; margin: 14mm 14mm; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: #1a1a1a; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 10.5pt; line-height: 1.55;
+  }
+  .sheet { max-width: 182mm; margin: 0 auto; padding: 6mm 0; }
+  header { border-bottom: 2px solid #1d9e75; padding-bottom: 6px; margin-bottom: 10px; }
+  h1 { font-size: 19pt; margin: 0; color: #173404; letter-spacing: .02em; }
+  .sub { font-size: 12pt; color: #1d9e75; font-weight: 700; margin: 2px 0 4px; }
+  .lead { font-size: 10.5pt; margin: 0; }
+  .lead b { color: #173404; }
+  .meta { font-size: 9pt; color: #5f5e5a; margin-top: 2px; }
+  h2 { font-size: 11pt; color: #173404; margin: 12px 0 4px;
+       border-left: 4px solid #1d9e75; padding-left: 7px; }
+  ul { margin: 0; padding-left: 1.15em; }
+  li { margin: 1px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+  .flow { background: #f4fbf2; border: 1px solid #c0dd97; border-radius: 8px;
+          padding: 7px 10px; font-size: 9.5pt; margin: 3px 0 5px; }
+  .flow b { color: #173404; }
+  .ask { background: #f4fbf2; border: 1px solid #1d9e75; border-radius: 8px;
+         padding: 9px 12px; margin-top: 6px; }
+  .ask h2 { border: none; padding: 0; margin: 0 0 4px; }
+  .ask ol { margin: 0; padding-left: 1.3em; }
+  .ask li { margin: 3px 0; }
+  .contact { margin-top: 9px; font-size: 10pt; }
+  .contact b { color: #173404; }
+  .note { font-size: 8.5pt; color: #5f5e5a; margin-top: 8px;
+          border-top: 1px solid rgba(0,0,0,.1); padding-top: 5px; }
+  .badge { display: inline-block; background: #c0dd97; color: #3b6d11;
+           font-size: 8pt; font-weight: 700; border-radius: 999px; padding: 1px 8px; vertical-align: 3px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>これどう捨てる？<span style="font-size:11pt;">（仮称）</span> <span class="badge">ベータ版</span></h1>
+    <p class="sub">飯田市のごみ分別を、写真一枚で。</p>
+    <p class="lead"><b>カメラで撮るだけで、そのごみの「飯田市での捨て方」が分かる Android アプリ。</b></p>
+    <p class="meta">市民向け・無料／開発: ほほ笑みラボ（飯田市）</p>
+  </header>
+
+  <div class="grid">
+    <div>
+      <h2>解決したい課題</h2>
+      <ul>
+        <li>「このごみ、どう捨てる？」は<b>市民全般の悩み</b>（特に若年層・転入者）。</li>
+        <li>分別ルールは地区・品目ごとに細かく、<b>市役所への問い合わせ負担</b>にも。</li>
+      </ul>
+
+      <h2>仕組み</h2>
+      <div class="flow">
+        ごみを撮影 → <b>AIが品目を特定</b> → <b>飯田市の公式ルール</b>を表示<br>
+        （収集日・分別カテゴリ・出し方の注意点）
+      </div>
+      <ul>
+        <li><b>AIは品目の特定だけ</b>。ルールは公式データに基づき表示（＝誤案内を出さない設計）。</li>
+        <li>文字検索・収集日カレンダー・施設情報も搭載。</li>
+      </ul>
+    </div>
+
+    <div>
+      <h2>現状 — 動くアプリが完成</h2>
+      <ul>
+        <li><b>実機で動作する試作（MVP）が完成</b>（撮影→判定→ルール表示まで）。</li>
+        <li>飯田市公式データで <b>品目 約590・10 地区</b>に対応（拡張可）。</li>
+        <li><b>プライバシー配慮</b>：画像はサーバー保存なし・ログイン不要。</li>
+        <li>各画面に「ベータ版」「公式情報を参照」を明示し信頼性に配慮。</li>
+      </ul>
+
+      <h2>飯田にとっての価値</h2>
+      <ul>
+        <li>市民が<b>写真一枚で自己解決</b> → 市役所の<b>問い合わせ業務の軽減</b>。</li>
+        <li>分別の質の向上・<b>ごみ減量</b>に寄与。</li>
+        <li><b>地元発</b>。将来は 飯田 → 南信州 → 県内 へ横展開も視野。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ask">
+    <h2>ご相談したいこと（飯田商工会議所さまへ）</h2>
+    <ol>
+      <li><b>飯田市（環境課）へのお取り次ぎ・進め方のご相談</b><br>
+        全市分のごみカレンダー等の<b>電子データのご提供</b>や、<b>公式情報の引用許諾</b>について、適切な相談ルートを教えていただきたい。</li>
+      <li><b>事業化に活用できる補助金・助成金のご案内</b><br>
+        開発・実証・普及に使える制度があれば、紹介・申請のご相談をしたい。</li>
+      <li>（あれば）<b>実証・連携先のご紹介</b>（市民テスト・広報の協力先など）。</li>
+    </ol>
+  </div>
+
+  <p class="contact">連絡先：<b>ほほ笑みラボ</b>（飯田市）／ rabo.hohoemi@gmail.com</p>
+
+  <p class="note">※ 本アプリはベータ版です。分別の最終確認は飯田市公式情報をご参照ください。</p>
+
+</div>
+</body>
+</html>
