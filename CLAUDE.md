@@ -52,7 +52,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── area-detector.ts        ← GPS 最寄り地区判定（純粋関数、Haversine）
 │   ├── area-detection-ui.ts    ← GPS判定結果の確認ダイアログ→setAreaId 共通フロー
 │   ├── notifications.ts        ← 通知サービス（expo-notifications、14日先までローカル予約）
-│   ├── text-search.ts          ← 品目検索の正規化＋スコアリング（純粋関数、ひらがな⇄カナ吸収）
+│   ├── text-search.ts          ← 品目検索の正規化＋スコアリング（純粋関数、ひらがな⇄カナ吸収。逆方向＝AI具体名→一般名の末尾一致も拾う「デジタル時計→時計」）
 │   ├── category-maps.ts        ← categoryId → name/color マップを 1 loop で構築（純粋関数）
 │   ├── legal-documents.ts      ← プライバシーポリシー / 利用規約の本文（LegalDocument 型）
 │   └── api.ts                  ← Worker /api/identify クライアント（10秒タイムアウト、デバイスIDハッシュ送信）
@@ -85,7 +85,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
 ├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開、lib/legal-documents.ts と同期）
-├── docs/pitch/                 ← 行政アピール/相談用 資料ドラフト（overview.md 等、docs/02）
+├── docs/pitch/                 ← 行政アピール/相談 資料（配布1枚 overview / talk-script / 環境課交渉メモ kankyoka-notes / 長野県共創 kyoso-*。md＋印刷用 html、docs/02）
 │
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様
@@ -152,7 +152,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **02** | 行政アピール資料 | `docs/pitch/overview.md` に1枚ドラフト作成済み（商工会議所→環境課の橋渡し＋補助金相談の入口）。スライド/Q&A/想定費用は続き |
+| **02** | 行政アピール資料 | 商工会議所相談 → **環境課への橋渡し成立、環境課と直接相談予定**。資料一式作成（配布1枚 `overview.html` / `talk-script.md` / 環境課交渉メモ `kankyoka-notes.html` / 長野県共創ラボ提案 `kyoso-*`）。軸は「補助金でなくリリースしたい」。**リリースの鍵＝公式データ（さんあ〜る/カレンダー）の利用許諾**。フィードバック機能(B/C)は環境課の反応を見て実装予定 |
 | **23** | EAS Build / Play 配布 | **コード/設定完了・実機検証済み**（`eas.json`・法務 Pages・eas init）。残りは外部手順（GitHub Pages 有効化・Google Play 申請・署名鍵バックアップ）→ ランブックは `docs/23_eas_build.md` |
 | **24** | ユーザーテスト | ほほ笑みラボ生徒。23 で preview APK 配布が可能になったので着手可 |
 

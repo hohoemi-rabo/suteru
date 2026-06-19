@@ -11,7 +11,8 @@
 - **地区数**: 飯田市全体では No.37 まで存在。MVPは PDF 入手済みの8地区（No.01/15/32/33/34/35/36/37）のみ対応。地区選択画面に「上記以外は近日対応予定」を明記済（13）
 - **品目辞書は公式さんあ〜る 589 品目が正本**（2026-05-20 全置換）。元データは `data/_sources/sanaru-bunbetsu.json`、変換中間ファイルは `items-converted.json`（いずれも gitignore）。複数区分品目は主区分を categoryId にし、部品別の捨て方は instruction に保持
 - **カテゴリ ID は 11 値**: さんあ〜る全置換時に `plastic_product`（プラを資源(プラ)1本化）と `oversized`（公式は素材別分類）を削除。現 categoryId は `burnable`, `plastic_resource`, `landfill`, `hazardous`, `metal_resource`, `paper_resource`, `bottle_pet`, `home_appliances`, `pc`, `small_appliances`, `not_accepted`。定期収集パターンを持つのは `CollectionCategoryId` の 6 値だけ
-- **全 9 JSON 本実装済み**: 01 データ整備で skeleton を解消。品目辞書のみ後にさんあ〜るへ全置換。`meta.json` version は 1.1.0
+- **全 9 JSON 本実装済み**: 01 データ整備で skeleton を解消。品目辞書のみ後にさんあ〜るへ全置換。`meta.json` version は 1.2.0（No.09/10 追加で更新）
+- **⚠️ 品目マッチングの逆方向は `endsWith` のみ（`includes` は語中誤爆）**: `lib/text-search.ts` の `scoreItem` に「AIの具体名 → 一般名の辞書項目」を拾う逆方向マッチを足す際、`includes` だと語の途中に当たり **「折りたたみ傘」→「畳」(燃やすごみ)** のような誤判定が出た（"折り**たたみ**傘" の "たたみ"）。**末尾一致 `endsWith` のみ＋辞書側 2 文字以上**に限定して回避（複合名詞の中心語＝末尾）。「間違えるより辞書外」を優先＝カメラ判定の信頼性。1 文字の中心語（傘・鍋）は別名追加で対応。2026-06
 
 ## Worker
 
