@@ -3,8 +3,11 @@
  *
  * 設計:
  * - ひらがな ↔ カタカナの差を正規化で吸収（IME 経由で打つときの揺れ対策）
- * - name 完全一致 > 前方一致 > 部分一致 > aliases の同順、でスコア化
- * - 95 品目 × 平均 6 aliases 程度を想定。React Compiler に任せて素直に書く
+ * - name 完全一致 > 前方一致 > 部分一致 > aliases の同順でスコア化
+ * - 最下位として「逆方向マッチ」: クエリが辞書名/別名で“終わる”場合も拾う（末尾＝複合名詞の中心語）
+ *   （カメラ判定で AI が「デジタル時計」のような具体名を返したとき「時計」に紐づけるため。
+ *    部分一致は語の途中に当たって誤爆するため使わない）
+ * - 589 品目 × aliases。React Compiler に任せて素直に書く
  */
 
 import type { Item } from '@/types';
@@ -70,6 +73,19 @@ function scoreItem(item: Item, q: string): ItemHit | null {
     if (a === q) return { item, score: 500, matchedField: 'alias' };
     if (a.startsWith(q)) return { item, score: 400, matchedField: 'alias' };
     if (a.includes(q)) return { item, score: 300, matchedField: 'alias' };
+  }
+
+  // 逆方向マッチ: クエリ(q)の方が辞書名より具体的なケースを拾う。
+  // 主にカメラ判定で AI が「デジタル時計」のように修飾語付きの名前を返したとき、
+  // 一般名の辞書項目（「時計」）に紐づける。日本語の複合名詞は「修飾語＋中心語」なので、
+  // 中心語＝末尾の一致(endsWith)だけを見る。部分一致(includes)は語の途中に当たって
+  // 誤爆するため不採用（例: 「折りたたみ傘」の "たたみ" が「畳」に一致してしまう）。
+  // 既存マッチより低スコアにし、他にヒットが無いときだけ効かせる。誤爆抑制で 2 文字以上に限定。
+  if (name.length >= 2 && q.endsWith(name)) return { item, score: 280, matchedField: 'name' };
+
+  for (const alias of item.aliases) {
+    const a = normalizeJa(alias);
+    if (a.length >= 2 && q.endsWith(a)) return { item, score: 230, matchedField: 'alias' };
   }
 
   return null;

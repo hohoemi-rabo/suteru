@@ -1,0 +1,159 @@
+<!doctype html>
+<!--
+飯田市 環境課 相談メモ（印刷向け / A4）。
+使い方: ブラウザで開く → 印刷 → 「PDFに保存」。印刷ダイアログで「背景のグラフィック」を ON。
+内容は docs/pitch/kankyoka-notes.md と同じ。手元の交渉メモ用（配布用は overview.html）。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>環境課 相談メモ｜これどう捨てる？</title>
+<style>
+  @page { size: A4 portrait; margin: 14mm 14mm; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: #1a1a1a; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 10.5pt; line-height: 1.6;
+  }
+  .sheet { max-width: 182mm; margin: 0 auto; padding: 4mm 0; }
+
+  header { border-bottom: 2px solid #1d9e75; padding-bottom: 7px; margin-bottom: 12px; }
+  h1 { font-size: 17pt; margin: 0; color: #173404; }
+  .axis { font-size: 10pt; color: #5f5e5a; margin: 4px 0 0; }
+
+  h2 { font-size: 12pt; color: #173404; margin: 16px 0 6px;
+       border-left: 5px solid #1d9e75; padding-left: 8px; page-break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 10px 0 3px; color: #27500a; }
+  p { margin: 4px 0; }
+  ul { margin: 3px 0; padding-left: 1.2em; }
+  li { margin: 2px 0; }
+  b { color: #173404; }
+
+  .goal { background: #f4fbf2; border: 1px solid #1d9e75; border-radius: 8px; padding: 10px 13px; }
+  .goal .q { font-size: 11pt; font-weight: 700; color: #173404; }
+  .goal .note { font-size: 9pt; color: #5f5e5a; margin-top: 4px; }
+
+  .tier { border-radius: 8px; padding: 8px 12px; margin: 6px 0; page-break-inside: avoid; }
+  .tier.min { background: #eaf3de; border: 1px solid #c0dd97; }
+  .tier.opt { background: #f4fbf2; border: 1px solid #c0dd97; }
+  .tier.future { background: #fff; border: 1px dashed #c0dd97; }
+  .tier .label { display: inline-block; font-size: 8.5pt; font-weight: 700; border-radius: 999px;
+                 padding: 1px 9px; margin-bottom: 3px; }
+  .min .label { background: #1d9e75; color: #fff; }
+  .opt .label { background: #c0dd97; color: #27500a; }
+  .future .label { background: #e6f1fb; color: #185fa5; }
+
+  .qa { page-break-inside: avoid; margin: 8px 0; }
+  .qa .q { font-weight: 700; color: #173404; }
+  .qa .a { margin: 2px 0 0; }
+
+  .scen { page-break-inside: avoid; margin: 5px 0; padding-left: 10px; border-left: 3px solid #c0dd97; }
+
+  .check li { list-style: none; margin-left: -1.0em; }
+  .blue { color: #185fa5; }
+  .footer { margin-top: 14px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,.1);
+            font-size: 8.5pt; color: #5f5e5a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>環境課 相談メモ — リリースに向けて</h1>
+    <p class="axis">今回の軸: 補助金ではなく「<b>市民向けに無料でリリースしたい。市の理解・協力（特に公式データの許諾と区分の確認）が欲しい</b>」／ ほほ笑みラボ</p>
+  </header>
+
+  <h2>0. 今日のゴール</h2>
+  <div class="goal">
+    <p class="q">「飯田市民向けに、このアプリを無料でリリースしたい。そのために、<u>公式の分別データの扱い（許諾）</u>と<u>分別区分の確認</u>で、市にご協力いただけないか相談に来ました。」</p>
+    <p class="note">※ 今回は補助金・お金の相談ではありません。</p>
+  </div>
+
+  <h2>1. まず伝えること（要点）</h2>
+  <ul>
+    <li><b>何</b>：ごみを撮ると品目を特定し、<b>飯田市の公式ルール（収集日・区分・出し方）</b>を表示するスマホアプリ。市民向け・無料。</li>
+    <li><b>動く</b>：すでに実機で動作する試作（MVP）が完成（<b>この場でデモできます</b>）。</li>
+    <li><b>設計の肝</b>：
+      <ul>
+        <li><b>AIは品目名を当てるだけ</b>。分別ルールは<b>公式データに基づき表示</b>（AIにルールを推測させない＝誤案内を出さない設計）。</li>
+        <li>各画面に「<b>ベータ版</b>」「<b>公式情報を参照</b>」を明示。<b>市公式アプリではない</b>と分かる作り。</li>
+        <li><b>プライバシー</b>：撮影画像はサーバーに保存しない・<b>ログイン不要</b>・個人情報の取得は最小。</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>2. 環境課にお願いしたいこと（3段階）</h2>
+  <div class="tier min">
+    <span class="label">最小 — これがあればリリースできる</span>
+    <ul>
+      <li>① <b>公式分別データ（さんあ〜る／ごみカレンダー）の利用・引用許諾</b>の整理（どの範囲なら使ってよいか）。</li>
+      <li>② 「<b>市公式ではない・ベータである</b>」前提での<b>個人による公開</b>へのご理解。</li>
+    </ul>
+  </div>
+  <div class="tier opt">
+    <span class="label">できれば — 精度と信頼性が上がる</span>
+    <ul>
+      <li>③ <b>分別区分の確認・監修</b>（例：「時計＝埋立ごみ」で合っているか等、気になる品目だけでも）。</li>
+      <li>④ <b>全市分の分別・収集日データのご提供</b>（現在10地区 → 全地区対応のため）。</li>
+    </ul>
+  </div>
+  <div class="tier future">
+    <span class="label">将来 — 共創の絵</span>
+    <ul>
+      <li>⑤ <b>市と共同でメンテ</b>（公式データ更新を反映）。<b>アプリ再申請なしで即反映できる仕組みは実装済み</b>。</li>
+      <li>⑥ 公認・横展開（南信州・県内）。</li>
+    </ul>
+  </div>
+
+  <h2>3. 想定問答（つっこみ対策）</h2>
+
+  <div class="qa"><p class="q">Q. 間違った分別を案内したら、市の責任になるのでは？</p>
+  <p class="a">A. <b>AIは品目を当てるだけで、ルールは公式データ通り</b>に表示します。各画面に「ベータ版」「最終確認は公式へ」を明示し、<b>市公式アプリではない</b>と分かる作りです。誤りは<b>こちらで辞書を直し、再申請なしで即反映</b>できます。</p></div>
+
+  <div class="qa"><p class="q">Q. 市民の苦情・問い合わせが市に直接来ないか？</p>
+  <p class="a">A. <b>市の窓口に直接流す形にはしません</b>。アプリ内に<b>こちらで受ける導線（品目リクエスト等）</b>を設け、<b>まず開発側で改善</b> → 区分の正しさだけ市と確認、という形にできます。<b>市の負担はむしろ減らす</b>狙いです。（※ この機能はご相談の反応を見て実装予定）</p></div>
+
+  <div class="qa"><p class="q">Q. 個人情報は大丈夫？</p>
+  <p class="a">A. <b>撮影画像はサーバーに保存しません</b>（判定後すぐ破棄・ログにも残さない）。<b>ログイン不要</b>。プライバシーポリシー・利用規約も整備済みです。</p></div>
+
+  <div class="qa"><p class="q">Q. さんあ〜るのデータを使っているが、許諾は？</p>
+  <p class="a">A. <b>まさにそこを今日相談したい</b>点です。公開にあたり、利用・引用の範囲を整理させてください。</p></div>
+
+  <div class="qa"><p class="q">Q. 勝手に「飯田市」の名前を使うのか？</p>
+  <p class="a">A. 「飯田市の分別ルールに基づく」という事実の表示と、「<b>市公式ではない</b>」明示のバランスを、適切な形にしたいです。表現はご相談のうえ合わせます。</p></div>
+
+  <div class="qa"><p class="q">Q. 維持・更新は誰が、どうやって？</p>
+  <p class="a">A. <b>データを差し替えるだけ</b>で更新でき（コード変更不要）、<b>OTAで即反映</b>できます。将来は市と共同メンテも可能です。</p></div>
+
+  <div class="qa"><p class="q">Q. お金（市の負担）は？</p>
+  <p class="a">A. 今回は<b>補助金等の相談ではありません</b>。市民に<b>無料で提供</b>したいだけです。運用の将来形は別途で構いません。</p></div>
+
+  <h2>4. 想定される展開と、こちらの出方</h2>
+  <div class="scen"><b>前向き</b>（許諾OK・協力的）→ ③監修・④全市データの具体相談へ。⑤共同メンテ・公認の道筋。</div>
+  <div class="scen"><b>慎重</b>（責任・公式表記を気にする）→ 「<b>公開情報の範囲で・市公式ではない明記・自己責任</b>」で<b>まず個人リリース</b> → 実績を作って再相談。</div>
+  <div class="scen"><b>誤案内の懸念が強い</b> → <b>ベータ表示／免責／公式リンク／フィードバックで改善／（希望あれば）監修</b>の枠組みで解消。必要なら<b>段階公開</b>（少人数テスト→一般公開）。</div>
+  <p style="margin-top:6px;">→ どの展開でも、<b>「市の負担を増やさず、市民の利便と市の問い合わせ軽減に役立つ」</b>という一点に話を戻す。</p>
+
+  <h2>5. リリースに向けた現状（できている / 必要なこと）</h2>
+  <ul class="check">
+    <li>✅ 動くMVP（実機）／10地区・約590品目／プライバシー設計／ベータ・公式リンク表示</li>
+    <li>✅ Google Play 申請の準備（ビルド体制）／法務文書（プライバシー・利用規約）整備</li>
+    <li>✅ データのOTA更新の仕組み（再申請なしで反映）※公開先の配線は残</li>
+    <li><span class="blue">⏳ <b>データ利用許諾</b>（←今日の最重要）／区分の最終確認／全市データ</span></li>
+  </ul>
+
+  <h2>6. 持ち物・デモ</h2>
+  <ul>
+    <li>配布：<b>overview</b> を印刷した1枚</li>
+    <li><b>実機デモ</b>（撮って見せる。「AIは品目特定だけ・ルールは公式」を口頭で添える）</li>
+    <li>このメモ（手元）</li>
+  </ul>
+
+  <p class="footer">これどう捨てる？（仮称）／ ほほ笑みラボ ｜ ※本アプリはベータ版です。分別の最終確認は飯田市公式情報をご参照ください。</p>
+
+</div>
+</body>
+</html>
