@@ -40,16 +40,31 @@ function clip(value: unknown, maxLen: number): string {
 }
 
 /**
- * 報告を転送先 Webhook（Discord 互換の `{ content }`）へ送る。
- * REPORT_WEBHOOK_URL 未設定なら何もしない。失敗は呼び出し側で握りつぶす想定。
+ * 報告を設定済みの通知先へ送る。
+ * - LINE（LINE_CHANNEL_ACCESS_TOKEN + LINE_TO が両方あれば）
+ * - Discord 互換 Webhook（REPORT_WEBHOOK_URL があれば）
+ * 両方設定されていれば両方へ送る。どれも未設定なら何もしない。
+ * 失敗は呼び出し側で握りつぶす想定。
  */
 export async function forwardReport(
   env: Env,
   report: ReportRequest
 ): Promise<void> {
-  const url = env.REPORT_WEBHOOK_URL;
-  if (!url) return;
+  const text = buildReportText(report);
+  const tasks: Promise<unknown>[] = [];
 
+  if (env.LINE_CHANNEL_ACCESS_TOKEN && env.LINE_TO) {
+    tasks.push(sendToLine(env.LINE_CHANNEL_ACCESS_TOKEN, env.LINE_TO, text));
+  }
+  if (env.REPORT_WEBHOOK_URL) {
+    tasks.push(sendToWebhook(env.REPORT_WEBHOOK_URL, text));
+  }
+
+  await Promise.all(tasks);
+}
+
+/** 通知本文を組み立てる（LINE・Discord 共通。LINE でそのまま読めるよう装飾記号は使わない）。 */
+function buildReportText(report: ReportRequest): string {
   const sourceLabel =
     report.source === "camera"
       ? "カメラ判定"
@@ -58,16 +73,40 @@ export async function forwardReport(
         : "不明";
 
   const lines = [
-    "🗑️ **未収録品目の報告**",
+    "🗑️ 未収録品目の報告",
     `品目名: ${report.identifiedName || "（AI が特定できず）"}`,
     `地区: ${report.areaName || "未設定"}`,
     `種別: ${sourceLabel}`,
   ];
   if (report.comment) lines.push(`コメント: ${report.comment}`);
 
+  return lines.join("\n");
+}
+
+/** LINE Messaging API の push でテキストを送る。 */
+async function sendToLine(
+  token: string,
+  to: string,
+  text: string
+): Promise<void> {
+  await fetch("https://api.line.me/v2/bot/message/push", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      to,
+      messages: [{ type: "text", text }],
+    }),
+  });
+}
+
+/** Discord 互換 Webhook（`{ content }`）でテキストを送る。 */
+async function sendToWebhook(url: string, text: string): Promise<void> {
   await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: lines.join("\n") }),
+    body: JSON.stringify({ content: text }),
   });
 }

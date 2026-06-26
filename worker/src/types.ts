@@ -13,6 +13,13 @@ export interface Env {
    * 未設定の場合、報告は受理（success: true）するが転送はしない（保存もしない）。
    */
   REPORT_WEBHOOK_URL?: string;
+  /**
+   * LINE 通知（任意）。両方そろったときだけ LINE Messaging API の push を送る。
+   * - LINE_CHANNEL_ACCESS_TOKEN: LINE 公式アカウント（Messaging API チャネル）の長期アクセストークン
+   * - LINE_TO: 送信先ユーザー ID（LINE Developers コンソールの「あなたのユーザーID」）
+   */
+  LINE_CHANNEL_ACCESS_TOKEN?: string;
+  LINE_TO?: string;
 
   // Vars (wrangler.toml で設定)
   GEMINI_MODEL: string;

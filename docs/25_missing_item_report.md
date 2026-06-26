@@ -18,7 +18,8 @@
 - **自動送信はしない＝ボタン方式**。本アプリ最大の売りが「プライバシー最優先（自動収集ゼロ）」で、プライバシーポリシーにも「操作履歴を収集しない」と明記しているため。ユーザーが押したときだけ、押した品目名のテキストだけを送る。
 - **送る情報はテキストのみ**: AI 判定の品目名・地区名・任意コメント・発生元（camera/search）。**画像・位置情報・元デバイス ID は送らない**（`X-Device-Id` はレート制限用ハッシュのみ）。
 - **対象は「AI が品目名を返したが辞書に無い」ケース（`unknown_name`）**。「AI が品目名すら出せない」ケース（`not_identifiable`）は公式データの穴ではなく AI 精度の問題なので v1 では対象外。
-- 転送先は Worker の `REPORT_WEBHOOK_URL`（Discord 互換 Webhook）。未設定でも受理する（転送しないだけ）→ 運用者のスマホへ即通知でき、デモで「ボタン→通知が届く」を見せられる。
+- 転送先は **LINE（Messaging API push）** または **Discord 互換 Webhook**。Worker の Secret で設定（`LINE_CHANNEL_ACCESS_TOKEN`+`LINE_TO` / `REPORT_WEBHOOK_URL`）。両方設定すれば両方へ。未設定でも受理する（転送しないだけ）→ 運用者のスマホへ即通知でき、デモで「ボタン→通知が届く」を見せられる。
+  - ⚠ LINE Notify は 2025-03 終了済み。今は LINE 公式アカウント（Messaging API）を使う。push が届くには bot を友だち追加しておくこと。
 
 ## 実装（完了分）
 
@@ -41,7 +42,9 @@
 
 ## 残作業（外部手順・任意拡張）
 
-- [ ] **Discord（または任意）Webhook を用意し `REPORT_WEBHOOK_URL` を dev/prod に登録**（`wrangler secret put REPORT_WEBHOOK_URL --env development` / `--env production`）→ 実機で「報告→通知が届く」を確認（さんあ〜る担当者へのデモ前に必須）
+- [ ] **通知先を用意して Secret を dev/prod に登録**（さんあ〜る担当者へのデモ前に必須）→ 実機で「報告→通知が届く」を確認
+  - LINE: Messaging API チャネル作成 → 長期トークン＋自分のユーザーID取得 → bot を友だち追加 → `wrangler secret put LINE_CHANNEL_ACCESS_TOKEN` / `LINE_TO`（dev/prod）
+  - Discord（代替）: Webhook URL → `wrangler secret put REPORT_WEBHOOK_URL`（dev/prod）
 - [ ] Worker を dev/prod 再デプロイ（`npm run deploy:dev` / `:prod`）
 - [ ] preview APK 再ビルド（report 機能を含む。23 EAS のフロー）
 - [ ] （任意）報告フォームに自由記述コメント欄を追加（現状は品目名＋地区のみ。`not_identifiable` ケースのために有用）

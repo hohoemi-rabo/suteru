@@ -53,17 +53,31 @@ npx wrangler secret put GEMINI_API_KEY
 # プロンプトに従ってキーを貼り付け
 ```
 
-### 4.5. （任意）報告通知先 Webhook を登録
+### 4.5. （任意）報告の通知先を登録
 
-`POST /api/report`（未収録品目の報告）の転送先を設定する。Discord の Incoming Webhook URL 等、`{ "content": "..." }` を受け付ける URL を想定。**未設定でも報告は受理される（転送しないだけ）**。
+`POST /api/report`（未収録品目の報告）の転送先を設定する。**LINE と Discord 互換 Webhook の両対応**。両方設定すれば両方に届く。**未設定でも報告は受理される（転送しないだけ）**。Secret は env ごとに独立なので **dev / prod 両方に登録**する。
+
+**LINE（推奨。LINE Notify は 2025-03 終了済みのため Messaging API を使う）:**
+
+LINE Developers コンソールで Messaging API チャネルを作り、(a) 長期チャネルアクセストークン と (b) 自分のユーザー ID（Basic settings の「あなたのユーザーID」）を取得してから:
+
+```bash
+npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN --env development
+npx wrangler secret put LINE_TO --env development
+npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN --env production
+npx wrangler secret put LINE_TO --env production
+```
+
+転送先: `POST https://api.line.me/v2/bot/message/push`（`{ to, messages:[{type:"text",text}] }`）。
+※ push が届くには、その公式アカウント（bot）を**友だち追加**しておくこと。
+
+**Discord（代替。最速）:**
 
 ```bash
 # Discord: サーバー設定 → 連携サービス → ウェブフック で URL を取得
 npx wrangler secret put REPORT_WEBHOOK_URL --env development
 npx wrangler secret put REPORT_WEBHOOK_URL --env production
 ```
-
-> Secret は env ごとに独立。dev / prod 両方に登録すること（片方だけだと一方で通知が来ない）。
 
 ### 5. ローカル開発
 
