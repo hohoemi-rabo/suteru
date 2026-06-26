@@ -17,9 +17,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Palette } from '@/constants/Colors';
 
-import { identifyItem, type IdentifyResult } from '@/lib/api';
+import { identifyItem, reportMissingItem, type IdentifyResult } from '@/lib/api';
 import { useData } from '@/lib/data-loader';
 import { normalizeJa, searchItems } from '@/lib/text-search';
+import { useUserSettings } from '@/lib/user-settings';
 import type { Item } from '@/types';
 
 const RESIZE_WIDTH_PX = 1280;
@@ -53,6 +54,9 @@ type IdentifyOutcome =
 
 export default function CameraScreen() {
   const data = useData();
+  const { settings } = useUserSettings();
+  const areaName =
+    data.areas.areas.find((a) => a.id === settings.areaId)?.name ?? '';
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
   const [state, setState] = useState<CameraState>({ kind: 'ready' });
@@ -206,6 +210,7 @@ export default function CameraScreen() {
 
       <ResultSheet
         outcome={state.kind === 'result' ? state.outcome : null}
+        areaName={areaName}
         onClose={handleCloseResult}
         onGoToSearch={handleGoToSearch}
       />
@@ -458,10 +463,12 @@ function PermissionDenied({
 
 function ResultSheet({
   outcome,
+  areaName,
   onClose,
   onGoToSearch,
 }: {
   outcome: IdentifyOutcome | null;
+  areaName: string;
   onClose: () => void;
   onGoToSearch: () => void;
 }) {
@@ -487,6 +494,7 @@ function ResultSheet({
           {outcome?.kind === 'unknown_name' && (
             <UnknownNameContent
               rawName={outcome.rawName}
+              areaName={areaName}
               onClose={onClose}
               onGoToSearch={onGoToSearch}
             />
@@ -507,15 +515,63 @@ function ResultSheet({
   );
 }
 
+type ReportState = 'idle' | 'sending' | 'sent' | 'error';
+
 function UnknownNameContent({
   rawName,
+  areaName,
   onClose,
   onGoToSearch,
 }: {
   rawName: string;
+  areaName: string;
   onClose: () => void;
   onGoToSearch: () => void;
 }) {
+  const [reportState, setReportState] = useState<ReportState>('idle');
+
+  const handleReport = async () => {
+    setReportState('sending');
+    const { ok } = await reportMissingItem({
+      identifiedName: rawName,
+      areaName,
+      source: 'camera',
+    });
+    setReportState(ok ? 'sent' : 'error');
+  };
+
+  // 報告完了後のお礼・お詫び表示
+  if (reportState === 'sent') {
+    return (
+      <>
+        <View className="self-start rounded-full bg-green-100 px-3 py-1.5">
+          <Text className="text-sm text-green-600 font-bold">報告しました</Text>
+        </View>
+        <Text className="text-2xl text-body font-bold">
+          ご報告ありがとうございます
+        </Text>
+        <Text className="text-base text-body leading-relaxed">
+          「{rawName}」を担当者にお伝えしました。すみません、確認のうえ、
+          できるだけ早く辞書に追加します。お急ぎの場合は飯田市公式情報もご確認ください。
+        </Text>
+        <View className="gap-2">
+          <Pressable
+            onPress={onGoToSearch}
+            className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"
+          >
+            <Text className="text-base text-white font-bold">文字検索を試す</Text>
+          </Pressable>
+          <Pressable
+            onPress={onClose}
+            className="min-h-11 rounded-full border-2 border-line px-4 py-3 items-center justify-center"
+          >
+            <Text className="text-base text-muted">閉じる</Text>
+          </Pressable>
+        </View>
+      </>
+    );
+  }
+
   return (
     <>
       <View className="self-start rounded-full bg-line px-3 py-1.5">
@@ -524,9 +580,35 @@ function UnknownNameContent({
       <Text className="text-2xl text-body font-bold">「{rawName}」は辞書にありません</Text>
       <Text className="text-base text-body leading-relaxed">
         AIは「{rawName}」と判定しましたが、飯田市のルール辞書にこの品目がまだ収録されていません。
-        別の言い方で文字検索を試すか、公式情報でご確認ください。
+        ご不便をおかけしてすみません。下のボタンで報告いただくと、担当者が確認して
+        できるだけ早く追加します。
       </Text>
+      {reportState === 'error' && (
+        <Text className="text-sm text-danger leading-relaxed">
+          報告を送信できませんでした。電波状況をご確認のうえ、もう一度お試しください。
+        </Text>
+      )}
       <View className="gap-2">
+        <Pressable
+          onPress={() => void handleReport()}
+          disabled={reportState === 'sending'}
+          accessibilityRole="button"
+          accessibilityLabel="この品目が辞書に無いことを報告する"
+          className={`min-h-11 rounded-full px-4 py-3 flex-row items-center justify-center gap-2 ${
+            reportState === 'sending' ? 'bg-line' : 'bg-blue-600'
+          }`}
+        >
+          {reportState === 'sending' ? (
+            <Text className="text-base text-muted font-bold">送信中…</Text>
+          ) : (
+            <>
+              <Ionicons name="send" size={16} color="#FFFFFF" />
+              <Text className="text-base text-white font-bold">
+                {reportState === 'error' ? 'もう一度報告する' : 'この品目を報告する'}
+              </Text>
+            </>
+          )}
+        </Pressable>
         <Pressable
           onPress={onGoToSearch}
           className="min-h-11 rounded-full bg-green-400 px-4 py-3 items-center justify-center"

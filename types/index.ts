@@ -269,6 +269,31 @@ export type IdentifyResponse =
     };
 
 // ============================================================
+// Worker API: /api/report（未収録品目の報告）
+// worker/src/types.ts と整合させること
+// 画像・位置情報・端末を特定する情報は一切含めない
+// ============================================================
+
+export interface ReportRequest {
+  /** AI が判定した品目名（辞書に無かったもの）。空でも可（comment があれば成立） */
+  identifiedName?: string;
+  /** 利用者が任意で添えたコメント */
+  comment?: string;
+  /** 選択中の地区名（地区別の傾向把握用） */
+  areaName?: string;
+  /** 報告の発生元 */
+  source?: 'camera' | 'search';
+}
+
+export type ReportResponse =
+  | { success: true }
+  | {
+      success: false;
+      error: string;
+      errorCode: 'invalid_request' | 'rate_limited' | 'internal_error';
+    };
+
+// ============================================================
 // アプリ内: AsyncStorage で管理するユーザー設定
 // ============================================================
 

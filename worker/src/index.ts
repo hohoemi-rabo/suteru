@@ -1,13 +1,20 @@
-import type { Env, IdentifyRequest, IdentifyResponse } from "./types";
+import type {
+  Env,
+  IdentifyRequest,
+  IdentifyResponse,
+  ReportResponse,
+} from "./types";
 import { callGeminiVision } from "./gemini";
 import { normalizeIdentifiedName } from "./prompt";
 import { checkRateLimit, getClientId } from "./rate-limit";
+import { forwardReport, sanitizeReport } from "./report";
 
 /**
  * Cloudflare Workersのエントリーポイント
  *
  * エンドポイント:
  *   POST /api/identify - 画像を受け取り、品目名を返す
+ *   POST /api/report   - 未収録品目の報告を受け取り、運用者へ転送する
  *   GET  /healthz       - ヘルスチェック
  *
  * 設計原則:
@@ -36,6 +43,11 @@ export default {
     // 識別エンドポイント
     if (url.pathname === "/api/identify" && request.method === "POST") {
       return handleIdentify(request, env);
+    }
+
+    // 未収録品目の報告エンドポイント
+    if (url.pathname === "/api/report" && request.method === "POST") {
+      return handleReport(request, env);
     }
 
     return jsonResponse({ error: "not_found" }, 404, env, request);
@@ -156,6 +168,71 @@ async function handleIdentify(request: Request, env: Env): Promise<Response> {
   };
 
   return jsonResponse(response, 200, env, request);
+}
+
+// ─────────────────────────────────────────────────────────
+// /api/report ハンドラ
+// ─────────────────────────────────────────────────────────
+
+async function handleReport(request: Request, env: Env): Promise<Response> {
+  // 1. レート制限（identify と同じ KV カウンタを共有 = 悪用防止）
+  const clientId = getClientId(request);
+  const limit = parseInt(env.RATE_LIMIT_PER_MINUTE || "10", 10);
+  const rl = await checkRateLimit({
+    kv: env.RATE_LIMIT,
+    clientId,
+    limitPerMinute: limit,
+  });
+  if (!rl.allowed) {
+    return jsonResponse<ReportResponse>(
+      {
+        success: false,
+        error: `Rate limit exceeded. Retry after ${rl.retryAfterSec} seconds.`,
+        errorCode: "rate_limited",
+      },
+      429,
+      env,
+      request,
+      { "Retry-After": String(rl.retryAfterSec) }
+    );
+  }
+
+  // 2. ボディのパース
+  let raw: unknown;
+  try {
+    raw = await request.json();
+  } catch {
+    return jsonResponse<ReportResponse>(
+      { success: false, error: "Invalid JSON", errorCode: "invalid_request" },
+      400,
+      env,
+      request
+    );
+  }
+
+  // 3. 検証・サニタイズ（画像等は受け取らない）
+  const report = sanitizeReport(raw);
+  if (!report) {
+    return jsonResponse<ReportResponse>(
+      {
+        success: false,
+        error: "Report must include an item name or comment.",
+        errorCode: "invalid_request",
+      },
+      400,
+      env,
+      request
+    );
+  }
+
+  // 4. 転送（best-effort）。失敗しても利用者の報告は受理する
+  try {
+    await forwardReport(env, report);
+  } catch (err) {
+    console.log("Report forward failed:", err instanceof Error ? err.message : "unknown");
+  }
+
+  return jsonResponse<ReportResponse>({ success: true }, 200, env, request);
 }
 
 // ─────────────────────────────────────────────────────────

@@ -14,7 +14,12 @@ import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
-import type { IdentifyRequest, IdentifyResponse } from '@/types';
+import type {
+  IdentifyRequest,
+  IdentifyResponse,
+  ReportRequest,
+  ReportResponse,
+} from '@/types';
 
 // ============================================================
 // 定数
@@ -24,6 +29,7 @@ const TIMEOUT_MS = 10_000;
 const MAX_BASE64_LEN = 7_000_000; // worker/src/index.ts:99-100 と合わせる
 const DEVICE_ID_KEY = 'suteru.device-id.v1';
 const IDENTIFY_PATH = '/api/identify';
+const REPORT_PATH = '/api/report';
 
 // ============================================================
 // 公開型
@@ -123,6 +129,54 @@ export async function identifyItem(
     }
     if (__DEV__) console.warn('[api] identify failed:', err);
     return errResult('network_error', '通信に失敗しました。電波状況をご確認ください。');
+  }
+}
+
+/**
+ * 未収録品目を運用者へ報告する（`/api/report` を叩く）。
+ *
+ * - 利用者が「報告する」ボタンを押したときだけ呼ぶ（自動送信はしない）
+ * - 送るのは品目名・コメント・地区名などのテキストのみ。画像・位置情報・元のデバイス ID は送らない
+ *   （`X-Device-Id` はレート制限用のハッシュのみ）
+ * - 失敗してもアプリ体験を止めないよう、例外は投げず `{ ok: false }` を返す
+ */
+export async function reportMissingItem(
+  params: ReportRequest,
+): Promise<{ ok: boolean }> {
+  const base = getApiBaseUrl();
+  if (!base) return { ok: false };
+
+  // 報告内容が空なら送らない（Worker 側でも弾くが、無駄打ちを避ける）
+  if (!params.identifiedName?.trim() && !params.comment?.trim()) {
+    return { ok: false };
+  }
+
+  const deviceId = await getOrCreateDeviceId();
+  const body: ReportRequest = {
+    identifiedName: params.identifiedName?.trim() ?? '',
+    comment: params.comment?.trim() ?? '',
+    areaName: params.areaName?.trim() ?? '',
+    source: params.source,
+  };
+
+  try {
+    const res = await fetchWithTimeout(
+      `${base}${REPORT_PATH}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Device-Id': deviceId,
+        },
+        body: JSON.stringify(body),
+      },
+      TIMEOUT_MS,
+    );
+    const json = (await res.json().catch(() => null)) as ReportResponse | null;
+    return { ok: res.ok && json?.success === true };
+  } catch (err: unknown) {
+    if (__DEV__) console.warn('[api] report failed:', err);
+    return { ok: false };
   }
 }
 

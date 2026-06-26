@@ -7,6 +7,12 @@ export interface Env {
 
   // Secrets (wrangler secret put で設定)
   GEMINI_API_KEY: string;
+  /**
+   * 未収録品目の報告先 Webhook URL（任意）。
+   * Discord の Incoming Webhook 等、`{ "content": "..." }` を受け付ける URL を想定。
+   * 未設定の場合、報告は受理（success: true）するが転送はしない（保存もしない）。
+   */
+  REPORT_WEBHOOK_URL?: string;
 
   // Vars (wrangler.toml で設定)
   GEMINI_MODEL: string;
@@ -43,4 +49,32 @@ export type IdentifyResponse =
         | "rate_limited"
         | "gemini_error"
         | "internal_error";
+    };
+
+/**
+ * /api/report のリクエスト（未収録品目の報告）
+ *
+ * 重要: 画像・位置情報・端末を特定する情報は一切含めない。
+ * 送るのは「AI が判定した品目名（テキスト）」など、利用者がボタンで明示的に共有したものだけ。
+ */
+export interface ReportRequest {
+  /** AI が判定した品目名（辞書に無かったもの）。空でも可（comment があれば成立） */
+  identifiedName?: string;
+  /** 利用者が任意で添えたコメント */
+  comment?: string;
+  /** 選択中の地区名（地区別の傾向把握用。個人特定にはならない粒度） */
+  areaName?: string;
+  /** 報告の発生元 */
+  source?: "camera" | "search";
+}
+
+/**
+ * /api/report のレスポンス
+ */
+export type ReportResponse =
+  | { success: true }
+  | {
+      success: false;
+      error: string;
+      errorCode: "invalid_request" | "rate_limited" | "internal_error";
     };

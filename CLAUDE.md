@@ -55,7 +55,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── text-search.ts          ← 品目検索の正規化＋スコアリング（純粋関数、ひらがな⇄カナ吸収。逆方向＝AI具体名→一般名の末尾一致も拾う「デジタル時計→時計」）
 │   ├── category-maps.ts        ← categoryId → name/color マップを 1 loop で構築（純粋関数）
 │   ├── legal-documents.ts      ← プライバシーポリシー / 利用規約の本文（LegalDocument 型）
-│   └── api.ts                  ← Worker /api/identify クライアント（10秒タイムアウト、デバイスIDハッシュ送信）
+│   └── api.ts                  ← Worker クライアント（identifyItem=/api/identify、reportMissingItem=/api/report。10秒タイムアウト、デバイスIDハッシュ送信）
 ├── types/index.ts              ← 全 JSON / API / UserSettings の型定義
 ├── constants/Colors.ts         ← デザイントークン正本（Palette 緑/青/中立・Radius・Spacing・FontSize）。色プロップ直指定はここ、className は tailwind 同期トークン
 ├── components/                 ← 再利用コンポーネント
@@ -90,7 +90,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様
     ├── docs/prompt-design.md   ← プロンプト設計の根拠
-    ├── src/                    ← index.ts / prompt.ts / gemini.ts / rate-limit.ts / types.ts
+    ├── src/                    ← index.ts / prompt.ts / gemini.ts / rate-limit.ts / report.ts / types.ts
     ├── wrangler.toml
     ├── package.json
     └── tsconfig.json
@@ -147,12 +147,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
   - 19 Facilities（タブ実装、外部 Google Maps リンク、リサイクルステーションへの動線）
   - 20 RecycleStations（push 画面、8 グループ × 119 拠点を次回開催日順で展開）
   - 22 法務文書（プライバシーポリシー + 利用規約、設定タブから push、Markdown ミラー）
+  - 25 未収録品目の報告（コア実装。辞書外品目をユーザーがボタンで運用者へ報告 → `/api/report` → Discord 等 Webhook。画像/位置情報/個人情報なし・テキストのみ。Webhook 登録と実機デモ確認は外部手順）
 
 ### 残り Phase 4 チケット（3 本）
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **02** | 行政アピール資料 | 商工会議所相談 → **環境課への橋渡し成立、環境課と直接相談予定**。資料一式作成（配布1枚 `overview.html` / `talk-script.md` / 環境課交渉メモ `kankyoka-notes.html` / 長野県共創ラボ提案 `kyoso-*`）。軸は「補助金でなくリリースしたい」。**リリースの鍵＝公式データ（さんあ〜る/カレンダー）の利用許諾**。フィードバック機能(B/C)は環境課の反応を見て実装予定 |
+| **02** | 行政アピール資料 | 商工会議所相談 → **環境課への橋渡し成立、環境課と直接相談予定**。資料一式作成（配布1枚 `overview.html` / `talk-script.md` / 環境課交渉メモ `kankyoka-notes.html` / 長野県共創ラボ提案 `kyoso-*`）。軸は「補助金でなくリリースしたい」。**リリースの鍵＝公式データ（さんあ〜る/カレンダー）の利用許諾**。フィードバック機能（未収録品目の報告）は **25 で実装済み**＝デモ可。交渉では「辞書外品目＝公式データの穴リストを市へ還元」を許諾の交換材料に |
 | **23** | EAS Build / Play 配布 | **コード/設定完了・実機検証済み**（`eas.json`・法務 Pages・eas init）。残りは外部手順（GitHub Pages 有効化・Google Play 申請・署名鍵バックアップ）→ ランブックは `docs/23_eas_build.md` |
 | **24** | ユーザーテスト | ほほ笑みラボ生徒。23 で preview APK 配布が可能になったので着手可 |
 
