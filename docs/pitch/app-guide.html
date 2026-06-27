@@ -1,0 +1,186 @@
+<!doctype html>
+<!--
+アプリ説明書（印刷向け / A4）。
+使い方: ブラウザで開く → 印刷 → 「PDFに保存」。印刷ダイアログで「背景のグラフィック」を ON。
+内容・画像は docs/pitch/app-guide.md / screenshots/ と同じ。さんあ〜る担当者・上長への回覧用。
+画像は screenshots/ を相対参照するので、このHTMLは docs/pitch/ 直下のまま開くこと。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アプリ説明書｜これどう捨てる？</title>
+<style>
+  @page { size: A4 portrait; margin: 13mm 13mm; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: #1a1a1a; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 10pt; line-height: 1.6;
+  }
+  .sheet { max-width: 184mm; margin: 0 auto; padding: 4mm 0; }
+
+  header { border-bottom: 2px solid #1d9e75; padding-bottom: 7px; margin-bottom: 10px; }
+  h1 { font-size: 16pt; margin: 0; color: #173404; }
+  .meta { font-size: 9pt; color: #5f5e5a; margin: 4px 0 0; }
+
+  .lead { background: #f4fbf2; border: 1px solid #1d9e75; border-radius: 8px; padding: 8px 12px; margin: 10px 0; font-size: 9.5pt; }
+  .lead b { color: #173404; }
+
+  .screen { margin: 12px 0; page-break-inside: avoid; }
+  h2 { font-size: 11.5pt; color: #173404; margin: 0 0 4px;
+       border-left: 5px solid #1d9e75; padding-left: 8px; }
+  .shots { display: flex; gap: 5mm; flex-wrap: wrap; margin: 5px 0 6px; }
+  .fig { margin: 0; }
+  .fig img { width: 42mm; height: auto; border: 1px solid #c8cfc0; border-radius: 8px; display: block; }
+  .fig figcaption { font-size: 8pt; color: #5f5e5a; margin-top: 3px; max-width: 42mm; line-height: 1.35; }
+  ul { margin: 3px 0; padding-left: 1.2em; }
+  li { margin: 2px 0; }
+  b { color: #173404; }
+
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 9pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #c8cfc0; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #eaf3de; color: #27500a; font-weight: 700; }
+
+  .footer { margin-top: 12px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,.1);
+            font-size: 8.5pt; color: #5f5e5a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>「これどう捨てる？」アプリ説明書（ベータ版）</h1>
+    <p class="meta">開発元: ほほ笑みラボ（飯田市）／ rabo.hohoemi@gmail.com</p>
+  </header>
+
+  <div class="lead">
+    <p style="margin:3px 0;"><b>一言でいうと</b>: ごみを撮るだけで「飯田市での捨て方」が分かる、市民向け・無料の Android アプリ。</p>
+    <p style="margin:3px 0;"><b>設計の肝</b>: AI は「品目名」を当てるだけ。分別ルールは<b>飯田市公式データ由来のアプリ内辞書</b>から表示します（AIにルールを推測させない設計）。出典の詳細は別紙「データ出典・照合 説明資料」参照。</p>
+  </div>
+
+  <div class="screen">
+    <h2>1. ホーム画面</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/01-home.jpg" alt="ホーム"><figcaption>① ホーム — 地区・写真でしらべる・文字検索・収集カレンダー</figcaption></figure>
+    </div>
+    <ul>
+      <li>上部に<b>現在の地区</b>を表示（タップで変更）。分別・収集日は地区ごとに異なるため、最初に地区を選びます。</li>
+      <li>中央が<b>カメラ判定</b>、上部が<b>文字検索</b>、下が<b>収集カレンダー</b>。</li>
+      <li>「<b>ベータ版</b>」「<b>飯田市公式の令和8年度データをもとにしたベータ版／公式サイトで確認</b>」を明示し、<b>市公式アプリではない</b>と分かる作り。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>2. カメラで撮る</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/02-camera.jpg" alt="カメラ撮影"><figcaption>② 枠に収めて撮影。右上に「画像は保存されません」</figcaption></figure>
+      <figure class="fig"><img src="screenshots/02-camera_2.jpg" alt="判定中"><figcaption>②' 撮影後「判定中…」（数秒）</figcaption></figure>
+    </div>
+    <ul>
+      <li>品目を枠内に収めて撮影します。枠の外は判定対象から外します。</li>
+      <li><b>重要</b>: 「<b>画像は保存されません</b>」と明記。撮影画像は判定後すぐ破棄し、<b>サーバーにもログにも残しません</b>（ログイン不要・個人情報の取得は最小）。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>3. 判定結果（分別ルールの表示）</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/03-result.jpg" alt="判定結果"><figcaption>③ 結果（例: リモコン）— カテゴリ・出し方・次回収集日</figcaption></figure>
+    </div>
+    <ul>
+      <li>AI が特定した品目名（例「リモコン」）をもとに、アプリ内辞書から<b>分別カテゴリ（埋立ごみ）・出し方の注意・次回収集日</b>を表示。</li>
+      <li>表示する分別ルールは<b>飯田市公式データ由来</b>（品目＝さんあ〜る／収集日＝令和8年度計画表PDF）。AI が独自判断したものではありません。</li>
+      <li>「乾電池は取り外して特定ごみへ」等の<b>部品ごとの出し方</b>も公式データのまま表示。注意文中の電話・URLはタップ可。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>4. 辞書に無いとき（未収録品目の報告）</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/04-not-found.jpg" alt="辞書外"><figcaption>④ 辞書に無い品目（例: 手鏡）＋「この品目を報告する」</figcaption></figure>
+      <figure class="fig"><img src="screenshots/05-report-done.jpg" alt="報告完了"><figcaption>⑤ 報告後「ご報告ありがとうございます」（同時に通知が飛ぶ）</figcaption></figure>
+      <figure class="fig"><img src="screenshots/06-line.jpg" alt="LINE通知"><figcaption>⑥ 運用側（開発者）に届く通知の例（LINE）</figcaption></figure>
+    </div>
+    <ul>
+      <li>辞書（公式データ由来）に無い場合は<b>正直に「辞書にありません」と表示</b>（推測で誤案内しない）。</li>
+      <li>「この品目を報告する」を押すと品目名が運用側に届きます。送るのは<b>品目名・地区名のテキストのみ</b>。<b>画像・位置情報・個人を特定する情報は送りません</b>。押さない限り送信もしません。</li>
+      <li><b>市への価値</b>: 集まると「<b>市民が実際に困っている＝公式データに無い品目リスト</b>」になり、市のデータ整備・問い合わせ削減に還元できます。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>5. 文字検索</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/07-search.jpg" alt="文字検索"><figcaption>⑦ 文字検索（例:「電池」で6件）</figcaption></figure>
+      <figure class="fig"><img src="screenshots/07-search_2.jpg" alt="品目詳細"><figcaption>⑦' タップ → 品目の詳細（電池 → 特定(有害)ごみ）</figcaption></figure>
+    </div>
+    <ul>
+      <li>カメラを使わず品目名・別名で検索（ひらがな/カタカナ差も吸収。「モバイルバッテリー」のように<b>別名で一致</b>も表示）。</li>
+      <li>ヒットをタップすると ③ と同じ結果画面へ。出典は品目辞書＝さんあ〜る。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>6. 収集カレンダー</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/08-calendar.jpg" alt="収集カレンダー"><figcaption>⑧ 収集カレンダー（ポップアップ）— 日曜始まり・色・凡例</figcaption></figure>
+    </div>
+    <ul>
+      <li>ホームのボタンから月カレンダーをポップアップ表示。収集日にカテゴリ色のドット（今日は緑の丸）。</li>
+      <li>日付タップでその日の収集内容を表示。出典は令和8年度計画表PDF（地区別）。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>7. 収集日（一覧）</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/09-schedule.jpg" alt="収集日"><figcaption>⑨ 収集日 — 次の収集・リスト/カレンダー切替・カテゴリ別</figcaption></figure>
+    </div>
+    <ul>
+      <li>自分の地区の「次の収集」「カテゴリ別の次回収集日」「今後の予定」を表示。地区ごとの収集パターン（例「燃やすごみ火金 / プラ資源木 …」）も表示。</li>
+      <li>前日に「明日は○○の日」と知らせる<b>通知</b>も設定できます。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>8. 施設・リサイクルステーション</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/10-facilities.jpg" alt="施設"><figcaption>⑩ 施設・業者 — RS次回開催・持ち込み施設</figcaption></figure>
+    </div>
+    <ul>
+      <li>リサイクルステーションの次回開催日・受入品目、持ち込み施設（稲葉クリーンセンター等）の住所・営業日・時間・料金を表示。地図リンクも。</li>
+      <li>出典は令和8年度計画表PDF／ごみ出しガイドブック。</li>
+    </ul>
+  </div>
+
+  <div class="screen">
+    <h2>9. 設定・法務</h2>
+    <div class="shots">
+      <figure class="fig"><img src="screenshots/11-settings.jpg" alt="設定 地区"><figcaption>⑪ 設定 — 地区の選択</figcaption></figure>
+      <figure class="fig"><img src="screenshots/11-settings_2.jpg" alt="設定 通知データ法務"><figcaption>⑪' 通知・データ更新・プライバシーポリシー/利用規約</figcaption></figure>
+    </div>
+    <ul>
+      <li>地区の変更、通知の ON/OFF・時刻、<b>データ更新の確認</b>（公式更新を再申請なしで反映）、プライバシーポリシー・利用規約を確認できます。</li>
+      <li>プライバシーポリシーに、撮影画像を保存しないこと・報告機能が任意（ボタン押下時のみ・テキストのみ）であることを明記。</li>
+    </ul>
+  </div>
+
+  <h2 style="margin-top:14px;">付録: データの出典まとめ（要点）</h2>
+  <table>
+    <thead><tr><th>表示している情報</th><th>出典</th></tr></thead>
+    <tbody>
+      <tr><td>品目→分別区分・出し方</td><td>飯田市公式「さんあ〜る」589品目（delight-system）</td></tr>
+      <tr><td>収集日・収集パターン</td><td>飯田市 分別収集計画表 令和8年度（PDF・10区）</td></tr>
+      <tr><td>施設・リサイクルステーション・基本ルール</td><td>同 計画表PDF／ごみ出しガイドブック</td></tr>
+      <tr><td>画像→品目名</td><td>Google Gemini（品目名の特定のみ。ルールには関与しない）</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:9pt; color:#444;">詳細は別紙「データ出典・照合 説明資料」（data-provenance）。</p>
+
+  <p class="footer">※ 本アプリはベータ版です。分別の最終確認は飯田市公式情報をご参照ください。／ ほほ笑みラボ・rabo.hohoemi@gmail.com</p>
+
+</div>
+</body>
+</html>
