@@ -86,7 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
 ├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開、lib/legal-documents.ts と同期）
-├── docs/pitch/                 ← 行政アピール/相談 資料（配布1枚 overview / talk-script / 環境課交渉メモ kankyoka-notes / 長野県共創 kyoso-*。md＋印刷用 html、docs/02）
+├── docs/pitch/                 ← 行政アピール/相談 資料（配布1枚 overview / talk-script / 環境課交渉メモ kankyoka-notes / 長野県共創 kyoso-* / **さんあ〜る担当者向け説明セット: data-provenance〔データ来歴〕・app-guide〔スクショ入り説明書〕・license-request〔許諾依頼〕** / screenshots〔実機スクショ＋撮影指示 README〕。各 md＋印刷用 html、docs/02）
 │
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様
@@ -125,7 +125,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | テキスト中の電話/URL をタップ可能にする | `components/LinkedText.tsx` |
 | 法務文書（プライバシー/利用規約）を編集 | `lib/legal-documents.ts` + 同期して `docs/legal/*.md` も更新 |
 | Workerのプロンプトを調整する | `worker/docs/prompt-design.md` → `worker/src/prompt.ts` |
-| 行政アピールの材料 | `REQUIREMENTS.md` §10、`docs/02_admin_pitch_materials.md` |
+| 行政アピールの材料 | `REQUIREMENTS.md` §10、`docs/02_admin_pitch_materials.md`、`docs/pitch/`（さんあ〜る担当者向けは data-provenance / app-guide / license-request の3点） |
 | 何ができていて何が残っているか | `docs/00_INDEX.md`（各チケットに ✅/⏳ マーク） |
 
 ## 設計原則（変えてはいけないもの）
@@ -157,7 +157,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 | # | 内容 | 備考 |
 |---|---|---|
-| **02** | 行政アピール資料 | 商工会議所相談 → **環境課への橋渡し成立、環境課と直接相談予定**。資料一式作成（配布1枚 `overview.html` / `talk-script.md` / 環境課交渉メモ `kankyoka-notes.html` / 長野県共創ラボ提案 `kyoso-*`）。軸は「補助金でなくリリースしたい」。**リリースの鍵＝公式データ（さんあ〜る/カレンダー）の利用許諾**。フィードバック機能（未収録品目の報告）は **25 で実装済み**＝デモ可。交渉では「辞書外品目＝公式データの穴リストを市へ還元」を許諾の交換材料に |
+| **02** | 行政アピール資料 | 商工会議所相談 → 環境課訪問済み → **さんあ〜る（公式データ）担当者へ説明予定**。資料: 配布1枚 `overview.html` / トーク `talk-script.md` / 環境課メモ `kankyoka-notes.html` / 長野県共創 `kyoso-*`、**さんあ〜る担当者向け3点セット（`data-provenance`＝データ来歴・`app-guide`＝スクショ入り説明書・`license-request`＝許諾依頼）**。軸は「補助金でなくリリースしたい」。**リリースの鍵＝公式データ（さんあ〜る/カレンダー）の利用許諾**。フィードバック機能（未収録品目の報告）は **25 で実装済み・LINE実機到達確認**＝デモ可。交渉では「辞書外品目＝公式データの穴リストを市へ還元」を許諾の交換材料に。各文書の `【 】`（氏名・住所・日付）は提出前に差し替え |
 | **23** | EAS Build / Play 配布 | **コード/設定完了・実機検証済み**（`eas.json`・法務 Pages・eas init）。残りは外部手順（GitHub Pages 有効化・Google Play 申請・署名鍵バックアップ）→ ランブックは `docs/23_eas_build.md` |
 | **24** | ユーザーテスト | ほほ笑みラボ生徒。23 で preview APK 配布が可能になったので着手可 |
 
