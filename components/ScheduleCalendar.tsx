@@ -126,6 +126,9 @@ function DayCell({
 }) {
   const todayCell = isToday(day.date);
   const dots = day.entries.slice(0, MAX_DOTS);
+  // 今日は緑の丸数字で示すので、枠線（選択ハイライト）は今日以外の選択日にだけ付ける。
+  // border は常時 2px 確保（未選択は透明）し、選択時の太さ変化でレイアウトがずれないようにする。
+  const showRing = isSelected && !todayCell;
 
   return (
     <Pressable
@@ -136,8 +139,8 @@ function DayCell({
           ? '、' + day.entries.map((e) => e.categoryName).join('・')
           : '、収集なし'
       }`}
-      className={`flex-1 min-h-14 items-center pt-1.5 pb-1 ${
-        isSelected ? 'bg-green-100' : ''
+      className={`flex-1 min-h-14 items-center pt-1.5 pb-1 rounded-xl border-2 ${
+        showRing ? 'border-green-400' : 'border-transparent'
       } ${day.inCurrentMonth ? '' : 'opacity-35'}`}
     >
       {/* 日付（今日は塗り円） */}
