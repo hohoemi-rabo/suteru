@@ -39,7 +39,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── result.tsx              ← F1/F2 共通の結果画面（指示文は LinkedText で電話/URLタップ可 + 次回収集日 + GPS判定で地区永続化）
 │   ├── recycle-stations.tsx    ← リサイクルステーション 8グループ一覧（タブ外、Facilities から push）
 │   ├── disaster-waste.tsx      ← 災害時のごみ・携帯トイレ案内（タブ外、Facilities から push、ガイドブックP36）
-│   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード（収集日はリスト/カレンダー切替）
+│   ├── (tabs)/                 ← ホーム / 収集日 / 施設 / 設定 の 4 タブ + areaId ガード（収集日はリスト/カレンダー切替。ホームに「収集カレンダー」ボタン→CalendarModal でポップアップ表示）
 │   ├── (onboarding)/           ← Welcome / area-select / notifications
 │   └── legal/                  ← プライバシーポリシー / 利用規約（設定から push）
 ├── lib/                        ← 業務ロジック（純粋関数 or React Context）
@@ -62,6 +62,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── AreaSelectorRow.tsx     ← ヘッダー共通の「現在の地区」行（ホーム/収集日/施設で共用、青系）
 │   ├── BetaBadge.tsx           ← 各画面タイトル右の「ベータ版」緑ピルバッジ（共通）
 │   ├── ScheduleCalendar.tsx    ← 収集日のカレンダー表示（月グリッド + 色ドット + 凡例カード）
+│   ├── CalendarModal.tsx       ← 収集カレンダーをポップアップ（下から出るボトムシート）で表示。ScheduleCalendar を再利用。ホームの「収集カレンダー」ボタンから開く
 │   ├── LinkedText.tsx          ← テキスト中の電話番号/URL をタップ可能に（tel: / ブラウザ）
 │   ├── LegalDocumentScreen.tsx ← 法務文書の共通レンダラ（privacy-policy / terms-of-use 両方で使う）
 │   └── ScreenBackground.tsx    ← 画面共通の背景縦グラデ（`colors` プロップで色指定可。ホーム/タブは緑、他ルートは薄青→白）+ SafeAreaView ラッパー
@@ -116,6 +117,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | GPS で最寄り地区判定 | `lib/area-detector.ts` の `detectArea()` |
 | GPS判定後に確認ダイアログ→設定永続化 | `lib/area-detection-ui.ts` の `handleDetectionResultWithConfirm()` |
 | 収集日のカレンダー月グリッドを作る | `lib/calendar-utils.ts` の `buildMonthGrid()` → `components/ScheduleCalendar.tsx` |
+| カレンダーをポップアップ（モーダル）で出す | `components/CalendarModal.tsx`（ScheduleCalendar を再利用。ホームのボタンから開く） |
 | ヘッダーの「現在の地区」行 | `components/AreaSelectorRow.tsx`（ホーム/収集日/施設で共用） |
 | 色・余白・角丸・文字サイズのトークン | `constants/Colors.ts`（`Palette`/`Radius`/`Spacing`/`FontSize`）。className は `tailwind.config.js` の同期トークン |
 | ベータ版バッジを置く | `components/BetaBadge.tsx`（各画面タイトルの右隣） |

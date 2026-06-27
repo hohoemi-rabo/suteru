@@ -7,6 +7,7 @@ import ScreenBackground from '@/components/ScreenBackground';
 
 import AreaSelectorRow from '@/components/AreaSelectorRow';
 import BetaBadge from '@/components/BetaBadge';
+import CalendarModal from '@/components/CalendarModal';
 import { FontSize, Palette } from '@/constants/Colors';
 import {
   getConfiguredApiUrl,
@@ -14,6 +15,7 @@ import {
   type IdentifyResult,
 } from '@/lib/api';
 import { detectArea, type DetectionResult } from '@/lib/area-detector';
+import { buildCategoryMaps } from '@/lib/category-maps';
 import { useData } from '@/lib/data-loader';
 import { getScheduledCount } from '@/lib/notifications';
 import {
@@ -28,12 +30,24 @@ export default function HomeScreen() {
   const data = useData();
   const { settings, isHydrated, reset } = useUserSettings();
   const router = useRouter();
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const currentArea = data.areas.areas.find((a) => a.id === settings.areaId) ?? null;
+  const pattern =
+    currentArea && currentArea.patternId !== 'TBD_NEEDS_VERIFICATION'
+      ? data.patterns.patterns[currentArea.patternId]
+      : undefined;
+  const { nameMap: categoryLabelMap, colorMap: categoryColorMap } =
+    buildCategoryMaps(data.categories);
 
   const handleCameraPress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     router.push('/camera');
+  };
+
+  const handleOpenCalendar = async () => {
+    await Haptics.selectionAsync();
+    setCalendarOpen(true);
   };
 
   const handleSearchPress = () => {
@@ -60,6 +74,7 @@ export default function HomeScreen() {
         <View className="px-4 gap-6">
           <SearchBarStub onPress={handleSearchPress} />
           <CameraHeroButton onPress={handleCameraPress} />
+          <CalendarButton onPress={() => void handleOpenCalendar()} />
           <FooterLinks
             notice={data.meta.betaNotice}
             onPressOfficial={handleOpenOfficial}
@@ -76,6 +91,14 @@ export default function HomeScreen() {
           />
         )}
       </ScrollView>
+
+      <CalendarModal
+        visible={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        pattern={pattern}
+        categoryLabelMap={categoryLabelMap}
+        categoryColorMap={categoryColorMap}
+      />
     </ScreenBackground>
   );
 }
@@ -135,6 +158,30 @@ function CameraHeroButton({ onPress }: { onPress: () => void }) {
         ごみを撮るだけで分別が分かる
       </Text>
     </View>
+  );
+}
+
+function CalendarButton({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="収集カレンダーを開く"
+      className="flex-row items-center gap-3 rounded-2xl bg-bg border border-line px-4 py-3.5 shadow-card"
+    >
+      <View className="w-11 h-11 rounded-full bg-blue-50 items-center justify-center">
+        <Ionicons name="calendar" size={24} color={Palette.blue[600]} />
+      </View>
+      <View className="flex-1">
+        <Text className="text-body font-bold" style={{ fontSize: FontSize.subtitle }}>
+          収集カレンダー
+        </Text>
+        <Text className="text-muted" style={{ fontSize: FontSize.small }}>
+          今月のごみ収集日をまとめて見る
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={18} color={Palette.text.tertiary} />
+    </Pressable>
   );
 }
 
