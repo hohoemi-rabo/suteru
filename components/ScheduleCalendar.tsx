@@ -71,7 +71,7 @@ export default function ScheduleCalendar({
           <View key={w} className="flex-1 items-center py-1">
             <Text
               className={`text-xs font-bold ${
-                i === 5 ? 'text-blue-600' : i === 6 ? 'text-danger' : 'text-muted'
+                i === 0 ? 'text-danger' : i === 6 ? 'text-blue-600' : 'text-muted'
               }`}
             >
               {w}

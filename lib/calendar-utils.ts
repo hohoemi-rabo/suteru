@@ -18,11 +18,11 @@ import {
 import { getCollectionsInRange, toIsoDate } from '@/lib/schedule-calculator';
 import type { CollectionCategoryId, NextCollection, Pattern } from '@/types';
 
-/** 月曜始まり。曜日ヘッダ・週開始の基準として使う */
-export const WEEK_STARTS_ON = 1 as const;
+/** 日曜始まり（飯田市公式カレンダーと同じ並び）。曜日ヘッダ・週開始の基準として使う */
+export const WEEK_STARTS_ON = 0 as const;
 
-/** カレンダーの曜日見出し（月曜始まり） */
-export const WEEKDAY_LABELS = ['月', '火', '水', '木', '金', '土', '日'] as const;
+/** カレンダーの曜日見出し（日曜始まり） */
+export const WEEKDAY_LABELS = ['日', '月', '火', '水', '木', '金', '土'] as const;
 
 export interface CalendarDay {
   date: Date;
@@ -33,7 +33,7 @@ export interface CalendarDay {
 }
 
 /**
- * 指定年月のカレンダーグリッド（月曜始まり、前後の月を含む完全な週）を返す。
+ * 指定年月のカレンダーグリッド（日曜始まり、前後の月を含む完全な週）を返す。
  *
  * @param year 西暦（例 2026）
  * @param monthIndex 0始まりの月（0=1月, 4=5月）
@@ -41,7 +41,7 @@ export interface CalendarDay {
  * @param labels CollectionCategoryId → 表示名
  *
  * @example
- * // 2026年5月のグリッド（4/27月〜5/31日 など、6週分の Date 配列）
+ * // 2026年5月のグリッド（4/26日〜5/30土 など、6週分の Date 配列）
  * buildMonthGrid(2026, 4, pattern, labels)
  */
 export function buildMonthGrid(
