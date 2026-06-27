@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Modal, Pressable, ScrollView, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import ScheduleCalendar from '@/components/ScheduleCalendar';
 import { FontSize, Palette } from '@/constants/Colors';
@@ -25,6 +26,7 @@ export default function CalendarModal({
   categoryLabelMap: Record<CollectionCategoryId, string>;
   categoryColorMap: Record<CollectionCategoryId, string>;
 }) {
+  const insets = useSafeAreaInsets();
   return (
     <Modal
       visible={visible}
@@ -69,7 +71,12 @@ export default function CalendarModal({
             </Pressable>
           </View>
 
-          <ScrollView contentContainerClassName="px-4 pb-8">
+          <ScrollView
+            contentContainerStyle={{
+              paddingHorizontal: 16,
+              paddingBottom: insets.bottom + 24,
+            }}
+          >
             {pattern ? (
               <ScheduleCalendar
                 pattern={pattern}

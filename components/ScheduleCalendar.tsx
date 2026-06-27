@@ -180,32 +180,20 @@ function SelectedDayDetail({
   day: CalendarDay | null;
   categoryColorMap: Record<CollectionCategoryId, string>;
 }) {
-  if (!day) {
-    // key を分け、影あり/なしの分岐で同じ View インスタンスが再利用されないようにする
-    // （初回後に shadow が動的付与されると css-interop の animated 昇格警告でクラッシュするため）
-    return (
-      <View key="empty" className="rounded-2xl bg-bg border border-line px-4 py-3">
-        <Text className="text-sm text-muted">
-          日付をタップすると、その日の収集が見られます。
-        </Text>
-      </View>
-    );
-  }
+  // 収集がある日をタップしたときだけ詳細を出す。
+  // 収集なし・未選択のときは何も出さない（縦の余白を節約し、凡例まで見やすくする）。
+  if (!day || day.entries.length === 0) return null;
 
   const dateLabel = format(day.date, 'M月d日（E）', { locale: ja });
 
   return (
-    <View key="detail" className="rounded-2xl bg-bg shadow-card p-4 gap-2">
+    <View className="rounded-2xl bg-bg shadow-card p-4 gap-2">
       <Text className="text-base text-body font-bold">{dateLabel}</Text>
-      {day.entries.length === 0 ? (
-        <Text className="text-sm text-muted">この日の収集はありません。</Text>
-      ) : (
-        <View className="gap-1.5">
-          {day.entries.map((e) => (
-            <CategoryRow key={e.categoryId} entry={e} categoryColorMap={categoryColorMap} />
-          ))}
-        </View>
-      )}
+      <View className="gap-1.5">
+        {day.entries.map((e) => (
+          <CategoryRow key={e.categoryId} entry={e} categoryColorMap={categoryColorMap} />
+        ))}
+      </View>
     </View>
   );
 }
