@@ -1,0 +1,171 @@
+<!doctype html>
+<!--
+データ出典・照合 説明資料（印刷向け / A4）。
+使い方: ブラウザで開く → 印刷 → 「PDFに保存」。印刷ダイアログで「背景のグラフィック」を ON。
+内容は docs/pitch/data-provenance.md と同じ。さんあ〜る担当者への説明・回覧用。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>データ出典・照合 説明資料｜これどう捨てる？</title>
+<style>
+  @page { size: A4 portrait; margin: 14mm 13mm; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: #1a1a1a; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 10pt; line-height: 1.6;
+  }
+  .sheet { max-width: 184mm; margin: 0 auto; padding: 4mm 0; }
+
+  header { border-bottom: 2px solid #1d9e75; padding-bottom: 7px; margin-bottom: 12px; }
+  h1 { font-size: 16pt; margin: 0; color: #173404; }
+  .meta { font-size: 9pt; color: #5f5e5a; margin: 4px 0 0; }
+
+  h2 { font-size: 11.5pt; color: #173404; margin: 15px 0 6px;
+       border-left: 5px solid #1d9e75; padding-left: 8px; page-break-after: avoid; }
+  h3 { font-size: 10pt; margin: 9px 0 3px; color: #27500a; }
+  p { margin: 4px 0; }
+  ul, ol { margin: 3px 0; padding-left: 1.2em; }
+  li { margin: 2px 0; }
+  b { color: #173404; }
+
+  .lead { background: #f4fbf2; border: 1px solid #1d9e75; border-radius: 8px; padding: 9px 12px; }
+
+  pre { background: #f6f7f4; border: 1px solid #e0e3da; border-radius: 6px;
+        padding: 8px 10px; font-size: 8.5pt; line-height: 1.45; overflow: visible;
+        white-space: pre-wrap; font-family: "SFMono-Regular", Consolas, "Noto Sans Mono CJK JP", monospace; }
+
+  table { width: 100%; border-collapse: collapse; margin: 6px 0; font-size: 8.7pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #c8cfc0; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #eaf3de; color: #27500a; font-weight: 700; }
+  td small { color: #5f5e5a; font-size: 8pt; }
+
+  .note { background: #fff8e6; border: 1px solid #e9d9a0; border-radius: 6px; padding: 7px 10px; font-size: 9pt; }
+  .footer { margin-top: 14px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,.1);
+            font-size: 8.5pt; color: #5f5e5a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>「これどう捨てる？」データ出典・照合 説明資料</h1>
+    <p class="meta">開発元: ほほ笑みラボ（飯田市）／ rabo.hohoemi@gmail.com ｜ ベータ版（データ version 1.2.0 時点）</p>
+  </header>
+
+  <h2>0. 大前提</h2>
+  <div class="lead">
+    <p>本アプリは<b>分別ルールを自分で考えたり推測したりしません</b>。</p>
+    <pre>ごみを撮影 → AI は「品目名」を当てるだけ
+            → その品目名で、アプリ内に持っている
+              「飯田市公式データ由来の辞書」を照合して、ルールを表示</pre>
+    <p>AI（Gemini）の役割は<b>「品目名の特定」だけ</b>。分別ルールは<b>公式データに基づくアプリ内辞書</b>から表示します（＝AIにルールを言わせない「ハルシネーション・ゼロ」設計）。表示されるルールの正しさは<b>元データ＝飯田市公式データの正しさ</b>に一致します。</p>
+  </div>
+
+  <h2>1. データ出典・照合 一覧表</h2>
+  <table>
+    <thead>
+      <tr><th>データ種別（ファイル・版）</th><th>出典（照合元）</th><th>取得・変換方法</th><th>更新</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>品目辞書</b><br><small>items.json / 1.1.0</small></td>
+        <td>飯田市公式ごみ分別アプリ<b>「さんあ〜る」</b>（delight-system）<br><small>manage.delight-system.com/threeR/web/bunbetsu?jichitaiId=iidashi</small></td>
+        <td>公式掲載の<b>589品目</b>を抽出し本アプリ形式へ変換。別名は公式の検索キーワードから抽出</td>
+        <td>公式更新に追従して再変換（OTAで再申請不要）</td>
+      </tr>
+      <tr>
+        <td>分別カテゴリ<br><small>categories.json / 1.1.0</small></td>
+        <td>さんあ〜るの主区分</td>
+        <td>区分を<b>11区分</b>に整理（主区分を採用）</td>
+        <td>同上</td>
+      </tr>
+      <tr>
+        <td><b>収集パターン</b><br><small>patterns.json / 1.1.0</small></td>
+        <td><b>飯田市 分別収集計画表 令和8年度</b> No.01/09/10/15/32〜37 の各PDF</td>
+        <td>PDF原本から収集曜日を抽出し<b>原本と照合済み</b></td>
+        <td>新年度カレンダーで差し替え</td>
+      </tr>
+      <tr>
+        <td>対象地区<br><small>areas.json / 1.1.0</small></td>
+        <td>同 収集計画表</td>
+        <td>No.01〜37のうち<b>PDF入手済み10区</b>に対応。代表地点座標つき（GPS地区判定）</td>
+        <td>PDF入手次第 追加</td>
+      </tr>
+      <tr>
+        <td>施設情報<br><small>facilities.json / 1.0.0</small></td>
+        <td>収集計画表PDF＋ガイドブック</td>
+        <td>転記</td>
+        <td>公式更新時に修正</td>
+      </tr>
+      <tr>
+        <td>リサイクルステーション<br><small>recycle-stations.json / 1.0.0</small></td>
+        <td>収集計画表PDF</td>
+        <td>8グループ・119拠点の開催日・拠点を転記</td>
+        <td>同上</td>
+      </tr>
+      <tr>
+        <td>特別処理品目<br><small>special-disposal.json / 1.0.0</small></td>
+        <td>収集計画表PDF＋ガイドブック</td>
+        <td>家電リサイクル法対象等を転記</td>
+        <td>同上</td>
+      </tr>
+      <tr>
+        <td>基本ルール<br><small>basic-rules.json / 1.0.0</small></td>
+        <td>ごみ出しガイドブック</td>
+        <td>袋・出す時間等を転記</td>
+        <td>同上</td>
+      </tr>
+      <tr>
+        <td>品目→画像判定<br><small>Gemini API</small></td>
+        <td>—</td>
+        <td>画像から<b>品目名のみ</b>を返す。分別ルールには関与しない</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><b>正本の使い分け</b>: 品目辞書＝さんあ〜る／収集日・施設＝令和8年度計画表PDF。この2系統を組み合わせています。</p>
+
+  <h2>2. さんあ〜る品目データの扱い（詳しく）</h2>
+  <ul>
+    <li><b>何を取ったか</b>: 公式「さんあ〜る」掲載の<b>589品目</b>（品目名・分別区分・出し方の説明・検索キーワード）。</li>
+    <li><b>どう変換したか</b>: 品目名→検索見出し／分別区分→11カテゴリにマッピング（複数区分は主区分をカテゴリにし、部品ごとの捨て方は説明文に保持）／検索キーワード→別名として保持。</li>
+    <li><b>画像・ロゴ・キャラクター等は使用していません</b>（テキストの分別情報のみ）。</li>
+    <li><b>表示</b>: 各画面に「ベータ版」「最新・正確な情報は飯田市公式へ」を明記し、<b>市公式アプリではない</b>と分かる作り。</li>
+  </ul>
+  <h3>正直にお伝えする差異・未確定点（リリース前に市と確認したい）</h3>
+  <div class="note">
+    <ul style="margin:0;">
+      <li><b>さんあ〜る（品目）と 計画表PDF（収集）で分類体系が一部異なります</b>（特にプラスチックの分け方）。本アプリは「品目＝さんあ〜る」「収集日＝PDF」を正本にしています。</li>
+      <li><b>ガイドブックとカレンダーで食い違う箇所</b>（例: 稲葉クリーンセンター料金 220円/180円、家電引取業者の住所・電話）があり、どちらが現行か市に確認したい。</li>
+      <li><b>データの利用許諾は未取得</b>です。まさにこの点をご相談したい（→ 別紙 許諾依頼）。</li>
+    </ul>
+  </div>
+
+  <h2>3. データの流れ（プライバシー設計とあわせて）</h2>
+  <pre>[公式データ]                          [アプリ（端末内）]
+ さんあ〜る589品目 ──変換──▶ items.json（バンドル）
+ 計画表PDF ───────変換──▶ patterns/areas/facilities…（バンドル）
+                                         │
+[カメラ判定の流れ]                        │ 品目名で照合
+ 撮影画像 ─▶ 自社Worker ─▶ Gemini ─▶「品目名」だけ返す ─▶ 辞書照合 ─▶ ルール表示
+              （Cloudflare）   （Google）
+              ▲ 画像はここで判定後すぐ破棄・保存もログも残さない</pre>
+  <p><b>撮影画像はサーバーに保存しません</b>（判定後即破棄・ログにも残さない）。ログイン不要・個人情報の取得は最小。分別ルールの表示はすべて端末内辞書（公式データ由来）から。</p>
+
+  <h2>4. ご相談したいこと</h2>
+  <ol>
+    <li><b>公式分別データ（さんあ〜る）の利用・引用許諾の整理</b> — 市民向け無料アプリで使ってよい範囲を確認したい。表示方法・出典明記・「市公式ではない」明示はご要望に合わせます。<b>「使わないで」と言われた範囲は使いません</b>。</li>
+    <li><b>分別区分の確認</b>（気になる品目だけでも。例:「時計＝埋立ごみ」で合っているか）。</li>
+    <li><b>（将来）全市分データのご提供・共同メンテ</b> — データ差し替えだけで更新でき、<b>アプリ再申請なしで反映（OTA）</b>を実装済み。</li>
+  </ol>
+  <p><b>お返しできること</b>: 「未収録品目の報告」機能で、市民が調べたのに<b>辞書（＝公式データ）に無かった品目</b>が運用側に届きます。集計すれば「市民が実際に困っている、公式データの穴リスト」になり、市のデータ整備・問い合わせ削減に還元できます（送るのは品目名テキストのみ・画像/位置情報/個人情報なし）。</p>
+
+  <p class="footer">※ 本アプリはベータ版です。分別の最終確認は飯田市公式情報をご参照ください。／ ほほ笑みラボ・rabo.hohoemi@gmail.com</p>
+
+</div>
+</body>
+</html>
