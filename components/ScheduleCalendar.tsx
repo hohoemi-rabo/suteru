@@ -80,8 +80,8 @@ export default function ScheduleCalendar({
         ))}
       </View>
 
-      {/* 日付グリッド（区切り線なし・余白で区切るフラットなレイアウト） */}
-      <View className="rounded-2xl bg-bg shadow-card p-1.5">
+      {/* 日付グリッド（縦横の薄いマス目。外枠の上・左 + 各セルの下・右で 1 本ずつの罫線にする） */}
+      <View className="rounded-2xl bg-bg shadow-card overflow-hidden border-t border-l border-line">
         {weeks.map((week, wi) => (
           <View key={wi} className="flex-row">
             {week.map((day) => (
@@ -126,8 +126,9 @@ function DayCell({
 }) {
   const todayCell = isToday(day.date);
   const dots = day.entries.slice(0, MAX_DOTS);
-  // 今日は緑の丸数字で示すので、枠線（選択ハイライト）は今日以外の選択日にだけ付ける。
-  // border は常時 2px 確保（未選択は透明）し、選択時の太さ変化でレイアウトがずれないようにする。
+  // 今日は緑の丸数字で示すので、選択の枠線は今日以外の選択日にだけ付ける。
+  // マス目の罫線はセル(Pressable)に、選択リングは内側 View に分けて二重 border の衝突を避ける。
+  // リングは常時 2px 確保（未選択は透明）し、選択時の太さ変化でレイアウトがずれないようにする。
   const showRing = isSelected && !todayCell;
 
   return (
@@ -139,34 +140,40 @@ function DayCell({
           ? '、' + day.entries.map((e) => e.categoryName).join('・')
           : '、収集なし'
       }`}
-      className={`flex-1 min-h-14 items-center pt-1.5 pb-1 rounded-xl border-2 ${
-        showRing ? 'border-green-400' : 'border-transparent'
-      } ${day.inCurrentMonth ? '' : 'opacity-35'}`}
+      className={`flex-1 border-b border-r border-line ${
+        day.inCurrentMonth ? '' : 'opacity-35'
+      }`}
     >
-      {/* 日付（今日は塗り円） */}
       <View
-        className={`w-7 h-7 items-center justify-center rounded-full ${
-          todayCell ? 'bg-green-400' : ''
+        className={`min-h-14 items-center pt-1.5 pb-1 rounded-lg border-2 ${
+          showRing ? 'border-green-400' : 'border-transparent'
         }`}
       >
-        <Text
-          className={`text-sm ${
-            todayCell ? 'text-white font-bold' : 'text-body'
+        {/* 日付（今日は塗り円） */}
+        <View
+          className={`w-7 h-7 items-center justify-center rounded-full ${
+            todayCell ? 'bg-green-400' : ''
           }`}
         >
-          {day.date.getDate()}
-        </Text>
-      </View>
+          <Text
+            className={`text-sm ${
+              todayCell ? 'text-white font-bold' : 'text-body'
+            }`}
+          >
+            {day.date.getDate()}
+          </Text>
+        </View>
 
-      {/* 収集カテゴリの色ドット */}
-      <View className="flex-row flex-wrap justify-center gap-0.5 mt-1 px-0.5">
-        {dots.map((e) => (
-          <View
-            key={e.categoryId}
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: categoryColorMap[e.categoryId] ?? Palette.text.secondary }}
-          />
-        ))}
+        {/* 収集カテゴリの色ドット */}
+        <View className="flex-row flex-wrap justify-center gap-0.5 mt-1 px-0.5">
+          {dots.map((e) => (
+            <View
+              key={e.categoryId}
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: categoryColorMap[e.categoryId] ?? Palette.text.secondary }}
+            />
+          ))}
+        </View>
       </View>
     </Pressable>
   );
