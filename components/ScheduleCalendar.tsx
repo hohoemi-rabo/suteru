@@ -80,10 +80,10 @@ export default function ScheduleCalendar({
         ))}
       </View>
 
-      {/* 日付グリッド */}
-      <View className="rounded-2xl bg-bg shadow-card overflow-hidden">
+      {/* 日付グリッド（区切り線なし・余白で区切るフラットなレイアウト） */}
+      <View className="rounded-2xl bg-bg shadow-card p-1.5">
         {weeks.map((week, wi) => (
-          <View key={wi} className={`flex-row ${wi > 0 ? 'border-t border-line' : ''}`}>
+          <View key={wi} className="flex-row">
             {week.map((day) => (
               <DayCell
                 key={toIsoDate(day.date)}
