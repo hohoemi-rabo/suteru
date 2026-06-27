@@ -137,9 +137,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. **オフラインでも基本機能**: カメラ判定以外はオフラインで動く
 4. **ベータ表示**: データは未確定なので、各画面に「ベータ版」「公式情報を参照」のディスクレイマー
 
-## 進捗（2026-06-02 時点）
+## 進捗（2026-06-27 時点）
 
-**Phase 4 を 4/7 完了 ＋ 23 のコア実装・実機検証済み**。残りは 02 行政アピール資料 / 23 のストア公開手順（外部）/ 24 ユーザーテスト。詳しい状態は `docs/00_INDEX.md` を参照。
+**Phase 4 を 4/7 完了 ＋ 23 のコア実装・実機検証済み ＋ 25 未収録品目の報告（コア実装・LINE実機到達確認）**。残りは 02 行政アピール資料 / 23 のストア公開手順（外部）/ 24 ユーザーテスト。詳しい状態は `docs/00_INDEX.md` を参照。
+
+直近（2026-06-27）の追加: 25 未収録品目の報告機能（辞書外→ボタン→LINE/Discord 通知）、ホームの「収集カレンダー」ポップアップ（`components/CalendarModal.tsx`、ScheduleCalendar 再利用）、カレンダーを日曜始まり＋薄いマス目＋「今日=緑丸／選択=枠線」に調整。preview APK は versionCode 4 でビルド投入済み。
 
 ### 完了済みチケット（21 本）
 
@@ -182,6 +184,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - AI モデル: **`gemini-3.1-flash-lite`**（`worker/wrangler.toml`、dev/prod 共通）
 - KV ネームスペース: dev/prod 共有（レート制限は端末 ID 別キー）
 - `[env.X]` 配下に `kv_namespaces` と `vars` を明示する必要あり（上書きしない！ → `.claude/rules/gotchas.md` 参照）
+- **エンドポイント**: `POST /api/identify`（画像→品目名）／`POST /api/report`（25 未収録品目の報告。テキストのみ・画像なし）／`GET /healthz`
+- **通知先 Secret（任意・report 用）**: `LINE_CHANNEL_ACCESS_TOKEN` + `LINE_TO`（LINE Messaging API push。LINE Notify は 2025-03 終了済み）／`REPORT_WEBHOOK_URL`（Discord 互換）。両方あれば両方へ送る。未設定でも報告は受理（転送しないだけ）。Secret は env 別に登録。**dev/prod とも登録済み・LINE 実機到達確認済み（2026-06-27）**
 
 ### データ整備状況
 

@@ -109,13 +109,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 - **`lib/area-detector.ts`**: 純粋関数。`detectArea(areas)` で「権限確認→GPS→最寄り判定」を一発で実行
 - **`lib/notifications.ts`**: React 依存ゼロの async モジュール。`requestPermission` / `getPermissionStatus` / `rescheduleNotifications` / `cancelAllScheduled` / `configureNotificationHandler` / `getScheduledCount`。React 側からは `app/_layout.tsx` の `<NotificationsScheduler>` が settings / AppState 'active' で駆動
 - **`lib/text-search.ts`**: 純粋関数。`normalizeJa`（ひらがな→カタカナ吸収）+ `searchItems(items, query, max)`（name 完全 1000 / 前方 800 / 部分 600 / aliases の同順でスコア。さらに最下位で**逆方向＝クエリが辞書名/別名で“終わる”(endsWith)場合も拾う**＝カメラ判定で AI が「デジタル時計」等の具体名を返したとき一般名「時計」に紐づけ。`includes` は語中誤爆（折りたたみ傘→畳）するため不使用、辞書側 2 文字以上に限定）
-- **`lib/api.ts`**: React 依存ゼロ。`identifyItem(base64, mimeType?)` で `/api/identify` を 10 秒タイムアウト・X-Device-Id ハッシュ付きで叩く。戻り値は判別ユニオン `IdentifyResult`（ok hit / ok null+reason / 失敗 errorCode+userMessage）。リトライなし
+- **`lib/api.ts`**: React 依存ゼロ。`identifyItem(base64, mimeType?)` で `/api/identify` を 10 秒タイムアウト・X-Device-Id ハッシュ付きで叩く。戻り値は判別ユニオン `IdentifyResult`（ok hit / ok null+reason / 失敗 errorCode+userMessage）。リトライなし。**`reportMissingItem({identifiedName, comment, areaName, source})`** で `/api/report` に未収録品目を送る（ユーザーがボタンを押したときだけ。テキストのみ・画像なし・例外を投げず `{ ok }` を返す）
 
 **ルール**:
 - **AsyncStorage 直アクセス禁止** → 必ず `lib/storage.ts` の `getCached`/`setCached`/`clearCached` 経由
 - **JSON データ取得は必ず `useData()` 経由**（または非React文脈なら `loadBundledData()`）
 - **設定値の読み書きは必ず `useUserSettings()` 経由**
-- **Worker 呼び出しは `identifyItem()` 経由のみ** — 各画面で fetch を直書きしない
+- **Worker 呼び出しは `lib/api.ts`（`identifyItem()` / `reportMissingItem()`）経由のみ** — 各画面で fetch を直書きしない
 
 ## DevDiagnostics パターン
 

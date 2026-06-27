@@ -20,6 +20,7 @@
 - **Secret は env ごと独立**: `GEMINI_API_KEY` を更新するときは `--env development` と `--env production` の両方に `wrangler secret put` する（片方だけ更新すると不整合）
 - **wrangler v3 系**: `kv:namespace create`（コロン）を使う。v4 にバージョンアップしたら `kv namespace create`（スペース）に変わる
 - **`[env.X]` を定義したら `kv_namespaces` と `vars` は env 別に明示が必須**: top-level の `[[kv_namespaces]]` / `[vars]` は env を定義した瞬間にその env には**継承されない**（Cloudflare 公式仕様）。継承忘れだと `/healthz` は通るが `/api/identify` で `TypeError: Cannot read properties of undefined (reading 'get')` になる。Secret は env 別に登録するので自動継承の話とは別。06 番デプロイ直後にハマったポイント
+- **`/api/report` の通知先（25 番）**: `LINE_NOTIFY` は使えない（**LINE Notify は 2025-03 終了**）→ LINE は **Messaging API の push**（`LINE_CHANNEL_ACCESS_TOKEN` + `LINE_TO`、bot を友だち追加しないと届かない）。Discord は `REPORT_WEBHOOK_URL`。`forwardReport` は **best-effort で fetch するだけ＝レスポンスを検証しない**ので、トークン/ID 誤りや友だち未追加でも `/api/report` は `success: true` を返す（届かないだけ）。到達不良の切り分けは `npm run tail` でログを見るか、検証用に一時的にレスポンス status をログ出力する。Secret は env 別（dev/prod 両方）に登録
 
 ## Expoアプリ
 
