@@ -86,7 +86,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   └── _sources/               ← 原本 PDF + さんあ〜る抽出/変換 JSON（.gitignore 済、コミットしない）
 │
 ├── docs/legal/                 ← 法務文書 Markdown ミラー（GitHub Pages 公開、lib/legal-documents.ts と同期）
-├── docs/pitch/                 ← 行政アピール/相談 資料（配布1枚 overview / talk-script / 環境課交渉メモ kankyoka-notes / 長野県共創 kyoso-* / **さんあ〜る担当者向け説明セット: data-provenance〔データ来歴〕・app-guide〔スクショ入り説明書〕・license-request〔許諾依頼〕** / screenshots〔実機スクショ＋撮影指示 README〕。各 md＋印刷用 html、docs/02）
+├── docs/pitch/                 ← 行政アピール/相談 資料（配布1枚 overview / talk-script / 環境課交渉メモ kankyoka-notes / 長野県共創 kyoso-* / **さんあ〜る担当者向け説明セット: data-provenance〔データ来歴・詳しい版〕＋ data-provenance-easy〔同・やさしい版/Q&A付き〕・app-guide〔スクショ入り説明書〕・license-request〔許諾依頼〕** / screenshots〔実機スクショ＋撮影指示 README〕。各 md＋印刷用 html、docs/02）
 │
 └── worker/                     ← Cloudflare Workers（Gemini APIプロキシ、独立サブプロジェクト）
     ├── README.md               ← Workerのセットアップ・API仕様

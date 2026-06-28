@@ -1,0 +1,119 @@
+<!doctype html>
+<!--
+データ出典 やさしい説明版（印刷向け / A4）。
+使い方: ブラウザで開く → 印刷 → 「PDFに保存」。印刷ダイアログで「背景のグラフィック」を ON。
+内容は docs/pitch/data-provenance-easy.md と同じ。技術に詳しくない担当者・上長向け。
+-->
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>やさしい説明｜これどう捨てる？</title>
+<style>
+  @page { size: A4 portrait; margin: 15mm 15mm; }
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: #1a1a1a; background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+    font-size: 11pt; line-height: 1.75;
+  }
+  .sheet { max-width: 180mm; margin: 0 auto; padding: 4mm 0; }
+
+  header { border-bottom: 2px solid #1d9e75; padding-bottom: 8px; margin-bottom: 12px; }
+  h1 { font-size: 17pt; margin: 0; color: #173404; }
+  .meta { font-size: 9.5pt; color: #5f5e5a; margin: 5px 0 0; }
+
+  h2 { font-size: 13pt; color: #173404; margin: 16px 0 6px;
+       border-left: 6px solid #1d9e75; padding-left: 9px; page-break-after: avoid; }
+  p { margin: 6px 0; }
+  b { color: #173404; }
+
+  .point { background: #f4fbf2; border: 1px solid #1d9e75; border-radius: 10px; padding: 11px 14px; margin: 8px 0; }
+  .tatoe { background: #fff; border-left: 4px solid #c0dd97; padding: 6px 12px; margin: 6px 0; font-size: 10.5pt; color: #27500a; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 10.5pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #c8cfc0; padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #eaf3de; color: #27500a; font-weight: 700; }
+
+  .qa { page-break-inside: avoid; margin: 9px 0; background: #fafdf8; border: 1px solid #e0ead2; border-radius: 8px; padding: 9px 13px; }
+  .qa .q { font-weight: 700; color: #173404; margin: 0; }
+  .qa .a { margin: 4px 0 0; }
+  .divider { border: none; border-top: 2px dashed #cfe0b8; margin: 18px 0 6px; }
+
+  .footer { margin-top: 16px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,.1);
+            font-size: 9pt; color: #5f5e5a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header>
+    <h1>「これどう捨てる？」やさしい説明</h1>
+    <p class="meta">データのことを かんたんに ／ 開発元: ほほ笑みラボ（飯田市）・rabo.hohoemi@gmail.com</p>
+  </header>
+
+  <h2>このアプリは何をするもの？</h2>
+  <p>ごみを <b>スマホのカメラで撮るだけ</b>で、「飯田市での捨て方」を教えてくれるアプリです。市民向け・無料です。</p>
+
+  <h2>いちばん大事なこと</h2>
+  <div class="point">
+    <p style="margin:2px 0;"><b>捨て方のルールは、すべて飯田市の公式情報を“そのまま”使っています。</b><br>
+    アプリやAIが、勝手にルールを作ったり考えたりすることはありません。</p>
+    <div class="tatoe">たとえるなら——アプリは「<b>飯田市の分別の本（公式）を、引きやすくしただけの早見表</b>」です。中身の文章は、市の公式情報のままです。</div>
+  </div>
+
+  <h2>どこの情報を使っているの？</h2>
+  <table>
+    <thead><tr><th>知りたいこと</th><th>使っている飯田市の公式情報</th></tr></thead>
+    <tbody>
+      <tr><td>この品目は何ごみ？／どう出す？</td><td>飯田市の公式ごみ分別アプリ「<b>さんあ〜る</b>」</td></tr>
+      <tr><td>いつ収集に出すの？（収集日）</td><td>飯田市の<b>ごみカレンダー（令和8年度）</b></td></tr>
+      <tr><td>持ち込み施設・リサイクルステーション</td><td>同じく市のカレンダー・ごみ出しガイドブック</td></tr>
+    </tbody>
+  </table>
+
+  <h2>AIは何をしているの？（ここがよく誤解されます）</h2>
+  <p>AIがするのは、写真を見て「<b>これは何か</b>（例：これはリモコン）」と<b>名前を当てること</b>だけです。「燃やすごみ」「○曜日」などの<b>分別ルールはAIは決めません</b>。名前が分かったら、上の公式情報から答えを表示します。だから、<b>AIがまちがった分別を作り出すことはありません</b>。</p>
+
+  <h2>写真や個人情報は？</h2>
+  <p>撮った写真は <b>保存しません</b>（判定がすんだら、すぐ消えます）。<b>ログインも不要</b>で、名前・住所などの個人情報も集めません。</p>
+
+  <h2>だから、お願いしたいこと</h2>
+  <p>飯田市の公式情報（さんあ〜る・ごみカレンダー）を、<b>市民向けの無料アプリで使わせてください</b>。「ここは使わないでほしい」と言われた部分は<b>使いません</b>。表示のしかたも、ご希望に合わせます。</p>
+
+  <h2>市役所にとっての“うれしいこと”</h2>
+  <p>アプリには「<b>この品目が載っていない</b>」と市民が知らせるボタンがあります。それが集まると「<b>市民が実際に困っている品目のリスト</b>」になり、市の情報づくりや問い合わせ減らしに役立てていただけます。</p>
+
+  <hr class="divider">
+  <h2>よくある質問（Q&amp;A）</h2>
+
+  <div class="qa"><p class="q">Q. AIが勝手に、まちがった分別を教えてしまわない？</p>
+  <p class="a">A. AIは「写真が何か」を当てるだけです。捨て方のルールは飯田市の公式情報を<b>そのまま表示</b>します。AIがルールを判断することはありません。</p></div>
+
+  <div class="qa"><p class="q">Q. 撮った写真はどこかに保存される？</p>
+  <p class="a">A. 保存しません。判定がすんだら<b>すぐ消えます</b>。ログインも要りません。</p></div>
+
+  <div class="qa"><p class="q">Q. 勝手に「飯田市」の名前を使っているのでは？</p>
+  <p class="a">A. 各画面に「<b>ベータ版</b>」「<b>飯田市の公式アプリではありません</b>」「最新は公式で確認」と表示しています。表示のしかたは市のご希望に合わせます。</p></div>
+
+  <div class="qa"><p class="q">Q. 情報が古くなったら？</p>
+  <p class="a">A. 公式が新しくなったら、こちらも<b>入れ替えます</b>。そのとき<b>アプリを出し直す必要はなく</b>、すぐ反映できます。</p></div>
+
+  <div class="qa"><p class="q">Q. もし、まちがいがあったら？</p>
+  <p class="a">A. 各画面に「最終確認は飯田市公式へ」と案内しています。気づいたら<b>直してすぐ反映</b>できますし、市民が「載っていない」と知らせるボタンもあります。</p></div>
+
+  <div class="qa"><p class="q">Q. お金はかかる？市の負担は？</p>
+  <p class="a">A. 市民は<b>無料</b>で使えます。今回は<b>補助金などのお金の相談ではありません</b>。</p></div>
+
+  <div class="qa"><p class="q">Q. 「さんあ〜る」の情報を使う許可は？</p>
+  <p class="a">A. <b>まさに今日それをご相談したい</b>点です。もし運用会社の許可も必要なら、その窓口を教えていただけると助かります。</p></div>
+
+  <div class="qa"><p class="q">Q. むずかしい仕組みはどうなっているの？</p>
+  <p class="a">A. もっと詳しい技術資料（「データ出典・照合 説明資料」）も用意しています。必要でしたらお渡しします。実機でのデモもその場でお見せできます。</p></div>
+
+  <p class="footer">※ 本アプリはベータ版です。分別の最終確認は飯田市公式情報をご参照ください。／ ほほ笑みラボ・rabo.hohoemi@gmail.com</p>
+
+</div>
+</body>
+</html>
